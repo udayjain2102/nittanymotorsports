@@ -1,8 +1,11 @@
 # Nittany Motorsports: NM26 FSAE-lite mule
 
+![design checks and tests](https://github.com/udayjain2102/nittanymotorsports/actions/workflows/tests.yml/badge.svg)
+
 A drivable FSAE test car ("mule") built to the 2026 FSAE safety rules, with a rear wing and DRS. Every number in the
 design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 165+ design checks
-and every automated test, and writes `mule/REPORT.md`.
+and every automated test, and writes `mule/REPORT.md`. GitHub runs the same checks on every push; the badge above
+turns red if a change breaks one.
 
 ![NM26 mule in Fusion](mule/views/NM26_fusion_view.jpg)
 
@@ -45,6 +48,7 @@ once, or install GitHub Desktop, which brings its own git.
 4. Re-export what you changed: `python mule.py` (simple CAD, drawings), `python cad_parts.py` (detailed CAD, ~3 min),
    `python fab.py` (shop data).
 5. Add a line to `mule/PROJECT_LOG.md` saying what changed and why, then commit, push and open a pull request.
+   GitHub runs every check on it.
 
 Start with [`mule/README.md`](mule/README.md) (how to run it, the colour key, all assumptions), then
 [`mule/PROJECT_LOG.md`](mule/PROJECT_LOG.md) (what was done, why, and what is still open).
@@ -98,6 +102,7 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 | File | Contains |
 |---|---|
 | `requirements.txt` | The four Python packages the code needs (CadQuery, NumPy, Matplotlib, pytest) |
+| `.github/workflows/tests.yml` | GitHub Actions: installs the packages and runs `python report.py` on every push and pull request |
 | `.gitattributes` | Marks CAD, drawings and generated reports as generated, so diffs show only real changes |
 | `.gitignore` | Keeps Python caches, session folders and third-party reference PDFs out of the repo |
 
