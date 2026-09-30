@@ -1,3 +1,6 @@
 __pycache__/
 .pytest_cache/
 .DS_Store
+.claude/
+# third-party reference papers: kept locally, not ours to publish
+/*.pdf

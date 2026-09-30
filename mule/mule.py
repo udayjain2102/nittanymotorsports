@@ -305,7 +305,7 @@ COLORS = {
     "aero":         ((0.55, 0.85, 0.10), "Lime", "Aero: rear wing main plane, DRS flap, endplates, wing struts and braces, DRS servo"),
 }
 # Part-number system code per colour group: NM26-<code>-<nnn>. Numbers are given in build order, so a part keeps
-# its number while the model's structure is unchanged; freeze them (parts.csv) before ordering or drawing parts.
+# its number while the model's structure is unchanged; freeze them (NM26_Mule_parts.csv) before ordering or drawing parts.
 PART_CODE = {"frame_heavy": "FRM", "frame_b": "FRM", "frame_c": "FRM", "suspension": "SUS", "pushrod": "SUS",
              "rocker": "SUS", "shock": "SUS", "wheel": "WHL", "corner": "UPR", "brake": "BRK", "steering": "STR",
              "powertrain": "PWT", "fuel": "FUL", "driver_cell": "CKP", "closeout": "BDY", "crash": "BDY", "electrical": "ELE", "aero": "AER"}
@@ -483,7 +483,7 @@ if __name__ == "__main__":
     # export Z-up (Fusion/SolidWorks default): rotate +90 deg about X so model Y (up) -> Z
     zup = cq.Assembly(name="NM26_Mule_Zup").add(asm, loc=cq.Location(cq.Vector(), cq.Vector(1, 0, 0), 90))
     zup.save(str(out / "NM26_Mule.step"))
-    with open(out / "parts.csv", "w", newline="") as f:
+    with open(out / "NM26_Mule_parts.csv", "w", newline="") as f:
         wr = csv.writer(f); wr.writerow(["part_number", "name", "colour"]); wr.writerows(asm.parts)
     shape = asm.toCompound()
     (out / "views").mkdir(exist_ok=True)
@@ -491,4 +491,4 @@ if __name__ == "__main__":
         cq.exporters.export(shape, str(out / "views" / f"{nm}.svg"),
                             opt={"projectionDir": d, "showHidden": False, "width": 1200, "height": 700})
     assert all(p for _, p, _ in res), "rule check failed"
-    print("wrote NM26_Mule.step, parts.csv, views/*.svg, cutlist.csv")
+    print("wrote NM26_Mule.step, NM26_Mule_parts.csv, views/*.svg, cutlist.csv")
