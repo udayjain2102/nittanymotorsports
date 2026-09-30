@@ -454,7 +454,7 @@ The wing sits behind the rear axle, so at top speed it adds 525 N to the rear ax
 
 ## 4. Bill of materials (rough cost estimates, USD — check current prices)
 
-Buying used where possible and machining uprights in-house, the total comes to roughly **$9–15k**.
+Buying used where possible and machining uprights in-house, the total comes to roughly **$9–15k** in one go. **For a phased build in funding steps of about $2,500 or less (about $6–9k to a driving car), see [BUDGET_PLAN.md](BUDGET_PLAN.md).**
 
 | Subsystem | Item | Qty | Est. $ | Notes |
 |---|---|---|---|---|
@@ -467,8 +467,8 @@ Buying used where possible and machining uprights in-house, the total comes to r
 | | Radiator + fan, fuel cell (~6 L) + pump + filter, exhaust/muffler | — | 700–1,200 | |
 | | Throttle cable/pedal, shifter (paddle cable or lever) | — | 150 | |
 | Suspension | 4130 tube: A-arms/tie rods 5/8″×0.035″, pushrods 3/4″×0.049″; rod ends, spherical bearings | 8 A-arms + 4 rods | 600–900 | |
-| | Shocks: MTB coil 230×65 mm, springs ~300 lb/in front / ~600 lb/in rear | 4 | 800–2,000 | See sections 2d and 2g |
-| | Rockers (machined 6061/7075 or 1/4″ steel plate), pivot bearings | 4 | 200–400 | Ratio 1.0 front, 1.3 rear; front shock mounts on the front hoop |
+| | Shocks: MTB coil 230×65 mm, springs ~250 lb/in front / ~215 lb/in rear | 4 | 800–2,000 (300–600 used) | See sections 2d and 2g |
+| | Rockers (machined 6061/7075 or 1/4″ steel plate), pivot bearings | 4 | 200–400 | Ratio 1.24 front, 1.94 rear; front shock mounts on the front hoop |
 | | Uprights 7075-T6 (machined), hubs 4140 Q&T (rear splined for CV), 8× SKF 6209-2RS1 bearings, 200 mm rotors, 16× M12×1.5 10.9 studs | 4 corners | 800–2,000 | See section 2i |
 | Steering | Rack ~380 mm between tie-rod ends with ≥ 30 mm travel each side and Kaz Technologies FSAE rack, 4.71 in/rev, $850 (4.1:1 overall with 85 mm arms, 178° lock-to-lock), 2 U-joints, quick-release, wheel, adjustable steering stops | — | 400–700 | See section 2f |
 | Brakes | Tilton 78-625 (front) + 78-750 (rear) master cylinders, 2 remote reservoirs, 5/8″ 4140 balance bar with remote adjuster | 1 set | 400–700 | See section 2k |
