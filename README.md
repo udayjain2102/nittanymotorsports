@@ -10,7 +10,7 @@ turns red if a change breaks one.
 ![NM26 mule in Fusion](mule/views/NM26_fusion_view.jpg)
 
 **Status (30 September 2026):** the design is complete and checked; nothing is built yet. Engine chosen: **Honda
-CRF450R 2018+** (the 13 hp kit engine doesn't fit the engine bay). Next: measure a CRF450R and get its service manual,
+CRF450R 2018+** (the 13 hp kit engine doesn't fit the engine bay). Next: measure a CRF450R (gear ratios are already in from the service manual),
 build the plywood mock-up, then order frame tube. The full to-do list is in [`WHATS_NEXT.md`](WHATS_NEXT.md).
 
 ## I just want to…

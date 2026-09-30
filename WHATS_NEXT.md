@@ -12,7 +12,7 @@ Last updated 2026-09-30. Engine chosen (CRF450R 2018+); total to a driving car i
 ## Before ordering frame tube: pin down the engine
 The frame's engine mounts are welded in step 1, so the engine has to be known first.
 - [x] Choose the engine: **Honda CRF450R 2018+** (electric start is standard from 2018; a 2017 only if it already has Honda's electric-start kit). The kit engine (Predator 420 + CVT) was ruled out: it does not fit the 450 bay (`python powertrain.py`, Option A).
-- [ ] Get the CRF450R 2018+ service manual: primary reduction, gear ratios, rev limit, engine mass. These aren't published online. Enter them in `ENGINE` in `powertrain.py` (torque, 48 N·m, is already in).
+- [x] Service-manual data in `ENGINE` in `powertrain.py`: primary 66/28, gears 32/15, 29/17, 27/19, 23/19, 24/23, dry mass 30.9 kg (2017–18 service manual p. 1-4/1-5). Rev limit not found yet.
 - [ ] Measure the engine (or a borrowed one) for mount points, countershaft position and envelope; enter them in `ENGINE` and make `python report.py` pass **before** ordering tube.
 
 ## Step 0: mock-up ($100–200)

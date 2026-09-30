@@ -27,14 +27,14 @@ Every system is a Python script in `mule/` that computes the design and checks i
 | Springs, rockers, shocks | `springs.py`, `rocker.py` | Pushrod + bell-crank layout, 230×65 MTB coil shocks | Motion ratio 0.72/0.75, 3.0/2.6 Hz ride, ~243/215 lb/in springs |
 | Steering | `steering.py`, `sideview.py` | Bump steer front and rear, Ackermann, 3D tyre clearance at lock, ratio, effort | Kaz rack, 4.1:1, 178° lock-to-lock, 95 N at the rim, rear bump steer 0.00° |
 | Uprights and hubs | `uprights.py` | Bearing life, hub shaft, upright arms, wheel studs, rotor packaging | SKF 6209 bearings, 4140 hubs, 7075 uprights |
-| Powertrain | `powertrain.py` | Gearing, chain, spool, CV shafts, engine mounts, launch load, toe-link/half-shaft clearance | Engine chosen: Honda CRF450R 2018+ (published 48 N·m torque); launch FoS 1.21. Gear ratios, size and mass are still generic |
+| Powertrain | `powertrain.py` | Gearing, chain, spool, CV shafts, engine mounts, launch load, toe-link/half-shaft clearance | Engine chosen: Honda CRF450R 2018+ (48 N·m; service-manual gear ratios and 30.9 kg); launch FoS 1.21; top speed 117 km/h. Engine size and mounts still generic until measured |
 | Brakes and pedal box | `brakes.py` | Caliper/MC sizing, balance bar, lock-up force, BOTS, 2000 N pedal test, rotor heat | Locks all four at 567 N; 296 bar at 2000 N (supplier ratings still needed) |
 | Cockpit | `cockpit.py` | T.1.1 and T.1.2 templates swept through the whole model | Both pass (after moving the steering rack low and the front shocks) |
 | Harness | `harness.py` | Belt angles, mounting tabs, 20 g crash load | Lap belt fixed from 15° to 55°; frame FoS 1.17 vs welded ultimate |
 | Electrical | `shutdown.py` | 12 V shutdown circuit simulated as a netlist; wire and fuse sizing | Every shutdown device cuts ignition and fuel pump; 0.23 V drop |
 | Mass and CG | `mass.py` | Item-by-item mass budget; tilt test | 296 kg with driver, CG 340 mm, tilt 60.9° (limit 60°) |
 | Rear wing with DRS | `aero.py` | Two-element wing with a moving flap, inside rule T.7; mounts, oscillation, servo, fail-safe logic | 126 N at 60 km/h (assumed coefficients); mounts 159 Hz; flap closes on brake or power loss |
-| Lap simulation | `lapsim.py` | Point-mass acceleration, skidpad, autocross; benchmark against FSAE Michigan 2025 results | 4.49 s / 5.17 s / 59.2 s (Michigan medians 4.62 / 5.52 / 55.7 s) |
+| Lap simulation | `lapsim.py` | Point-mass acceleration, skidpad, autocross; benchmark against FSAE Michigan 2025 results | 4.48 s / 5.12 s / 58.6 s (Michigan medians 4.62 / 5.52 / 55.7 s) |
 
 ## 2. Problems found and fixed along the way
 
@@ -118,7 +118,7 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
 
 **Engine chosen: Honda CRF450R.** The user picked a 2017 or later model. Checking online showed that the 2017 has kick start as standard, with electric start only as an option kit; electric start became standard in 2018. The target is therefore a 2018 or later engine, or a 2017 that already has the kit.
 - `powertrain.py` now uses the published torque, 48 N·m at 7000 rpm, instead of the 50 N·m placeholder. The acceleration prediction moves from 4.47 s to 4.49 s.
-- The gear ratios, rev limit, size and mass are not published online. They are still generic until the service manual is in hand or an engine is measured.
+- Gear ratios and engine mass then came from the 2017–18 CRF450R service manual (page 1-5, read on ManualsLib): primary 2.357 (66/28); gears 2.133, 1.706, 1.421, 1.211, 1.043; stock final drive 13/49; engine dry weight 30.9 kg for 2018 on. With our 13/50 sprockets, top speed is 117 km/h, and 1st gear still reaches the traction limit (928 against 859 N·m). The acceleration prediction is now 4.48 s. Still generic: rev limit, engine size and position, and output-shaft position, until an engine is measured.
 - The budget to a driving car is now about $7,400–10,900 with a used 450.
 
 **Parts list.** New `mule/docs/PARTS_LIST.md` covers:
@@ -140,7 +140,7 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
 ## 8. Still open (needs people, parts or suppliers)
 
 1. **Brake pressure ratings in writing** from Wilwood, Tilton and the hose supplier: 296 bar needed, 300 bar assumed.
-2. **CRF450R 2018+ data:** get the service manual (gear ratios, rev limit, mass) and measure an engine's mounts, output shaft and size into `ENGINE` in `powertrain.py` **before ordering tube**.
+2. **Measure a CRF450R 2018+:** its mounts, output shaft and size go into `ENGINE` in `powertrain.py` **before ordering tube** (gear ratios and mass are already in, from the service manual).
 3. **Build the buck** and fit the drivers before cutting tube.
 4. **Weigh parts as they arrive**: the tilt margin is 0.9°.
 5. **Run TEST_PLAN stages 1–7** on the real car and put the measured numbers back into the code, especially the wing's aero coefficients.
