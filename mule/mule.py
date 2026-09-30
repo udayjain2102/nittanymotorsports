@@ -3,7 +3,7 @@
 Axes (same as NM26_FSAE_Concept.step): X forward (rear axle at 0), Y up (ground at 0),
 Z lateral (+Z = driver's right). Units: mm.
 
-Run:  python mule.py            -> asserts rules, writes NM26_Mule.step, views/*.svg, cutlist.csv
+Run:  python mule.py            -> asserts rules, writes cad/simple/NM26_Mule.step, views/*.svg, fab/cutlist.csv
 Tune the PARAMETERS block; everything else is derived from it.
 """
 import math, csv, pathlib
@@ -473,7 +473,7 @@ if __name__ == "__main__":
     print(f"hip={tuple(round(v) for v in HIP)} shoulder={tuple(round(v) for v in SHOULDER)} "
           f"head={tuple(round(v) for v in HEAD)} pedal_x={X_PEDAL:.0f} bulkhead_x={X_BH}")
     rows = cutlist(); total_mass = 0
-    with open(out / "cutlist.csv", "w", newline="") as f:
+    with open(out / "fab" / "cutlist.csv", "w", newline="") as f:
         wr = csv.writer(f); wr.writerow(["size", "OD_mm", "wall_mm", "role", "pieces", "total_length_mm", "mass_kg"])
         for (s, role), (n, L) in sorted(rows.items()):
             od, t = SIZES[s]; m = tube_props(s)[1] * L * STEEL_DENSITY; total_mass += m
@@ -485,8 +485,8 @@ if __name__ == "__main__":
     asm = build()
     # export Z-up (Fusion/SolidWorks default): rotate +90 deg about X so model Y (up) -> Z
     zup = cq.Assembly(name="NM26_Mule_Zup").add(asm, loc=cq.Location(cq.Vector(), cq.Vector(1, 0, 0), 90))
-    zup.save(str(out / "NM26_Mule.step"))
-    with open(out / "NM26_Mule_parts.csv", "w", newline="") as f:
+    (out / "cad" / "simple").mkdir(parents=True, exist_ok=True); zup.save(str(out / "cad" / "simple" / "NM26_Mule.step"))
+    with open(out / "cad" / "simple" / "NM26_Mule_parts.csv", "w", newline="") as f:
         wr = csv.writer(f); wr.writerow(["part_number", "name", "colour"]); wr.writerows(asm.parts)
     shape = asm.toCompound()
     (out / "views").mkdir(exist_ok=True)
@@ -494,4 +494,4 @@ if __name__ == "__main__":
         cq.exporters.export(shape, str(out / "views" / f"{nm}.svg"),
                             opt={"projectionDir": d, "showHidden": False, "width": 1200, "height": 700})
     assert all(p for _, p, _ in res), "rule check failed"
-    print("wrote NM26_Mule.step, NM26_Mule_parts.csv, views/*.svg, cutlist.csv")
+    print("wrote cad/simple/NM26_Mule.step, cad/simple/NM26_Mule_parts.csv, views/*.svg, fab/cutlist.csv")

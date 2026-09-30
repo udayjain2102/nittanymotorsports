@@ -4,7 +4,7 @@
 
 A drivable FSAE test car ("mule") built to the 2026 FSAE safety rules, with a rear wing and DRS. Every number in the
 design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 165+ design checks
-and every automated test, and writes `mule/REPORT.md`. GitHub runs the same checks on every push; the badge above
+and every automated test, and writes `mule/docs/REPORT.md`. GitHub runs the same checks on every push; the badge above
 turns red if a change breaks one.
 
 ![NM26 mule in Fusion](mule/views/NM26_fusion_view.jpg)
@@ -15,10 +15,10 @@ turns red if a change breaks one.
 |---|---|
 | **Look at the car in CAD** | Download [`mule/cad/NM26_Assembly.step`](mule/cad/NM26_Assembly.step) and open it in Fusion (File > Open > Open from my computer), SolidWorks, Onshape or FreeCAD. It arrives upright, one component per part. Team members with Fusion access: `adi laptop files > Nittany Motorsports > NM26_Assembly_DRS_wing`. |
 | **Find one part** | [`mule/cad/NM26_Assembly_parts.csv`](mule/cad/NM26_Assembly_parts.csv) lists every part number, what the part is and its file in `mule/cad/parts/` |
-| **Know what to buy and build** | [`mule/BUILD_PLAN.md`](mule/BUILD_PLAN.md): §4 bill of materials, §5 build order, the rules checklist; tube cuts and bends are in [`mule/fab/`](mule/fab) |
-| **Test the built car** | [`mule/TEST_PLAN.md`](mule/TEST_PLAN.md): each test, the predicted value and the pass criteria |
-| **See the requirements and results** | [`mule/PDS.md`](mule/PDS.md) (targets) and [`mule/REPORT.md`](mule/REPORT.md) (every check and its result) |
-| **Understand why something is the way it is** | [`mule/PROJECT_LOG.md`](mule/PROJECT_LOG.md), step by step, including every mistake found and fixed |
+| **Know what to buy and build** | [`mule/docs/BUILD_PLAN.md`](mule/docs/BUILD_PLAN.md): §4 bill of materials, §5 build order, the rules checklist; tube cuts and bends are in [`mule/fab/`](mule/fab) |
+| **Test the built car** | [`mule/docs/TEST_PLAN.md`](mule/docs/TEST_PLAN.md): each test, the predicted value and the pass criteria |
+| **See the requirements and results** | [`mule/docs/PDS.md`](mule/docs/PDS.md) (targets) and [`mule/docs/REPORT.md`](mule/docs/REPORT.md) (every check and its result) |
+| **Understand why something is the way it is** | [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md), step by step, including every mistake found and fixed |
 | **Change the design** | See below |
 
 ## Quick start (run the design code)
@@ -32,7 +32,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cd mule
-python report.py                   # every design check + every test -> REPORT.md (about 1 min)
+python report.py                   # every design check + every test -> docs/REPORT.md (about 1 min)
 ```
 
 On a Mac, VS Code's Source Control needs git, which Apple ships with Xcode: run `sudo xcodebuild -license accept`
@@ -47,15 +47,28 @@ once, or install GitHub Desktop, which brings its own git.
 3. Run `python report.py` in `mule/`. A failed check names the rule or target and prints the number that missed.
 4. Re-export what you changed: `python mule.py` (simple CAD, drawings), `python cad_parts.py` (detailed CAD, ~3 min),
    `python fab.py` (shop data).
-5. Add a line to `mule/PROJECT_LOG.md` saying what changed and why, then commit, push and open a pull request.
+5. Add a line to `mule/docs/PROJECT_LOG.md` saying what changed and why, then commit, push and open a pull request.
    GitHub runs every check on it.
 
 Start with [`mule/README.md`](mule/README.md) (how to run it, the colour key, all assumptions), then
-[`mule/PROJECT_LOG.md`](mule/PROJECT_LOG.md) (what was done, why, and what is still open).
+[`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md) (what was done, why, and what is still open).
 
 ## What each file contains
 
-### Documents (`mule/`)
+### Folder layout
+```
+README.md, requirements.txt   this page and the Python packages
+mule/                         the car: all design scripts (*.py) sit here because they import each other
+  docs/                       requirements, build plan, test plan, project log, generated report
+  cad/                        detailed CAD: assembly, parts/, parts list, routing, drawings
+    simple/                   simple CAD model, its parts list, and the frame-only FEA model
+  fab/                        shop data: cut sheet, hoop bends, jig nodes, cut list
+  views/                      drawings of the simple model and the colour key
+  tests/                      automated tests (pytest)
+references/                   other teams' papers (local only, not in git)
+```
+
+### Documents (`mule/docs/`)
 | File | Contains |
 |---|---|
 | `README.md` | How to set up and run the code, the output files, the CAD colour key, every assumption, known limits |
@@ -65,18 +78,18 @@ Start with [`mule/README.md`](mule/README.md) (how to run it, the colour key, al
 | `PROJECT_LOG.md` | Chronological record of every step, method, result, error and fix; current results; open items |
 | `REPORT.md` | Generated by `report.py`: every design check and every test with its outcome. Don't edit it by hand. |
 
-### CAD and shop data (`mule/`)
+### CAD and shop data (`mule/cad/`, `mule/fab/`)
 | File | Contains |
 |---|---|
-| `NM26_Mule.step` | Simple full-car model (tubes, boxes, cylinders), one colour per system; made by `mule.py` |
-| `NM26_Mule_parts.csv` | Part number, name and colour of every body in `NM26_Mule.step` |
-| `NM26_Frame_FEA.step` | Frame only, one solid per tube, for Fusion Simulation; made by `frame_fea_export.py` |
+| `cad/simple/NM26_Mule.step` | Simple full-car model (tubes, boxes, cylinders), one colour per system; made by `mule.py` |
+| `cad/simple/NM26_Mule_parts.csv` | Part number, name and colour of every body in `NM26_Mule.step` |
+| `cad/simple/NM26_Frame_FEA.step` | Frame only, one solid per tube, for Fusion Simulation; made by `frame_fea_export.py` |
 | `cad/NM26_Assembly.step` | Detailed full-car assembly (tread, springs, CV boots, rockers, tabs), in 9 sub-assemblies; made by `cad_parts.py` |
 | `cad/parts/NM26-<system>-<nnn>_<name>.step` | One file per detailed part, already in its assembly position (Z-up). Every name is unique: frame tubes carry their size, role, side and number (bottom to top), and tabs carry the frame point they are welded at |
 | `cad/NM26_Assembly_parts.csv` | Part number, name, sub-assembly, colour, file, and **what each file contains**, for every detailed part |
 | `cad/view_*.svg`, `cad/view_*.png` | Drawings of the detailed assembly (iso, side, front, top) |
 | `views/*.svg`, `views/*.png`, `views/NM26_fusion_view.jpg` | Drawings of the simple model, plus the Fusion screenshot of the detailed car at the top of this page; `colour_key.png` explains the colours; `corners.png` shows the suspension corners |
-| `cutlist.csv` | Frame tube lengths and masses by size and role |
+| `fab/cutlist.csv` | Frame tube lengths and masses by size and role |
 | `fab/cut_sheet.csv` | Every frame piece: size, cut length, cope angles at each end |
 | `fab/hoop_bends.csv` | Bend programs (feed / rotation / bend) for both roll hoops |
 | `fab/nodes.csv` | Frame-jig coordinates of every joint |
@@ -95,8 +108,8 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 | `aero.py` | Rear wing with DRS flap: rules geometry, forces, mounts, servo, failsafe logic |
 | `lapsim.py` | Point-mass acceleration, skidpad and autocross, with the wing; benchmark times |
 | `fab.py`, `views.py`, `frame_fea_export.py`, `cad_parts.py` | Shop data, drawings, the frame-only STEP, the detailed per-part CAD |
-| `report.py` | Writes `REPORT.md` (all checks and tests) and the README colour key |
-| `tests/` | `pytest -q tests`: hand calculations, limiting cases, and a guard that `TEST_PLAN.md` quotes current numbers |
+| `report.py` | Writes `docs/REPORT.md` (all checks and tests) and the README colour key |
+| `tests/` | `pytest -q tests`: hand calculations, limiting cases, and a guard that `docs/TEST_PLAN.md` quotes current numbers |
 
 ### Repo files (top level)
 | File | Contains |
@@ -104,5 +117,5 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 | `requirements.txt` | The four Python packages the code needs (CadQuery, NumPy, Matplotlib, pytest) |
 | `.github/workflows/tests.yml` | GitHub Actions: installs the packages and runs `python report.py` on every push and pull request |
 | `.gitattributes` | Marks CAD, drawings and generated reports as generated, so diffs show only real changes |
-| `.gitignore` | Keeps Python caches, session folders and third-party reference PDFs out of the repo |
+| `.gitignore` | Keeps Python caches, session folders and `references/` (third-party papers) out of the repo |
 

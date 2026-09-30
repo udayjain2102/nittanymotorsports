@@ -57,8 +57,8 @@ def main():
             "Each `test_all_*_checks_pass` test runs one module's checks above; the others test the math directly "
             "(hand calculations, equilibrium, limiting cases).\n", "| Test | Outcome | Seconds |", "|---|---|---|"]
     out += [f"| `{n}` | {'pass' if o == 'passed' else '**' + o + '**'} | {d} |" for n, o, d in col.rows]
-    (HERE / "REPORT.md").write_text("\n".join(out) + "\n")
-    print(f"wrote REPORT.md: {passed}/{total} design checks, {npass}/{len(col.rows)} tests pass")
+    (HERE / "docs" / "REPORT.md").write_text("\n".join(out) + "\n")
+    print(f"wrote docs/REPORT.md: {passed}/{total} design checks, {npass}/{len(col.rows)} tests pass")
     return code == 0 and passed == total
 
 if __name__ == "__main__":
