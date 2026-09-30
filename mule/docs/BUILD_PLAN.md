@@ -364,7 +364,7 @@ Added at the team's request. Aero is now in scope; see PDS R15.
 **Layout.** A two-element wing with a fixed main plane (300 mm chord, 10°) and a moving flap (170 mm chord). The flap pivots at 30 % of its chord, close to where its aero load acts, so it takes little torque to move. It sits between 3 mm endplates, 1006 mm span, 0.47 m² planform.
 - Mounting: two vertical 1.0×0.049″ struts from the rear-bulkhead top nodes carry a mounting spar. Each strut is braced forward to the main-hoop top, and one diagonal takes side load.
 - Flap positions: closed at 40° (high downforce), open at 10° (DRS, low drag).
-- CAD: every part is Lime and numbered `NM26-AER-nnn`.
+- CAD: every part is White and numbered `NM26-AER-nnn`.
 
 **Rules (T.7), checked at both flap positions:**
 - behind the head-restraint plane, so inside the rear aero zone;
