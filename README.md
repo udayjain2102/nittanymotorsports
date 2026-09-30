@@ -51,7 +51,7 @@ once, or install GitHub Desktop, which brings its own git.
 5. Add a line to `mule/docs/PROJECT_LOG.md` saying what changed and why, then commit, push and open a pull request.
    GitHub runs every check on it.
 
-For a summary of everything done so far, read [`WORKDONE.md`](WORKDONE.md).
+For a summary of everything done so far, read [`WORKDONE.md`](WORKDONE.md). For the to-do list, see [`WHATS_NEXT.md`](WHATS_NEXT.md).
 
 Start with [`mule/README.md`](mule/README.md) (how to run it, the colour key, all assumptions), then
 [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md) (what was done, why, and what is still open).
@@ -118,6 +118,7 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 ### Repo files (top level)
 | File | Contains |
 |---|---|
+| `WHATS_NEXT.md` | The to-do list, in order: supplier emails, funding steps, build, tests, upgrades |
 | `WORKDONE.md` | Overview of all the work done so far: every system, the problems found and fixed, CAD, documents, GitHub, open items |
 | `requirements.txt` | The four Python packages the code needs (CadQuery, NumPy, Matplotlib, pytest) |
 | `.github/workflows/tests.yml` | GitHub Actions: installs the packages and runs `python report.py` on every push and pull request |
