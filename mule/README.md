@@ -48,7 +48,17 @@ a finned engine, pickup tabs and rocker bushings on the frame). It writes:
 - `cad/NM26_Assembly.step` - the whole car as a nested assembly: `01_frame_weldment` (every tube and bracket as a
   body), `02_corner_<axle>_<side>` x4, `03_cockpit`, `04_powertrain`, `05_body`, `06_electrical`.
 - `cad/NM26_Assembly_parts.csv` - part number, name, sub-assembly, colour, file, and what each file contains. Every name is unique: frame tubes carry their side and position, tabs the frame point they sit at. `tests/test_cad_parts.py` checks the three agree.
-- `cad/view_*.svg` / `.png` - line drawings of the assembly.
+- `cad/view_*.svg` / `.png` - line drawings of the assembly (`view_engine`, `view_routing_top` are close-ups).
+- `cad/ROUTING.md` - every brake line, the throttle cable, the fuel line and every harness wire: from, to, waypoints.
+
+`cad_detail.py` holds the detailed component models: the engine as 15 parts (crankcase, clutch and stator covers,
+finned cylinder, head and cam cover, coil, throttle body with injector, airbox with the 20 mm restrictor, header,
+muffler, oil filter, starter, gear lever, mount brackets), the cockpit and electrical parts as real shapes (curved seat
+shell, padded head restraint, pedal box with cheeks and pivot, dash with E-stop/start/DRS buttons, rotary master
+switch, mushroom E-stop, inertia switch, relay, ECU, fan, battery with strap, BOTS, fuel cell with pump and filler),
+and `routes()`: the `08_routing` sub-assembly, brake lines (purple), throttle cable (purple), fuel line (brown) and
+12 V wiring (pink) as tubes along the frame from the `shutdown.py` netlist and the pedal/caliper positions. The engine
+is still a generic 450 cc single at the right size and place; swap in the chosen engine's model when it is known.
 
 In Fusion, open `NM26_Assembly.step` for the full car (each part becomes a component). To assemble from the part
 files instead, Insert each part STEP and leave it at the origin: no joints are needed to line the parts up. The frame
@@ -81,7 +91,9 @@ Each system has one colour in `NM26_Mule.step`. The table below comes from `mule
 | Cream | Sheet metal: belly pan, firewall, anti-intrusion plate |
 | Yellow | Impact attenuator (foam) |
 | Pink | Electrical: battery, master switch, E-stop, kill relay, inertia switch, brake light |
-| Lime | Aero: rear wing main plane, DRS flap, endplates, wing struts and braces, DRS servo |
+| White | Aero: rear wing main plane, DRS flap, endplates, wing struts and braces, DRS servo |
+| Gold | Routing: brake lines (hard line and flexible hose) and the throttle cable |
+| Magenta | Routing: 12 V harness wires (battery, master switch, shutdown loop, ignition, fuel pump, starter, fan, brake light, DRS) |
 <!-- /colour-key -->
 
 In Fusion, press Shift+N to toggle component colours if everything shows grey.

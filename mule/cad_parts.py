@@ -19,6 +19,7 @@ import csv, math, pathlib
 import cadquery as cq
 import mule as m
 import uprights as U, rocker, brakes as BR, powertrain as PT, shutdown as SD
+import cad_detail as D
 from mule import N, mir, tube, box, cyl_x, cyl_z, sub, norm, SIZES, TIRE_OD, TIRE_W, WHEELBASE, TRACK_F, TRACK_R
 
 V = cq.Vector
@@ -241,17 +242,6 @@ def sprocket(c, r_pitch, teeth, bore, lightening):
 def chain_run(a, b):
     d = unit(sub(b, a)); return cq.Workplane(plane(a, d)).rect(10, 17).extrude(norm(sub(b, a))).val()
 
-def engine():
-    x0, x1, y0, y1, z0, z1 = PT.ENGINE["box"]
-    case = fillet_all(box(x0, x1, y0, y0 + 200, z0, z1), 15)
-    cx = (x0 + x1) / 2 + 30
-    cylinder = cq.Solid.makeCylinder(55, 95, V(cx, y0 + 200, 0), V(0, 1, 0))
-    fins = [cq.Solid.makeCylinder(78, 3, V(cx, y0 + 205 + 9 * i, 0), V(0, 1, 0)) for i in range(10)]
-    head = fillet_all(box(cx - 62, cx + 62, y0 + 295, y1, -60, 60), 8)
-    cover = cyl_z(x0 + 70, y0 + 90, z0 - 12, z0, 60)     # clutch cover, left side (chain side)
-    cover2 = cyl_z(x1 - 90, y0 + 100, z1, z1 + 12, 55)   # ignition cover, right side
-    return fuse(case, cylinder, *fins, head, cover, cover2)
-
 def spool(zs):
     y = TIRE_OD / 2
     s = cyl_z(0, y, -zs + 20, zs - 20, 25).cut(cyl_z(0, y, -zs + 19, zs - 19, 10))
@@ -286,14 +276,6 @@ def steering_rack():
     lugs = [box(x - 12, x + 12, y - 45, y, z - 8, z + 8) for z in (-90, 90)]
     pinion = cyl(add3((x, y, 0), (0, 1, 0), 0), add3((x, y, 0), (-0.98, 0.17, 0), -45), 12)
     return fuse(housing, bar, *lugs, sphere((x, y, -hl), 11), sphere((x, y, hl), 11), pinion)
-
-def seat_shell():
-    hx = m.HIP[0]; y0 = m.SEAT_Y0
-    base = box(hx - 80, m.X_PEDAL - 450, y0, y0 + 6, -200, 200)
-    back = box(hx - 90, hx - 40, y0, m.SHOULDER[1] + 40, -200, 200)
-    bolsters = [box(hx - 90, m.X_PEDAL - 450, y0, y0 + 120, s * 200 - (6 if s > 0 else 0), s * 200 + (6 if s < 0 else 0)) for s in (-1, 1)]
-    wings = [box(hx - 90, hx - 40, y0 + 300, m.SHOULDER[1] + 40, s * 200 - (6 if s > 0 else 0), s * 200 + (6 if s < 0 else 0)) for s in (-1, 1)]
-    return fillet_all(fuse(base, back, *bolsters, *wings), 4)
 
 def pedal(nm, z):
     g = BR.geometry(); (xp, yp), (xa, ya) = g["piv"], g["pad"]
@@ -369,10 +351,11 @@ def build():
             for nm, s, key in right:
                 b.add(f(s), f"{nm}_{ax}_{side}", key, grp)
     # cockpit
-    b.add(seat_shell(), "seat_shell", "driver_cell", "03_cockpit")
-    b.add(fillet_all(box(m.X_MAIN + 13, m.X_MAIN + 73, m.HEAD[1] - 140, m.HEAD[1] + 140, -80, 80), 10), "head_restraint", "driver_cell", "03_cockpit")
+    b.add(D.seat_shell(), "seat_shell", "driver_cell", "03_cockpit", "4 mm moulded seat shell: curved back wrapped round the driver, trough base, hip bolsters, shoulder-belt slots")
+    b.add(D.head_restraint(), "head_restraint", "driver_cell", "03_cockpit", "head restraint: 50 mm padding on a plate, two arms to the main hoop")
+    b.add(D.dash_panel(), "dash_panel", "electrical", "03_cockpit", "dash panel under the front hoop: E-stop hole, start button, DRS button")
     g = BR.geometry(); (xb, yb) = g["bar"]
-    b.add(box(m.PB_X[0] - 20, m.PB_X[1] + 10, g["y_base"] - 6, g["y_base"], -m.PB_Z - 20, m.PB_Z + 20), "pedal_box_base", "brake", "03_cockpit")
+    b.add(D.pedal_box(), "pedal_box", "brake", "03_cockpit", "pedal box: base plate bolted to two floor cross tubes, pivot shaft, side cheeks, heel stop")
     for z, nm in ((BR.BRAKE_Z, "brake"), (BR.THROTTLE_Z, "throttle")):
         b.add(pedal(nm, z), f"{nm}_pedal", "brake", "03_cockpit")
     zb = BR.BRAKE_Z
@@ -387,7 +370,8 @@ def build():
     b.add(steering_column(), "steering_column", "steering", "03_cockpit")
     b.add(steering_rack(), "steering_rack", "steering", "03_cockpit")
     # powertrain
-    b.add(engine(), "engine_450cc_single_placeholder", "powertrain", "04_powertrain")
+    for nm, s_, what in D.engine_parts():
+        b.add(s_, nm, "powertrain", "04_powertrain", what + " (generic 450 cc single: replace with the chosen engine)")
     cs, r1, ax_, r2 = PT.sprockets()
     b.add(sprocket(cs, r1, PT.FRONT_T, 12, False), f"sprocket_front_{PT.FRONT_T}T", "powertrain", "04_powertrain")
     b.add(sprocket(ax_, r2, PT.REAR_T, 26, True), f"sprocket_rear_{PT.REAR_T}T", "powertrain", "04_powertrain")
@@ -399,26 +383,26 @@ def build():
         b.add(spool_carrier(zs, sg), f"spool_carrier_{side}", "powertrain", "04_powertrain")
         cv = cv_shaft(PT.CV["z_in"], U.geom("rear")["zi"] - 10)
         b.add(cv if sg > 0 else mirror_z(cv), f"cv_halfshaft_{side}", "powertrain", "04_powertrain")
-    fc = fuse(fillet_all(box(m.X_MAIN - 213, m.X_MAIN - 43, 480, 700, -140, 140), 8), cyl(( m.X_MAIN - 128, 700, 0), (m.X_MAIN - 128, 740, 0), 22))
-    b.add(fc, "fuel_cell_6L", "fuel", "04_powertrain")
+    b.add(D.fuel_cell(), "fuel_cell_6L", "fuel", "04_powertrain", "6 L fuel cell over the engine: filler neck and cap, breather, in-tank pump on a flange, outlet fitting")
     # body / closeout
     b.add(box(m.IA[0] - 1.5, m.IA[0], m.Y_BH_BOT, m.Y_BH_TOP, -m.Z_BH, m.Z_BH), "anti_intrusion_plate", "closeout", "05_body")
     ia = box(*m.IA[:4], -m.IA[4], m.IA[4])
     try: ia = cq.Workplane().add(ia).faces(">X").chamfer(25).val()
     except Exception: pass
     b.add(ia, "impact_attenuator", "crash", "05_body")
-    b.add(box(m.X_MAIN - 40, m.X_MAIN - 13, m.Y_LOW, 700, -m.Z_COCKPIT, m.Z_COCKPIT), "firewall", "closeout", "05_body")
+    b.add(D.firewall(), "firewall", "closeout", "05_body", "firewall sheet with 20 mm flanges, two grommets for the harness, throttle cable and fuel line")
     b.add(m.belly_pan(), "belly_pan_1.6mm", "closeout", "05_body")
-    # electrical
-    for nm, (w, h, d) in (("battery", (150, 90, 90)), ("primary master switch", (60, 60, 40)), ("e-stop", (40, 40, 40)),
-                          ("inertia switch", (50, 50, 40)), ("kill relay", (40, 40, 30)), ("brake light", (20, 60, 160))):
-        x, y, z = SD.LOC[nm]
-        s = fillet_all(box(x - w / 2, x + w / 2, y - h / 2, y + h / 2, z - d / 2, z + d / 2), 3)
-        if nm == "battery":
-            s = fuse(s, cyl((x + 50, y + h / 2, z), (x + 50, y + h / 2 + 14, z), 7), cyl((x - 50, y + h / 2, z), (x - 50, y + h / 2 + 14, z), 7))
-        if nm == "e-stop":
-            s = fuse(s, cyl((x, y + h / 2, z), (x, y + h / 2 + 12, z), 6), cyl((x, y + h / 2 + 12, z), (x, y + h / 2 + 22, z), 18))
-        b.add(s, nm.replace(" ", "_"), "electrical", "06_electrical")
+    # electrical (positions from shutdown.LOC)
+    for nm, shape, what in (("battery", D.battery(), "12 V battery with terminals, hold-down strap and tray"),
+                            ("primary_master_switch", D.master_switch(), "primary master switch: rotary >= 100 A with red key handle, right side at the main hoop"),
+                            ("e-stop", D.e_stop(), f"cockpit E-stop, {SD.ESTOP_DIA:.0f} mm mushroom button in the dash"),
+                            ("inertia_switch", D.inertia_switch(), "inertia (crash) switch with reset button, on the floor behind the seat"),
+                            ("kill_relay", D.kill_relay(), "30 A kill relay with blade terminals: the shutdown loop feeds ignition and fuel pump through it"),
+                            ("brake_light", D.brake_light(), f"LED brake light, {SD.BRAKE_LIGHT['led_line_mm']:.0f} mm LED line facing rearward (T.3.4)"),
+                            ("brake_overtravel_switch_BOTS", D.bots(), "brake over-travel switch (BOTS) behind the brake pedal, normally closed in the shutdown loop"),
+                            ("ignition_ECU", D.ecu(), "ignition / ECU box with connector, on the left of the engine bay"),
+                            ("cooling_fan", D.fan(), "12 V cooling fan in a shroud, right of the engine bay")):
+        b.add(shape, nm, "electrical", "06_electrical", what)
     # rear wing with DRS flap (aero.py geometry; flap shown closed)
     import aero as AE
     sec = AE.section("closed")
@@ -437,8 +421,11 @@ def build():
         b.add(tube(a_, b_, sz), f"{role.split(' (')[0].lower().replace(' ', '_')}_{side}", "aero", "07_aero",
               f"4130 tube {od / 25.4:.3f} x {t / 25.4:.3f} in, {role}, {norm(sub(b_, a_)):.0f} mm long")
     pv = sec["pivot"]
-    b.add(box(pv[0] - 30, pv[0] + 30, pv[1] - 70, pv[1] - 25, -30, 30), "DRS_servo_15Nm", "aero", "07_aero",
-          "12 V DRS servo (>= 15 N*m stall) with return spring and linkage to the flap")
+    b.add(D.drs_servo(pv), "DRS_servo_15Nm", "aero", "07_aero",
+          "12 V DRS servo (>= 15 N*m stall) with output arm to the flap pivot, return spring shuts the flap")
+    # routing: brake lines, throttle cable, fuel line, 12 V harness (rough runs along the frame)
+    for nm, key, r, pts, what in D.routes():
+        b.add(D.route(pts, r), nm, key, "08_routing", what)
     return b.finish()
 
 ZUP = cq.Location(V(), V(1, 0, 0), 90)   # model Y-up -> STEP Z-up (Fusion default)
@@ -456,6 +443,12 @@ if __name__ == "__main__":
     with open(out / "NM26_Assembly_parts.csv", "w", newline="") as f:
         w = csv.writer(f); w.writerow(["part_number", "name", "sub_assembly", "colour", "file", "contains"])
         w.writerows(r[:5] + (r[6],) for r in b.rows)
+    with open(out / "ROUTING.md", "w") as f:   # where every line, cable and wire runs (same data as the 08_routing parts)
+        f.write("# NM26 routing: brake lines, throttle cable, fuel line, 12 V harness\n\nRough runs along the frame, from the real component positions "
+                "(`brakes.geometry`, `shutdown.LOC`, `uprights.geom`). Axes X forward, Y up, Z right (driver's right), mm. "
+                "The same runs are the `08_routing` parts in `NM26_Assembly.step`.\n\n| Run | What | Waypoints (x, y, z) |\n|---|---|---|\n")
+        for nm, key, r, pts, what in D.routes():
+            f.write(f"| `{nm}` | {what} | " + " -> ".join(f"({p[0]:.0f}, {p[1]:.0f}, {p[2]:.0f})" for p in pts) + " |\n")
     shape = cq.Compound.makeCompound([r[5] for r in b.rows])
     for nm, d in [("iso", (1, 0.6, 1)), ("side", (0, 0, 1)), ("front", (1, 0, 0)), ("top", (0, 1, 0))]:
         cq.exporters.export(shape, str(out / f"view_{nm}.svg"), opt={"projectionDir": d, "showHidden": False, "width": 1400, "height": 800})

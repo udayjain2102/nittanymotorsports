@@ -302,13 +302,16 @@ COLORS = {
     "closeout":     ((0.88, 0.88, 0.80), "Cream", "Sheet metal: belly pan, firewall, anti-intrusion plate"),
     "crash":        ((1.00, 0.85, 0.10), "Yellow", "Impact attenuator (foam)"),
     "electrical":   ((0.95, 0.10, 0.60), "Pink", "Electrical: battery, master switch, E-stop, kill relay, inertia switch, brake light"),
-    "aero":         ((0.55, 0.85, 0.10), "Lime", "Aero: rear wing main plane, DRS flap, endplates, wing struts and braces, DRS servo"),
+    "aero":         ((0.95, 0.95, 0.97), "White", "Aero: rear wing main plane, DRS flap, endplates, wing struts and braces, DRS servo"),
+    "hydraulic":    ((0.90, 0.72, 0.10), "Gold", "Routing: brake lines (hard line and flexible hose) and the throttle cable"),
+    "wiring":       ((0.85, 0.00, 0.85), "Magenta", "Routing: 12 V harness wires (battery, master switch, shutdown loop, ignition, fuel pump, starter, fan, brake light, DRS)"),
 }
 # Part-number system code per colour group: NM26-<code>-<nnn>. Numbers are given in build order, so a part keeps
 # its number while the model's structure is unchanged; freeze them (NM26_Mule_parts.csv) before ordering or drawing parts.
 PART_CODE = {"frame_heavy": "FRM", "frame_b": "FRM", "frame_c": "FRM", "suspension": "SUS", "pushrod": "SUS",
              "rocker": "SUS", "shock": "SUS", "wheel": "WHL", "corner": "UPR", "brake": "BRK", "steering": "STR",
-             "powertrain": "PWT", "fuel": "FUL", "driver_cell": "CKP", "closeout": "BDY", "crash": "BDY", "electrical": "ELE", "aero": "AER"}
+             "powertrain": "PWT", "fuel": "FUL", "driver_cell": "CKP", "closeout": "BDY", "crash": "BDY", "electrical": "ELE", "aero": "AER",
+             "hydraulic": "RTG", "wiring": "RTG"}
 
 def color(key): return cq.Color(*COLORS[key][0])   # entries: (rgb, colour name, what it is)
 
