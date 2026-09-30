@@ -1,0 +1,10 @@
+# Generated files: hide them from diffs and language stats so real changes are easy to review.
+*.step       binary linguist-generated
+*.svg        -diff  linguist-generated
+*.png        binary
+*.jpg        binary
+mule/REPORT.md          linguist-generated
+mule/cutlist.csv        linguist-generated
+mule/fab/*.csv          linguist-generated
+mule/cad/*.csv          linguist-generated
+mule/NM26_Mule_parts.csv linguist-generated
