@@ -83,6 +83,34 @@ def cv():
     ang = math.degrees(math.atan2(springs.TRAVEL, L0)); plunge = math.hypot(L0, springs.TRAVEL) - L0
     return ang, plunge, L0
 
+CV_BOOT_R = 40.0   # mm, CV boot / joint radius, applied along the whole shaft (conservative)
+
+def seg_seg(p1, q1, p2, q2, n=40):
+    """Minimum distance (mm) between two segments, sampled."""
+    best = 1e9
+    for i in range(n + 1):
+        a = p1 + (q1 - p1) * i / n
+        best = min(best, seg_point_dist(a, p2, q2))
+    return best
+
+def toe_link_to_halfshaft():
+    """Smallest gap (mm) between the rear toe link and the CV half-shaft (boot radius included) over the design
+    travel: both outer ends move with the upright. Trinity's 2020 FSAE car had its rear tie rods hit the axle."""
+    import suspension as S, springs
+    import uprights as U
+    g = S.geom("rear"); (_, p, q, _) = m.susp_links("rear")[4]; z_out = U.geom("rear")["zi"] - 10; worst = 1e9
+    for t in (-springs.DROOP, -12.5, 0.0, 25.0, springs.TRAVEL):
+        lo, hi = -0.8, 0.8
+        for _ in range(60):
+            mid = (lo + hi) / 2; f, _ = S.upright(g, mid)
+            (lo, hi) = (mid, hi) if f(g["C"])[1] - g["C"][1] - t < 0 else (lo, mid)
+        f, _ = S.upright(g, (lo + hi) / 2)
+        mv = lambda pt: np.array([pt[0], *reversed(f((pt[2], pt[1])))])
+        hub = mv((0.0, m.TIRE_OD / 2, z_out))
+        gap = seg_seg(np.array(q, float), mv(p), np.array([0.0, m.TIRE_OD / 2, CV["z_in"]]), hub) - CV_BOOT_R - m.SUSP_TUBE[0] / 2
+        worst = min(worst, gap)
+    return worst
+
 def mount_forces(F_chain_engine, p_chain):
     """Engine free body: chain force at its tangent point + weight x 2.5 g -> minimum-norm forces at the 6 mounts."""
     names = ["em_fb", "em_ft", "em_rb"]; pts = [np.array(m.N[n], float) for n in names] + [np.array(m.mir(m.N[n]), float) for n in names]
@@ -145,6 +173,7 @@ def checks():
          f"z = {CHAIN_Z:.0f} (engine side {bx[4]:.0f}, posts {-m.N['sp_c'][2]:.0f})"),
         ("CV angle <= limit over +/-50 mm travel", ang <= CV["max_angle"], f"{ang:.1f} deg (shaft {L0:.0f} mm)"),
         ("CV plunge <= limit", plunge <= CV["plunge"], f"{plunge:.1f} mm"),
+        ("rear toe link clears the CV half-shaft >= 10 mm over travel (boot included)", toe_link_to_halfshaft() >= 10, f"{toe_link_to_halfshaft():.0f} mm"),
         ("engine envelope clear of main hoop / firewall", bx[1] <= m.X_MAIN - 40, f"engine front {bx[1]:.0f}, firewall {m.X_MAIN - 40:.0f}"),
         ("frame FoS >= 1.2 under full-traction launch", fos >= 1.2, f"{fos:.2f} ({where})"),
     ]

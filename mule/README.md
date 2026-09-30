@@ -16,7 +16,7 @@ pip install cadquery matplotlib numpy pytest
 ```bash
 pytest -q tests            # everything (about 45 s; the cockpit template sweep is the slow part)
 python mule.py             # rule checks, then writes NM26_Mule.step, cutlist.csv, views/*.svg
-python cad_parts.py        # detailed CAD (~3 min): cad/parts/*.step (one file per part), cad/NM26_Assembly.step, cad/parts.csv
+python cad_parts.py        # detailed CAD (~3 min): cad/parts/*.step (one file per part), cad/NM26_Assembly.step, cad/NM26_Assembly_parts.csv
 python fab.py              # fab/cut_sheet.csv, fab/hoop_bends.csv, fab/nodes.csv, fab/jig_plan.png
 python report.py           # REPORT.md: every design check + every test with its outcome (regenerate after any change)
 ```
@@ -31,7 +31,7 @@ Every script can also be run on its own (`python fea.py` and so on). Each one pr
 | `NM26_Frame_FEA.step` | **CAD**: frame only, one solid per tube, for simulation | Fusion Simulation (Combine the bodies first) |
 | `fab/cut_sheet.csv`, `fab/hoop_bends.csv`, `fab/nodes.csv`, `cutlist.csv` | Shop data: tube cuts and copes, bend programs, jig coordinates | Excel / Sheets |
 | `views/*.png`, `views/*.svg`, `fab/jig_plan.png` | 2D drawings | Any image viewer |
-| `parts.csv` | Part number (`NM26-<system>-<nnn>`), name and colour of every body in the CAD | Excel / Sheets |
+| `NM26_Mule_parts.csv` | Part number (`NM26-<system>-<nnn>`), name and colour of every body in `NM26_Mule.step` (the simple model) | Excel / Sheets |
 | `REPORT.md` | Every check and test, with results (generated) | Markdown |
 | `PROJECT_LOG.md`, `BUILD_PLAN.md`, `TEST_PLAN.md` | History, design narrative plus BOM, physical test plan | Markdown |
 
@@ -47,7 +47,7 @@ a finned engine, pickup tabs and rocker bushings on the frame). It writes:
 - `cad/parts/NM26-<sys>-<nnn>_<name>.step` - one file per part (258), each already at its assembly position, Z-up.
 - `cad/NM26_Assembly.step` - the whole car as a nested assembly: `01_frame_weldment` (every tube and bracket as a
   body), `02_corner_<axle>_<side>` x4, `03_cockpit`, `04_powertrain`, `05_body`, `06_electrical`.
-- `cad/parts.csv` - part number, name, sub-assembly, colour, file. `tests/test_cad_parts.py` checks the three agree.
+- `cad/NM26_Assembly_parts.csv` - part number, name, sub-assembly, colour, file, and what each file contains. Every name is unique: frame tubes carry their side and position, tabs the frame point they sit at. `tests/test_cad_parts.py` checks the three agree.
 - `cad/view_*.svg` / `.png` - line drawings of the assembly.
 
 In Fusion, open `NM26_Assembly.step` for the full car (each part becomes a component). To assemble from the part

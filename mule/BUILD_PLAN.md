@@ -326,7 +326,7 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
 | Rear bump steer (found while doing the above) | not checked; really **0.76° toe-out per 25 mm** of bump (roll oversteer) | **0.00°** | `steering.py` now checks the rear too. The toe link is re-aimed at the rear arms' instant centre (`mule.SUSP['rear']['steer']`). |
 | Lap simulation | none | acceleration 4.49 s, skidpad 5.17 s, autocross 59.2 s (50 km/h) | `lapsim.py`, point mass, grip 1.3 (calibrated: the 2025 Michigan skidpad winner implies 1.34). The autocross is a representative 0.8 km course built to the D.11.1.1 layout rules. Sensitivity: 0.1 grip = 0.16 s accel, 0.21 s skidpad, 2.4 s autocross; 10 kg = 0.01 s accel. A point mass has no tyre load sensitivity, so mass looks almost free; in reality it isn't. Drag alone would allow 148 km/h, above the 110 km/h gearing limit. |
 | Benchmark, Pugh matrix | none | Pugh matrices, plus a benchmark against the FSAE Michigan 2025 event times, in `PDS.md` | The mule's point-mass times sit between the 10th-place car and the median. The vehicle-number columns (other teams' mass, stiffness, etc.) wait for published design reports. |
-| Buck, part numbers | none | Buck plan below; every CAD body named `NM26-<system>-<nnn>`, listed in `parts.csv` | `mule.PART_CODE` |
+| Buck, part numbers | none | Buck plan below; every CAD body named `NM26-<system>-<nnn>`, listed in `NM26_Mule_parts.csv` (and `cad/NM26_Assembly_parts.csv` for the detailed model) | `mule.PART_CODE` |
 
 **Full-scale buck (before cutting any tube).** Build it in a weekend from 2×4s, plywood and ¾″ EMT conduit, using `fab/nodes.csv` for the coordinates:
 1. Floor board at the lower-rail outline. Mark the pedal face, the seat base and the hip point from `mule.py`.
@@ -355,7 +355,7 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
 | BDY | body and crash |
 | ELE | electrical |
 
-Numbers are assigned in build order. `parts.csv` lists every part number with its name and colour. Freeze that list (copy it into the BOM) before making drawings or placing orders. After that, add new parts at the end instead of re-numbering.
+Numbers are assigned in build order. `NM26_Mule_parts.csv` lists every part number with its name and colour; `cad/NM26_Assembly_parts.csv` does the same for the detailed model and says what each file contains. Freeze that list (copy it into the BOM) before making drawings or placing orders. After that, add new parts at the end instead of re-numbering.
 
 ## 2n. Rear wing with DRS (`aero.py`)
 

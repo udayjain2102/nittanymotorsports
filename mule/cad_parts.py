@@ -9,7 +9,7 @@ toothed sprockets, a finned engine, pickup tabs on the frame, etc.
 Run:  python cad_parts.py
   -> cad/parts/NM26-<sys>-<nnn>_<name>.step   one file per part, already in its assembly position (Z-up)
   -> cad/NM26_Assembly.step                   the full car as a nested assembly (system sub-assemblies)
-  -> cad/parts.csv                            part number, name, sub-assembly, file
+  -> cad/NM26_Assembly_parts.csv              part number, name, sub-assembly, colour, file, what the file contains
 
 Fusion: File > Open the assembly STEP for the whole car (each part becomes a component). To rebuild the
 assembly from the part files, Insert each part STEP and leave it at the origin: every part file is already
@@ -182,8 +182,29 @@ def cv_shaft(z_in, z_out):
     return fuse(shaft, inner, outer, b1, b2)
 
 # ---------------- OTHER SYSTEMS ----------------
+SIDE = lambda z: "R" if z > 5 else "L" if z < -5 else "C"      # model +Z = right; C = centreline / cross tube
+NODE_WORD = {"ring": "front_ring", "bh": "front_bulkhead", "rr": "rear_ring", "r": "rear_bulkhead"}
+
 def frame_tubes():
-    return [(tube(a, b, s), s, role) for a, b, s, role in m.MEMBERS]
+    """(solid, size, name, contains) per frame member. Tubes sharing a role and side are numbered bottom to top
+    (then front to back), so every file name is unique and says where the tube is."""
+    groups = {}
+    for i, (a, b, s, role) in enumerate(m.MEMBERS):
+        groups.setdefault((s, role, SIDE((a[2] + b[2]) / 2)), []).append(i)
+    order = {}
+    for key, idx in groups.items():
+        idx.sort(key=lambda i: (min(m.MEMBERS[i][0][1], m.MEMBERS[i][1][1]), -max(m.MEMBERS[i][0][0], m.MEMBERS[i][1][0])))
+        for k, i in enumerate(idx): order[i] = (k + 1, len(idx), key[2])
+    out = []
+    for i, (a, b, s, role) in enumerate(m.MEMBERS):
+        k, n, side = order[i]; r = role.split(" (")[0].replace(" ", "_").replace("/", "-")
+        od, t = SIZES[s]; ys = sorted((a[1], b[1]))
+        name = f"tube_{s}_{r}_{side}" + (f"_{k}of{n}" if n > 1 else "")
+        where = {"R": "right side", "L": "left side", "C": "across the car"}[side]
+        out.append((tube(a, b, s), s, name,
+                    f"4130 tube {od / 25.4:.3f} x {t / 25.4:.3f} in, {role}, {where}" + (f" (no. {k} of {n}, bottom to top)" if n > 1 else "")
+                    + f"; {norm(sub(b, a)):.0f} mm long, {ys[0]:.0f}-{ys[1]:.0f} mm above the ground"))
+    return out
 
 def frame_brackets():
     """Pickup tabs for every A-arm inboard pickup and rear toe-link, shock tabs, rocker pivot bushings."""
@@ -191,16 +212,19 @@ def frame_brackets():
     for ax in ("front", "rear"):
         links = m.susp_links(ax)
         for pair in (links[0:2], links[2:4]):
-            (_, bj, q1, _), (_, _, q2, _) = pair
-            out += [("pickup_tabs", pickup_tabs(q1, q2, bj)), ("pickup_tabs", pickup_tabs(q2, q1, bj))]
+            (lname, bj, q1, n1), (_, _, q2, n2) = pair; arm = lname.split()[0]
+            for q, qo, node in ((q1, q2, n1), (q2, q1, n2)):
+                where = NODE_WORD[node.split("_")[0]]
+                out.append((f"pickup_tab_{ax}_{arm}_wishbone_at_{where}", pickup_tabs(q, qo, bj),
+                            f"double-shear clevis tab pair welded at the {where.replace('_', ' ')}, for the {ax} {arm} wishbone rod end"))
         if ax == "rear":   # toe-link inboard tab, hinge along X
             _, p, q, _ = links[4]
-            out.append(("toe_link_tabs", pickup_tabs(q, add3(q, (1, 0, 0), 50), p)))
+            out.append(("toe_link_tab_rear", pickup_tabs(q, add3(q, (1, 0, 0), 50), p), "double-shear clevis tab pair for the rear toe-link inner rod end"))
         r = rocker.analyse(ax); P, S, B = tuple(r["g"]["P"]), tuple(r["g"]["S"]), tuple(r["B3"])
         _, n = rocker_plate(P, tuple(r["A3"]), B)
-        out.append(("shock_tabs", pickup_tabs(S, add3(S, n, 50), B)))
-        out.append(("rocker_pivot_bushing", cyl(add3(P, n, -24), add3(P, n, 24), 8)))
-    return [(nm, s) for nm, s in out] + [(nm, mirror_z(s)) for nm, s in out]
+        out.append((f"shock_tab_{ax}", pickup_tabs(S, add3(S, n, 50), B), f"double-shear tab pair for the {ax} shock's frame-end eye"))
+        out.append((f"rocker_pivot_bushing_{ax}", cyl(add3(P, n, -24), add3(P, n, 24), 8), f"steel bushing welded to the frame, {ax} rocker pivot"))
+    return [(nm + "_R", s, d + ", right side") for nm, s, d in out] + [(nm + "_L", mirror_z(s), d + ", left side") for nm, s, d in out]
 
 def sprocket(c, r_pitch, teeth, bore, lightening):
     z = PT.CHAIN_Z; R = r_pitch + 5
@@ -278,6 +302,30 @@ def pedal(nm, z):
     return fuse(arm, pad, cyl_z(xp, yp, z - 18, z + 18, 12))
 
 # ---------------- ASSEMBLY ----------------
+DESC = {   # what each non-frame part file contains, by name prefix (first match wins)
+    "tyre": "20.5x7-13 slick tyre with tread detail", "rim_13in": "13 in x 7 in spoked wheel rim", "lug_nuts": "4 lug nuts on M12 studs",
+    "hub": "wheel hub with 4 x 100 studs (runs on two SKF 6209 bearings)", "rotor_drilled": "200 mm drilled brake rotor with hat",
+    "caliper": "brake caliper with pistons and bleed screw (GP200 front / PS-1 rear)", "upright": "machined 7075-T6 upright with bearing housing",
+    "upper_a_arm": "upper wishbone: 5/8 in 4130 tubes, rod ends inboard, ball joint outboard", "lower_a_arm": "lower wishbone: 5/8 in 4130 tubes, rod ends inboard, ball joint outboard",
+    "pushrod": "3/4 in pushrod with rod ends, upright to rocker", "tie_rod": "front tie rod with rod ends, rack to steering arm",
+    "toe_link": "rear toe link with rod ends", "rocker_plate": "bell-crank rocker plates", "coilover_shock": "230 x 65 mm coil-over shock with spring",
+    "spool": "rear spool (locked diff)", "spool_carrier": "eccentric spool bearing carrier (chain adjust)", "sprocket_front": "engine countershaft sprocket",
+    "sprocket_rear": "rear sprocket on the spool", "chain": "520 chain run (straight segment)", "cv_halfshaft": "tripod CV half-shaft with boots",
+    "engine": "placeholder finned 450 cc single engine block (replace with the chosen engine)", "fuel_cell": "6 L fuel cell",
+    "seat_shell": "moulded seat shell (placeholder, fitted on the buck)", "head_restraint": "head restraint pad and support", "steering_wheel": "quick-release steering wheel",
+    "steering_column": "steering column shaft, wheel to rack, with 2 U-joints", "steering_rack": "steering rack (Kaz FSAE rack)", "pedal_box_base": "pedal box base plate",
+    "brake_pedal": "brake pedal, 5:1 ratio, drives the balance bar", "throttle_pedal": "throttle pedal with cable pull", "balance_bar": "brake balance bar", "master_cyl": "brake master cylinder (bore in the name)",
+    "reservoir": "brake fluid reservoir", "impact_attenuator": "impact attenuator (standard foam IA)", "anti_intrusion_plate": "1.5 mm steel anti-intrusion plate",
+    "firewall": "firewall sheet", "belly_pan": "1.6 mm 5052 aluminium belly pan", "battery": "12 V battery", "primary_master_switch": "primary master switch (rotary, >= 100 A), right side at the main hoop",
+    "e-stop": "cockpit E-stop button", "inertia_switch": "inertia (crash) switch", "kill_relay": "30 A kill relay: the shutdown loop feeds the ignition and fuel pump through it", "brake_light": "LED brake light"}
+
+def describe(name):
+    for k, v in DESC.items():
+        if name.startswith(k):
+            corner = next((c for c in ("front_L", "front_R", "rear_L", "rear_R") if c in name), None)
+            return v + (f", {corner.replace('_', ' ').replace(' L', ' left').replace(' R', ' right')} corner" if corner else "")
+    return name.replace("_", " ")
+
 class Build:
     def __init__(self):
         self.root = cq.Assembly(name="NM26_Mule"); self.count = {}; self.rows = []; self.subs = {}
@@ -288,20 +336,20 @@ class Build:
     def finish(self):
         for name in sorted(self.subs): self.root.add(self.subs[name])
         return self
-    def add(self, shape, name, key, group):
+    def add(self, shape, name, key, group, contains=None):
         code = m.PART_CODE[key]; self.count[code] = self.count.get(code, 0) + 1
         pn = f"NM26-{code}-{self.count[code]:03d}"; full = f"{pn}_{name}"
         self.sub(group).add(shape, name=full, color=m.color(key))
-        self.rows.append((pn, name, group, m.COLORS[key][1], full + ".step", shape))
+        self.rows.append((pn, name, group, m.COLORS[key][1], full + ".step", shape, contains or describe(name)))
         return shape
 
 def build():
     b = Build()
     # frame weldment: every tube and bracket is a body in one sub-assembly
-    for i, (t, s, role) in enumerate(frame_tubes()):
-        b.add(t, f"tube_{s}_{role.split(' (')[0].replace(' ', '_').replace('/', '-')}", {"J": "frame_heavy", "H": "frame_heavy", "A": "frame_heavy", "B": "frame_b", "C": "frame_c"}[s], "01_frame_weldment")
-    for nm, s in frame_brackets():
-        b.add(s, nm, "frame_b", "01_frame_weldment")
+    for t, s, name, desc in frame_tubes():
+        b.add(t, name, {"J": "frame_heavy", "H": "frame_heavy", "A": "frame_heavy", "B": "frame_b", "C": "frame_c"}[s], "01_frame_weldment", desc)
+    for nm, s, desc in frame_brackets():
+        b.add(s, nm, "frame_b", "01_frame_weldment", desc)
     # corners
     for ax, x, tr in (("front", WHEELBASE, TRACK_F), ("rear", 0.0, TRACK_R)):
         g = U.geom(ax); links = m.susp_links(ax); zc = tr / 2
@@ -371,6 +419,26 @@ def build():
         if nm == "e-stop":
             s = fuse(s, cyl((x, y + h / 2, z), (x, y + h / 2 + 12, z), 6), cyl((x, y + h / 2 + 12, z), (x, y + h / 2 + 22, z), 18))
         b.add(s, nm.replace(" ", "_"), "electrical", "06_electrical")
+    # rear wing with DRS flap (aero.py geometry; flap shown closed)
+    import aero as AE
+    sec = AE.section("closed")
+    b.add(m.airfoil(sec["le"], AE.MAIN["chord"], AE.MAIN["angle"], AE.SPAN), "rear_wing_main_plane", "aero", "07_aero",
+          f"rear wing main plane, {AE.MAIN['chord']:.0f} mm chord at {AE.MAIN['angle']:.0f} deg, {AE.SPAN:.0f} mm span")
+    b.add(m.airfoil(sec["fle"], AE.FLAP["chord"], AE.FLAP["closed"], AE.SPAN), "rear_wing_DRS_flap", "aero", "07_aero",
+          f"DRS flap, {AE.FLAP['chord']:.0f} mm chord, shown closed at {AE.FLAP['closed']:.0f} deg (opens to {AE.FLAP['open']:.0f} deg about its 30 % chord pivot)")
+    xs = [q[0] for st in ("closed", "open") for q in AE.section(st).values()]
+    ys = [q[1] for st in ("closed", "open") for q in AE.section(st).values()]
+    for sg, side in ((1, "R"), (-1, "L")):
+        z0 = sg * AE.SPAN / 2
+        b.add(box(min(xs) - 5, max(xs) + 5, min(ys) - 60, max(ys) + 15, min(z0, z0 + sg * AE.ENDPLATE_T), max(z0, z0 + sg * AE.ENDPLATE_T)),
+              f"rear_wing_endplate_{side}", "aero", "07_aero", f"{AE.ENDPLATE_T:.0f} mm aluminium wing endplate, {'right' if sg > 0 else 'left'} side")
+    for i, (a_, b_, sz, role) in enumerate(AE.strut_members()):
+        side = SIDE((a_[2] + b_[2]) / 2); od, t = SIZES[sz]
+        b.add(tube(a_, b_, sz), f"{role.split(' (')[0].lower().replace(' ', '_')}_{side}", "aero", "07_aero",
+              f"4130 tube {od / 25.4:.3f} x {t / 25.4:.3f} in, {role}, {norm(sub(b_, a_)):.0f} mm long")
+    pv = sec["pivot"]
+    b.add(box(pv[0] - 30, pv[0] + 30, pv[1] - 70, pv[1] - 25, -30, 30), "DRS_servo_15Nm", "aero", "07_aero",
+          "12 V DRS servo (>= 15 N*m stall) with return spring and linkage to the flap")
     return b.finish()
 
 ZUP = cq.Location(V(), V(1, 0, 0), 90)   # model Y-up -> STEP Z-up (Fusion default)
@@ -378,17 +446,17 @@ ZUP = cq.Location(V(), V(1, 0, 0), 90)   # model Y-up -> STEP Z-up (Fusion defau
 if __name__ == "__main__":
     out = pathlib.Path(__file__).parent / "cad"; (out / "parts").mkdir(parents=True, exist_ok=True)
     b = build()
-    bad = [(pn, nm) for pn, nm, _, _, _, s in b.rows if not s.isValid() or s.Volume() <= 0]
+    bad = [(pn, nm) for pn, nm, _, _, _, s, _ in b.rows if not s.isValid() or s.Volume() <= 0]
     assert not bad, f"invalid solids: {bad}"
     import sys
-    for pn, nm, grp, col, fn, s in b.rows:
+    for pn, nm, grp, col, fn, s, _ in b.rows:
         if "--assembly-only" in sys.argv: break
         cq.exporters.export(s.rotate(V(0, 0, 0), V(1, 0, 0), 90), str(out / "parts" / fn))
     cq.Assembly(name="NM26_Mule_Zup").add(b.root, loc=ZUP).save(str(out / "NM26_Assembly.step"))
-    with open(out / "parts.csv", "w", newline="") as f:
-        w = csv.writer(f); w.writerow(["part_number", "name", "sub_assembly", "colour", "file"])
-        w.writerows(r[:5] for r in b.rows)
+    with open(out / "NM26_Assembly_parts.csv", "w", newline="") as f:
+        w = csv.writer(f); w.writerow(["part_number", "name", "sub_assembly", "colour", "file", "contains"])
+        w.writerows(r[:5] + (r[6],) for r in b.rows)
     shape = cq.Compound.makeCompound([r[5] for r in b.rows])
     for nm, d in [("iso", (1, 0.6, 1)), ("side", (0, 0, 1)), ("front", (1, 0, 0)), ("top", (0, 1, 0))]:
         cq.exporters.export(shape, str(out / f"view_{nm}.svg"), opt={"projectionDir": d, "showHidden": False, "width": 1400, "height": 800})
-    print(f"wrote {len(b.rows)} part files in cad/parts, cad/NM26_Assembly.step, cad/parts.csv, cad/view_*.svg")
+    print(f"wrote {len(b.rows)} part files in cad/parts, cad/NM26_Assembly.step, cad/NM26_Assembly_parts.csv, cad/view_*.svg")
