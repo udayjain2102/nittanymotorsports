@@ -1,0 +1,114 @@
+part_number,name,colour
+NM26-FRM-001,frame_size_J,Red
+NM26-FRM-002,frame_size_H,Red
+NM26-FRM-003,frame_size_A,Red
+NM26-FRM-004,frame_size_B,Orange
+NM26-FRM-005,frame_size_C,Grey
+NM26-WHL-001,tire_front_R,Black
+NM26-UPR-001,upright_front_R,Light grey
+NM26-UPR-002,hub_front_R,Light grey
+NM26-UPR-003,rotor_front_R,Light grey
+NM26-BRK-001,caliper_front_R,Purple
+NM26-SUS-001,lower_ring_lsus_front_R,Blue
+NM26-SUS-002,lower_bh_lsus_front_R,Blue
+NM26-SUS-003,upper_ring_sus_front_R,Blue
+NM26-SUS-004,upper_bh_sus_front_R,Blue
+NM26-SUS-005,steer_front_R,Blue
+NM26-SUS-006,pushrod_front_R,Cyan
+NM26-WHL-002,tire_front_L,Black
+NM26-UPR-004,upright_front_L,Light grey
+NM26-UPR-005,hub_front_L,Light grey
+NM26-UPR-006,rotor_front_L,Light grey
+NM26-BRK-002,caliper_front_L,Purple
+NM26-SUS-007,lower_ring_lsus_front_L,Blue
+NM26-SUS-008,lower_bh_lsus_front_L,Blue
+NM26-SUS-009,upper_ring_sus_front_L,Blue
+NM26-SUS-010,upper_bh_sus_front_L,Blue
+NM26-SUS-011,steer_front_L,Blue
+NM26-SUS-012,pushrod_front_L,Cyan
+NM26-WHL-003,tire_rear_R,Black
+NM26-UPR-007,upright_rear_R,Light grey
+NM26-UPR-008,hub_rear_R,Light grey
+NM26-UPR-009,rotor_rear_R,Light grey
+NM26-BRK-003,caliper_rear_R,Purple
+NM26-SUS-013,lower_rr_lsus_rear_R,Blue
+NM26-SUS-014,lower_r_lsus_rear_R,Blue
+NM26-SUS-015,upper_rr_sus_rear_R,Blue
+NM26-SUS-016,upper_r_sus_rear_R,Blue
+NM26-SUS-017,steer_rear_R,Blue
+NM26-SUS-018,pushrod_rear_R,Cyan
+NM26-WHL-004,tire_rear_L,Black
+NM26-UPR-010,upright_rear_L,Light grey
+NM26-UPR-011,hub_rear_L,Light grey
+NM26-UPR-012,rotor_rear_L,Light grey
+NM26-BRK-004,caliper_rear_L,Purple
+NM26-SUS-019,lower_rr_lsus_rear_L,Blue
+NM26-SUS-020,lower_r_lsus_rear_L,Blue
+NM26-SUS-021,upper_rr_sus_rear_L,Blue
+NM26-SUS-022,upper_r_sus_rear_L,Blue
+NM26-SUS-023,steer_rear_L,Blue
+NM26-SUS-024,pushrod_rear_L,Cyan
+NM26-SUS-025,rocker_front_R_arm_pushrod,Navy
+NM26-SUS-026,rocker_front_R_arm_shock,Navy
+NM26-SUS-027,rocker_front_R_arm_tie,Navy
+NM26-SUS-028,shock_front_R,Light blue
+NM26-SUS-029,rocker_front_L_arm_pushrod,Navy
+NM26-SUS-030,rocker_front_L_arm_shock,Navy
+NM26-SUS-031,rocker_front_L_arm_tie,Navy
+NM26-SUS-032,shock_front_L,Light blue
+NM26-SUS-033,rocker_rear_R_arm_pushrod,Navy
+NM26-SUS-034,rocker_rear_R_arm_shock,Navy
+NM26-SUS-035,rocker_rear_R_arm_tie,Navy
+NM26-SUS-036,shock_rear_R,Light blue
+NM26-SUS-037,rocker_rear_L_arm_pushrod,Navy
+NM26-SUS-038,rocker_rear_L_arm_shock,Navy
+NM26-SUS-039,rocker_rear_L_arm_tie,Navy
+NM26-SUS-040,shock_rear_L,Light blue
+NM26-CKP-001,seat_base,Green
+NM26-CKP-002,seat_back,Green
+NM26-CKP-003,head_restraint,Green
+NM26-BRK-005,pedal_box_base,Purple
+NM26-BRK-006,brake_pedal,Purple
+NM26-BRK-007,brake_pedal_pad,Purple
+NM26-BRK-008,throttle_pedal,Purple
+NM26-BRK-009,throttle_pedal_pad,Purple
+NM26-BRK-010,balance_bar,Purple
+NM26-BRK-011,master_cyl_front_0.625in,Purple
+NM26-BRK-012,reservoir_front,Purple
+NM26-BRK-013,master_cyl_rear_0.750in,Purple
+NM26-BRK-014,reservoir_rear,Purple
+NM26-BDY-001,anti_intrusion_plate,Cream
+NM26-BDY-002,impact_attenuator,Yellow
+NM26-STR-001,steering_wheel,Teal
+NM26-STR-002,steering_column,Teal
+NM26-STR-003,steering_rack,Teal
+NM26-PWT-001,engine_450cc_single_placeholder,Dark grey
+NM26-PWT-002,sprocket_front_13T,Dark grey
+NM26-PWT-003,sprocket_rear_50T,Dark grey
+NM26-PWT-004,chain_top,Dark grey
+NM26-PWT-005,chain_bottom,Dark grey
+NM26-PWT-006,spool,Dark grey
+NM26-PWT-007,spool_carrier_R,Dark grey
+NM26-PWT-008,cv_halfshaft_R,Dark grey
+NM26-PWT-009,spool_carrier_L,Dark grey
+NM26-PWT-010,cv_halfshaft_L,Dark grey
+NM26-BDY-003,firewall,Cream
+NM26-FUL-001,fuel_cell_6L,Brown
+NM26-BDY-004,belly_pan_1.6mm,Cream
+NM26-ELE-001,battery,Pink
+NM26-ELE-002,primary_master_switch,Pink
+NM26-ELE-003,e-stop,Pink
+NM26-ELE-004,inertia_switch,Pink
+NM26-ELE-005,kill_relay,Pink
+NM26-ELE-006,brake_light,Pink
+NM26-AER-001,rear_wing_main_plane,Lime
+NM26-AER-002,rear_wing_DRS_flap_closed,Lime
+NM26-AER-003,rear_wing_endplate_R,Lime
+NM26-AER-004,rear_wing_endplate_L,Lime
+NM26-AER-005,wing_strut,Lime
+NM26-AER-006,wing_brace_to_main_hoop,Lime
+NM26-AER-007,wing_strut,Lime
+NM26-AER-008,wing_brace_to_main_hoop,Lime
+NM26-AER-009,wing_spar_main_plane_mount,Lime
+NM26-AER-010,wing_strut_diagonal,Lime
+NM26-AER-011,DRS_servo_15Nm,Lime
