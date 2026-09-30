@@ -11,15 +11,15 @@ Whatever engine is chosen, measure it into `powertrain.py` and make `python repo
 
 | Option | Power | Start | Price seen | Fits the 450 bay? | Notes |
 |---|---|---|---|---|---|
-| **Honda CRF450R 2017+** (used engine) | ~50 hp | electric | ~$2,800 new crate; used varies | yes (it is the design basis) | Most common FSAE-lite engine; lots of parts and service info |
-| Honda CRF450R 2002–2016 (used engine) | ~45 hp | **kick only** | $1,500–1,600 (eBay, 2005/2007 running) | yes | Cheapest real option, but needs an electric-start conversion: nobody can kick-start from a seat |
+| **Honda CRF450R 2018+** (used engine), **chosen** | ~53 hp, 48 N·m @ 7000 | electric | ~$2,800 new crate; used varies | yes (it is the design basis) | Most common FSAE-lite engine; lots of parts and service info. 2017 has kick start standard (electric start was an option kit): only buy a 2017 with the kit fitted |
+| Honda CRF450R 2002–2017 (used engine) | ~45 hp | **kick only** | $1,500–1,600 (eBay, 2005/2007 running) | yes | Cheapest real option, but needs an electric-start conversion: nobody can kick-start from a seat |
 | Honda CRF450X (used engine) | ~40 hp | electric | used bikes $3,500+ | yes | Wider-ratio enduro gearbox, softer tune: easy to drive |
 | Yamaha YZ450F 2018+ (used engine) | ~50 hp | electric | ~$4,300 (2022, eBay) | check: rearward-tilted cylinder | Measure the envelope; intake faces forward |
 | KTM / Husqvarna 450 SX-F | ~55 hp | electric | check | check | Light, but parts cost more |
 | Predator 420 + Comet 40-series CVT (kit) | 13 hp | pull / electric kit | ~$380 engine + CVT | **no** (`python powertrain.py`, Option A) | By its listed size it is too tall for the space under the fuel cell (434 vs 388 mm) and too long or too wide once the CVT is added. The listed size includes the fuel tank, muffler and air filter, so measure the bare engine before ruling it out |
 
-**Recommendation:** a used electric-start 450, preferably a CRF450R 2017+ or a CRF450X. The kit engine only works if
-the fuel cell moves or a measured bare block turns out smaller; either way it becomes a redesign, not a bolt-in.
+**Chosen 2026-09-30: Honda CRF450R 2018+.** Still needed from the service manual or a real engine: primary and gear ratios,
+rev limit, mass, mount points and countershaft position (`ENGINE` in `powertrain.py` still has generic values for these).
 
 ## Drivetrain (chosen)
 
@@ -67,5 +67,6 @@ Every hydraulic part needs a written rating of at least **296 bar** (the 2000 N 
 
 ## Price sources for this page
 - Predator 420 size and torque: [Harbor Freight](https://www.harborfreight.com/13-hp-420cc-ohv-horizontal-shaft-gas-engine-epa-60340.html), [Predator](https://predatorbrand.com/420cc-predator-engine/)
+- CRF450R power, torque: [UltimateSpecs](https://www.ultimatespecs.com/motorcycles-specs/honda/honda-crf450r-2017); electric start standard from 2018: [Ultimate Motorcycling](https://ultimatemotorcycling.com/2017/05/10/2018-honda-crf450r-unveiled-now-electric-start/); stock sprockets 13/49: [Vital MX](https://www.vitalmx.com/forums/Tech-Help-Race-Shop,42/CRF-2017-drive-and-gear-ratios,1314714)
 - Used 450 engines: [eBay CRF450R engines](https://www.ebay.com/b/Motorcycle-Scooter-Complete-Engines-for-Honda-CRF450R/171108/bn_1398521), [eBay YZ450F engines](https://www.ebay.com/b/Complete-Engines-for-Yamaha-YZ450F/171108/bn_21454774)
 - Others as listed in `BUDGET_PLAN.md`.

@@ -1,8 +1,9 @@
 """Powertrain: gearing, chain drive (length, adjustment, wrap, clearances), CV angles, engine mounts,
 and the frame under a full-traction launch (chain loop + rear tyre force, inertia relief).
 
-ENGINE values are a generic 450 cc single placeholder: replace them with the chosen engine's
-service-manual numbers and measured mount/countershaft positions, then re-run pytest.
+ENGINE: chosen 2026-09-30 = Honda CRF450R 2018+ (electric start standard from 2018). Peak torque is the published
+figure; redline, primary/gear ratios, envelope, countershaft and mass are still generic 450 values: replace them with
+the service-manual numbers and measured mount/countershaft positions, then re-run pytest.
 Axes as mule.py (X fwd, Y up, Z right). Chain on the LEFT side (motorcycle convention).
 Run: python powertrain.py
 """
@@ -12,7 +13,8 @@ import mule as m
 import loads as L
 import fea
 
-ENGINE = dict(redline=11500, peak_torque=50.0,             # rpm, N*m   (placeholder: verify)
+ENGINE = dict(name="Honda CRF450R 2018+",
+              redline=11500, peak_torque=48.0,             # rpm (placeholder: verify), N*m @ 7000 rpm (published, 2017+)
               primary=2.6, gears=[2.0, 1.6, 1.33, 1.14, 1.0],  # primary reduction, gearbox ratios (placeholder)
               box=(150.0, m.X_MAIN - 50, 130.0, 470.0, -170.0, 170.0),   # envelope x0,x1,y0,y1,z0,z1 (placeholder)
               countershaft=(200.0, 250.0), mass=32.0)          # output shaft (X, Y) and mass

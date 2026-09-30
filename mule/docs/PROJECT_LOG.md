@@ -158,3 +158,14 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - **Done:** `powertrain.py` Option A (`KIT`, `CVT`, `kit_bay`, `kit_fit`, `kit_checks`). It fits a horizontal-shaft kit engine + go-kart CVT on an adapter plate on the 450 mounts, crank across the car, and tries both yaw orientations. It is printed by `python powertrain.py` but not asserted, because the option is not selected. One new test in `tests/test_powertrain.py`.
 - **Result:** Predator 420 at its listed size (480 × 434 × 351 mm, which includes the tank, muffler and filter) fails. The height is 434 mm against 388 mm under the fuel cell. The length is 351 mm against 330 mm between the jackshaft and the firewall, and with the CVT the width is 590 mm against 487 mm between the rear-ring tubes. The Comet 40-series CVT rating (8–18 hp) is fine. Recommendation changed to a used electric-start 450; `BUDGET_PLAN.md` updated.
 - **Added:** `docs/PARTS_LIST.md`: engine candidates with prices, and the chosen drivetrain, chassis, brake and safety parts with the script that sizes each one.
+
+## 2026-09-30 - engine chosen: Honda CRF450R 2018+
+- **Decision (user):** CRF450R "2017+". Online check: the 2017 has kick start as standard (electric start was an optional kit); electric start is standard from 2018. So the target is 2018+, or a 2017 with the kit fitted.
+- **Done:** `ENGINE` in `powertrain.py` named, peak torque 48 N·m @ 7000 rpm (published) replaces the 50 N·m placeholder. Redline, primary and gear ratios, envelope, countershaft and mass are still generic: gear ratios are not published online, so they need the service manual. Stock bike sprockets are 13/49 (ours 13/50).
+- WHATS_NEXT, PARTS_LIST and the mass label updated.
+
+## 2026-09-30 - flaky CI fixed: singular support set in `fea.inertia_relief`
+- **Symptom:** GitHub Actions failed 3 of 8 runs on unchanged code, always `test_loads.py` with frame FoS exactly 0.829 (passing runs and every local run: 1.26).
+- **Cause:** `inertia_relief` picked 3-2-1 supports as the nodes farthest from the CG. All three landed on the front bulkhead plane (x 2130), and that set does not stop rotation about Y and Z, so the stiffness matrix was singular. `np.linalg.solve` still returned an answer, but the rigid-body part depended on rounding, which differs between runner CPUs.
+- **Fix:** clamp one node in all 6 DOF (the loads are already balanced, so it carries ~zero force). All results unchanged locally (loads FoS 1.264). New test `test_inertia_relief_stress_independent_of_support_node` fails on the old code and passes now.
+- Also: the CRF450R torque (48 N·m) moves the acceleration prediction from 4.47 s to 4.49 s; TEST_PLAN and PDS updated.

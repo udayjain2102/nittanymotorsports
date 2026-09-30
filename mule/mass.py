@@ -39,7 +39,7 @@ def items():
     fr_kg, fr_c = frame(); bx = PT.ENGINE["box"]
     out = [("frame (tube, from geometry)", fr_kg, (fr_c[0], fr_c[1]), True),
            ("weld, tabs, brackets (+8 % of tube)", 0.08 * fr_kg, (fr_c[0], fr_c[1]), True),
-           ("engine 450 single (placeholder)", PT.ENGINE["mass"], ((bx[0] + bx[1]) / 2, (bx[2] + bx[3]) / 2), True),
+           ("engine CRF450R 2018+ (mass placeholder)", PT.ENGINE["mass"], ((bx[0] + bx[1]) / 2, (bx[2] + bx[3]) / 2), True),
            ("driver", DRIVER["kg"], (m.HIP[0] + DRIVER["dx"], m.HIP[1] + DRIVER["dy"]), True),
            ("fuel 6 L", 4.5, (m.X_MAIN - 13 - 115, 560.0), True),
            ("fuel cell, pump, lines", 2.5, (m.X_MAIN - 13 - 115, 560.0), True),

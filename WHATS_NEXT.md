@@ -10,9 +10,9 @@ In order. Tick them off here as they're done. The costs come from [`mule/docs/BU
 
 ## Before ordering frame tube: pick the engine
 The frame's engine mounts are welded in step 1, so the engine has to be chosen first. Options and prices: [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md).
-- [ ] Choose the engine. The kit-engine option (Predator 420 + CVT) **does not fit** the 450 engine bay by its listed size (`python powertrain.py`, Option A), so the recommendation is a used electric-start 450 (CRF450R 2017+ or CRF450X).
-- [ ] If you still want the kit engine: measure the bare engine (no tank, muffler or air filter) into `KIT` in `powertrain.py`. If it still fails, the fuel cell has to move, and that is a frame change.
-- [ ] Measure the chosen engine's mounts, output shaft and envelope into `ENGINE` in `powertrain.py`; make `python report.py` pass.
+- [x] Choose the engine: **Honda CRF450R 2018+** (electric start is standard from 2018; a 2017 only if it already has Honda's electric-start kit). The kit engine (Predator 420 + CVT) was ruled out: it does not fit the 450 bay (`python powertrain.py`, Option A).
+- [ ] Get the service manual: primary reduction, gear ratios, rev limit, engine mass. Enter them in `ENGINE` in `powertrain.py`.
+- [ ] Measure the engine (or a borrowed one) for mount points, countershaft position and envelope; enter them in `ENGINE` and make `python report.py` pass **before** ordering tube.
 
 ## Step 0: mock-up ($100–200)
 - [ ] Build the plywood/conduit buck (`mule/docs/BUILD_PLAN.md` §2m).
@@ -33,7 +33,7 @@ The frame's engine mounts are welded in step 1, so the engine has to be chosen f
 ## After it drives
 - [ ] Weigh the car and enter real masses in `mule/mass.py`: the tilt margin is only 0.9°.
 - [ ] TEST_PLAN stage 7 (skidpad); put the measured grip back into `lapsim.py`.
-- [ ] Upgrades, one request each: used 450 engine → new tyres → Kaz rack → rear wing + DRS → data logging.
+- [ ] Upgrades, one request each: new tyres → Kaz rack → rear wing + DRS → data logging.
 
 ## Keeping the repo useful
 - Every design change: edit the code, run `python report.py` in `mule/`, add a line to `mule/docs/PROJECT_LOG.md`, then commit and push (GitHub re-runs every check).
