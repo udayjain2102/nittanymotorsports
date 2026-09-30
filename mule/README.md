@@ -8,7 +8,7 @@ The requirements (numbers plus how each is verified) are in [PDS.md](PDS.md). Th
 
 ```bash
 python3.11 -m venv .venv && source .venv/bin/activate
-pip install cadquery matplotlib numpy pytest
+pip install -r ../requirements.txt     # cadquery, numpy, matplotlib, pytest
 ```
 
 ## Run
