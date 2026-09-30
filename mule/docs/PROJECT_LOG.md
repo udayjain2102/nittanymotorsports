@@ -164,8 +164,10 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - **Done:** `ENGINE` in `powertrain.py` named, peak torque 48 N·m @ 7000 rpm (published) replaces the 50 N·m placeholder. Redline, primary and gear ratios, envelope, countershaft and mass are still generic: gear ratios are not published online, so they need the service manual. Stock bike sprockets are 13/49 (ours 13/50).
 - WHATS_NEXT, PARTS_LIST and the mass label updated.
 
-## 2026-09-30 - flaky CI fixed: singular support set in `fea.inertia_relief`
-- **Symptom:** GitHub Actions failed 3 of 8 runs on unchanged code, always `test_loads.py` with frame FoS exactly 0.829 (passing runs and every local run: 1.26).
-- **Cause:** `inertia_relief` picked 3-2-1 supports as the nodes farthest from the CG. All three landed on the front bulkhead plane (x 2130), and that set does not stop rotation about Y and Z, so the stiffness matrix was singular. `np.linalg.solve` still returned an answer, but the rigid-body part depended on rounding, which differs between runner CPUs.
-- **Fix:** clamp one node in all 6 DOF (the loads are already balanced, so it carries ~zero force). All results unchanged locally (loads FoS 1.264). New test `test_inertia_relief_stress_independent_of_support_node` fails on the old code and passes now.
+## 2026-09-30 - flaky CI fixed: rocker tangent picked by rounding
+- **Symptom:** GitHub Actions failed about half the runs on unchanged code, always `test_loads.py` with frame FoS 0.829 (every local run: 1.26).
+- **Found with an 8-job CI matrix:** failures only on some runner CPUs (mostly newer AVX-512 ones), and only the front load cases changed. The front rocker's shock pickup was different there. `rocker.design` chose between two mirror-image tangent solutions by "the smaller |B|", but the two are exactly equal in theory (111.52318241153715 vs ...714 locally), so the last bit of rounding picked the side.
+- **Fix:** `rocker.TANGENT_SIDE` fixes the side per axle (front −1, rear +1: the sides the design was validated with). Every check value is unchanged locally.
+- **Also fixed on the way:** `fea.inertia_relief` chose 3-2-1 supports that all sat on the front bulkhead plane and did not stop rotation about Y and Z (singular stiffness matrix). It now clamps one node in 6 DOF; results unchanged; new test `test_inertia_relief_stress_independent_of_support_node` fails on the old code. This was not the CI cause.
+- `test_loads.py` now prints every load case when the frame check fails.
 - Also: the CRF450R torque (48 N·m) moves the acceleration prediction from 4.47 s to 4.49 s; TEST_PLAN and PDS updated.

@@ -273,7 +273,7 @@ Each `test_all_*_checks_pass` test runs one module's checks above; the others te
 
 | Test | Outcome | Seconds |
 |---|---|---|
-| `tests/test_aero.py::test_all_aero_checks_pass` | pass | 0.2 |
+| `tests/test_aero.py::test_all_aero_checks_pass` | pass | 0.19 |
 | `tests/test_aero.py::test_forces_are_q_s_c` | pass | 0.0 |
 | `tests/test_aero.py::test_axle_split_sums_to_downforce` | pass | 0.0 |
 | `tests/test_aero.py::test_drs_truth_table_fails_closed` | pass | 0.0 |
@@ -286,15 +286,15 @@ Each `test_all_*_checks_pass` test runs one module's checks above; the others te
 | `tests/test_brakes.py::test_pressure_at_split_matches_bar_force` | pass | 0.0 |
 | `tests/test_cad_parts.py::test_part_files_match_csv` | pass | 0.0 |
 | `tests/test_cad_parts.py::test_assembly_step_has_every_part` | pass | 0.39 |
-| `tests/test_cockpit.py::test_templates_pass` | pass | 30.07 |
+| `tests/test_cockpit.py::test_templates_pass` | pass | 29.78 |
 | `tests/test_cockpit.py::test_polygon_clearance_sign` | pass | 0.0 |
 | `tests/test_cockpit.py::test_t12_template_size` | pass | 0.0 |
 | `tests/test_fab.py::test_perpendicular_cope_long_point` | pass | 0.0 |
 | `tests/test_fab.py::test_90_degree_bend_program` | pass | 0.0 |
 | `tests/test_fab.py::test_pieces_cover_every_member_once` | pass | 0.0 |
 | `tests/test_fab.py::test_hoops_bendable_with_legal_radius` | pass | 0.0 |
-| `tests/test_fab.py::test_every_tube_end_has_a_joint_and_never_copes_onto_a_smaller_tube` | pass | 0.42 |
-| `tests/test_fab.py::test_outputs_written` | pass | 9.59 |
+| `tests/test_fab.py::test_every_tube_end_has_a_joint_and_never_copes_onto_a_smaller_tube` | pass | 0.43 |
+| `tests/test_fab.py::test_outputs_written` | pass | 10.18 |
 | `tests/test_fea.py::test_cantilever_and_inertia_relief` | pass | 0.01 |
 | `tests/test_fea.py::test_hoop_cases_and_torsion` | pass | 0.07 |
 | `tests/test_fea.py::test_inertia_relief_stress_independent_of_support_node` | pass | 0.02 |
@@ -326,7 +326,7 @@ Each `test_all_*_checks_pass` test runs one module's checks above; the others te
 | `tests/test_rules.py::test_tube_sizes_meet_F_3_4_1` | pass | 0.0 |
 | `tests/test_rules.py::test_frame_is_symmetric` | pass | 0.0 |
 | `tests/test_rules.py::test_no_zero_length_or_duplicate_members` | pass | 0.0 |
-| `tests/test_rules.py::test_belly_pan_sits_under_lowest_tubes` | pass | 0.02 |
+| `tests/test_rules.py::test_belly_pan_sits_under_lowest_tubes` | pass | 0.06 |
 | `tests/test_rules.py::test_suspension_links_are_symmetric_pairs` | pass | 0.0 |
 | `tests/test_rules.py::test_readme_colour_key_matches_the_model` | pass | 0.0 |
 | `tests/test_rules.py::test_every_cad_colour_group_has_a_part_code` | pass | 0.0 |
@@ -341,7 +341,7 @@ Each `test_all_*_checks_pass` test runs one module's checks above; the others te
 | `tests/test_springs.py::test_springs_and_stroke_are_buyable` | pass | 0.0 |
 | `tests/test_springs.py::test_spring_split_gives_mild_understeer_balance` | pass | 0.01 |
 | `tests/test_springs.py::test_motion_ratio_and_travel_meet_targets` | pass | 0.0 |
-| `tests/test_steering.py::test_all_steering_checks_pass` | pass | 0.11 |
+| `tests/test_steering.py::test_all_steering_checks_pass` | pass | 0.1 |
 | `tests/test_steering.py::test_kingpin_rotation_is_rigid` | pass | 0.0 |
 | `tests/test_suspension.py::test_parallel_equal_arms_have_no_camber_gain` | pass | 0.0 |
 | `tests/test_suspension.py::test_all_suspension_checks_pass` | pass | 0.0 |
