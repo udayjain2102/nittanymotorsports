@@ -20,4 +20,9 @@ def test_upright_equilibrium_every_case():
 def test_links_dont_buckle_and_frame_holds():
     worst_link, which, worst_frame = L.run(verbose=False)
     assert worst_link > 2, which
-    assert worst_frame > 1.0
+    if worst_frame <= 1.0:   # diagnostics: this failed only on some CI runners (0.829 vs 1.26 locally)
+        import io, contextlib, platform
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            L.run(verbose=True); np.show_config()
+        raise AssertionError(f"frame FoS {worst_frame:.3f} on {platform.processor() or platform.machine()}\n{buf.getvalue()}")
