@@ -1,17 +1,18 @@
 # What's next
 
-In order. Tick them off here as they're done. The costs come from [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md).
+In order. Tick them off here as they're done. The costs come from [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md), the parts from [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md).
+Last updated 2026-09-30. Engine chosen (CRF450R 2018+); total to a driving car is now about **$7,400–10,900**.
 
 ## This week (no money needed)
-- [ ] Email Wilwood (GP200, PS-1 calipers), Tilton (78-series master cylinders) and the hose supplier for their **maximum pressure ratings in writing**. We need at least 296 bar (4,290 psi).
 - [ ] Ask nearby FSAE teams for used 13″ wheels, slicks, MTB coil shocks, rod ends and uprights.
 - [ ] Ask Keizer and Hoosier about FSAE sponsorship or discounts.
 - [ ] Submit the funding request for **step 0 ($100–200)** and **step 1 ($1,100–1,600)**.
+- [ ] Borrow or find a CRF450R 2018+ to measure (a dealer, a team member's bike or another FSAE team). The frame can't be finalised without its mount points.
 
-## Before ordering frame tube: pick the engine
-The frame's engine mounts are welded in step 1, so the engine has to be chosen first. Options and prices: [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md).
+## Before ordering frame tube: pin down the engine
+The frame's engine mounts are welded in step 1, so the engine has to be known first.
 - [x] Choose the engine: **Honda CRF450R 2018+** (electric start is standard from 2018; a 2017 only if it already has Honda's electric-start kit). The kit engine (Predator 420 + CVT) was ruled out: it does not fit the 450 bay (`python powertrain.py`, Option A).
-- [ ] Get the service manual: primary reduction, gear ratios, rev limit, engine mass. Enter them in `ENGINE` in `powertrain.py`.
+- [ ] Get the CRF450R 2018+ service manual: primary reduction, gear ratios, rev limit, engine mass. These aren't published online. Enter them in `ENGINE` in `powertrain.py` (torque, 48 N·m, is already in).
 - [ ] Measure the engine (or a borrowed one) for mount points, countershaft position and envelope; enter them in `ENGINE` and make `python report.py` pass **before** ordering tube.
 
 ## Step 0: mock-up ($100–200)
@@ -27,7 +28,8 @@ The frame's engine mounts are welded in step 1, so the engine has to be chosen f
 
 ## Steps 2–4: to a driving car
 - [ ] Step 2, rolling chassis ($1,800–2,500): suspension, used shocks, fabricated steel uprights (re-check in `uprights.py`), used wheels and tyres, cheap rack. Then TEST_PLAN stage 2.
-- [ ] Step 3, engine and drive ($2,600–4,000 with a used 450): buy the engine chosen above, check it against the measured numbers, then buy the chain, sprockets, spool and CV shafts.
+- [ ] Step 3, engine and drive ($2,600–4,000 with a used 450). This is over the ~$2,500 per request, so split it: **3a** the engine ($1,500–2,800, a running 2018+ CRF450R with electric start), then **3b** chain, sprockets, spool, CV shafts, cooling, exhaust and fuel. Check the engine against the measured numbers before 3b.
+- [ ] Before step 4: email Wilwood (GP200, PS-1 calipers), Tilton (78-series master cylinders) and the hose supplier for their **maximum pressure ratings in writing**. We need at least 296 bar (4,290 psi). *(On hold for now.)*
 - [ ] Step 4, brakes, safety and electrics ($1,800–2,600): buy only brake parts rated for 296 bar or more; buy the harness new. Then TEST_PLAN stages 3–6. **First drive.**
 
 ## After it drives
@@ -37,4 +39,6 @@ The frame's engine mounts are welded in step 1, so the engine has to be chosen f
 
 ## Keeping the repo useful
 - Every design change: edit the code, run `python report.py` in `mule/`, add a line to `mule/docs/PROJECT_LOG.md`, then commit and push (GitHub re-runs every check).
+- A day's work goes into `WORKDONE.md` as a short summary; the detail stays in `PROJECT_LOG.md`.
+- No MATLAB needed: everything runs in Python (see the README quick start for the setup).
 - New Fusion uploads go in `adi laptop files > Nittany Motorsports` as the next version (`NM26_Assembly_v5`, …); move the old one out.
