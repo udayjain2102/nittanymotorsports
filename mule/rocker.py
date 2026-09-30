@@ -17,6 +17,7 @@ A_SHIFT = {"front": 20.0, "rear": 0.0}            # pushrod pickup moved along t
 SHOCK_MOUNT = {"front": "fh_sis", "rear": "r_lsus"}  # shock chassis end. Front: front hoop at SIS height, clear of the T.1.2 template
 BRACKET = {"front": (80.0, 40.0, 0.0), "rear": (-60.0, 0.0, 40.0)}  # shock eye offset from its node (bracket), mm; grid-searched for clearance
 SHOCK_R = 25.0                                      # shock body/spring radius for clearance
+TANGENT_SIDE = {"front": -1, "rear": 1}            # which of the two mirror-image shock tangents (equal rocker size) to use
 
 def unit(v): v = np.asarray(v, float); return v / np.linalg.norm(v)
 
@@ -29,13 +30,12 @@ def design(axle):
     e1 = d; e2 = unit((S - P) - np.dot(S - P, d) * d)  # in-plane basis
     to2 = lambda v: np.array([np.dot(v, e1), np.dot(v, e2)]); to3 = lambda w: P + w[0] * e1 + w[1] * e2
     s = to2(S - P); hs = springs.ROCKER[axle] * H_P[axle]; L = SHOCK_EYE - SAG * SHOCK_STROKE
-    # tangent from S to the circle |x| = hs, then walk L along it from S (take the tangent on the -e2... side giving smaller rocker)
+    # tangent from S to the circle |x| = hs, then walk L along it from S. The two tangents are mirror images with
+    # equal |B|, so the side is fixed explicitly: picking "the smaller" was decided by the last bit of rounding and
+    # flipped the front rocker on some CI CPUs (frame FoS 0.83 instead of 1.26).
     ds = np.linalg.norm(s); t = math.sqrt(ds * ds - hs * hs)
-    best = None
-    for sg in (1, -1):
-        ang = math.atan2(-s[1], -s[0]) + sg * math.asin(hs / ds)      # direction from S along the tangent
-        B = s + L * np.array([math.cos(ang), math.sin(ang)])
-        if best is None or np.linalg.norm(B) < np.linalg.norm(best): best = B
+    ang = math.atan2(-s[1], -s[0]) + TANGENT_SIDE[axle] * math.asin(hs / ds)   # direction from S along the tangent
+    best = s + L * np.array([math.cos(ang), math.sin(ang)])
     g = dict(P=P, S=S, U=U, d=d, A2=np.array([A_SHIFT[axle], H_P[axle]]), B2=best, s2=s, to3=to3, to2=to2, L=L, tangent=t, axle=axle)
     # pushrod line (along e1) passes H_P from P; pick the side that COMPRESSES the shock in bump
     if shock_length(g, 5)[0] > shock_length(g, -5)[0]: g["A2"] = np.array([g["A2"][0], -g["A2"][1]])
