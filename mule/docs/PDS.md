@@ -23,11 +23,11 @@ This page lists the car's requirements. Each one has a number and a way to verif
 | R8 | Kinematics | RC 15–60 / 25–80 mm; camber gain −0.3 to −1.2 °/25 mm; bump steer ≤ 0.25° front and rear; front scrub ≤ 40 mm; front share of the lateral load transfer 0–12 points above the front weight share; outside tyre −2.0 to −0.3° to the ground at 1.5 g; compliance toe and camber ≤ 0.25° | 37/52 mm, −0.72/−0.75, 0.11° / 0.00°; 38 mm; 49.6 % vs 45 %; −0.9/−0.4°; 0.10 in / 0.18 out toe (`suspension.py`, `steering.py`, `roll.py`, `compliance.py`) | T2.2, T2.3, T2.7 |
 | R9 | Steering | 23° inner lock; Ackermann 0–120 %; ratio 4–7:1; lock-to-lock ≤ 180°; rim force ≤ 120 N at 1.5 g; caster 3–7° | 50 %, 4.1:1, 178°, 95 N, 4.6° (`steering.py`, `sideview.py`) | T2.6 |
 | R10 | Braking | lock all four with ≤ 600 N; 2000 N without failure; front locks first | 567 N; 296 bar; 59 % front (`brakes.py`) | T3.2–T3.4, T6.1 |
-| R11 | Performance | 100–130 km/h top speed; 1st gear reaches traction | 110 km/h (`powertrain.py`) | T5.1 |
+| R11 | Performance | 100–130 km/h top speed; 1st gear reaches traction | 117 km/h (`powertrain.py`, CRF450R ratios) | T5.1 |
 | R12 | Durability | bearing L10 ≥ 3 × 2000 km; hub and upright FoS ≥ 1.5 | 271–512 Mrev; 5.1 / 1.7 (`uprights.py`) | T7.2 |
 | R13 | Shutdown | any device kills ignition and fuel pump; master switch cuts everything | netlist simulation (`shutdown.py`) | T4.4 |
 | R15 | Aero | Rear wing with DRS inside T.7; 200 N push ≤ 25 mm; mounts don't oscillate; DRS fails closed; no event slower than without the wing | all T.7 limits met in both flap positions; 0.1 mm; 159 Hz; spring return; autocross −0.67 s (`aero.py`, `lapsim.py`) | T4.5, T5.5 |
-| R14 | Events (point mass, grip 1.3) | acceleration ≤ 5.0 s; skidpad ≤ 5.5 s; autocross average ≥ 40 km/h | 4.49 s; 5.17 s; 50 km/h (`lapsim.py`) | T5.1, T7.1 |
+| R14 | Events (point mass, grip 1.3) | acceleration ≤ 5.0 s; skidpad ≤ 5.5 s; autocross average ≥ 40 km/h | 4.48 s; 5.12 s; 51 km/h (`lapsim.py`) | T5.1, T7.1 |
 
 **Accepted non-requirements for the mule:**
 - the FSAE hairpin turning circle (ours is 5.7 m radius; a hairpin needs 4.5 m);
@@ -89,7 +89,7 @@ Revisit the wing only after the tilt margin grows (weigh the parts) and the car 
 
 | Event | Best | 10th | Median | NM26 mule, point mass at grip 1.3 |
 |---|---|---|---|---|
-| Acceleration, 75 m | 4.169 s | 4.324 s | 4.617 s | 4.49 s (CRF450R torque, generic gear ratios) |
+| Acceleration, 75 m | 4.169 s | 4.324 s | 4.617 s | 4.48 s (CRF450R torque and ratios) |
 | Skidpad | 5.080 s | 5.287 s | 5.515 s | 5.17 s |
 | Autocross | 48.878 s | 52.019 s | 55.725 s | 59.2 s on our own 0.8 km course, so indicative only |
 

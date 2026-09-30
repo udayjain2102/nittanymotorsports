@@ -2,8 +2,8 @@
 and the frame under a full-traction launch (chain loop + rear tyre force, inertia relief).
 
 ENGINE: chosen 2026-09-30 = Honda CRF450R 2018+ (electric start standard from 2018). Peak torque is the published
-figure; redline, primary/gear ratios, envelope, countershaft and mass are still generic 450 values: replace them with
-the service-manual numbers and measured mount/countershaft positions, then re-run pytest.
+figure; primary and gear ratios and dry mass are from the 2017-18 service manual. Redline, envelope and countershaft
+are still generic 450 values: replace them with measured mount/countershaft positions, then re-run pytest.
 Axes as mule.py (X fwd, Y up, Z right). Chain on the LEFT side (motorcycle convention).
 Run: python powertrain.py
 """
@@ -15,9 +15,9 @@ import fea
 
 ENGINE = dict(name="Honda CRF450R 2018+",
               redline=11500, peak_torque=48.0,             # rpm (placeholder: verify), N*m @ 7000 rpm (published, 2017+)
-              primary=2.6, gears=[2.0, 1.6, 1.33, 1.14, 1.0],  # primary reduction, gearbox ratios (placeholder)
+              primary=66 / 28, gears=[32 / 15, 29 / 17, 27 / 19, 23 / 19, 24 / 23],  # 2017-18 service manual p. 1-5
               box=(150.0, m.X_MAIN - 50, 130.0, 470.0, -170.0, 170.0),   # envelope x0,x1,y0,y1,z0,z1 (placeholder)
-              countershaft=(200.0, 250.0), mass=32.0)          # output shaft (X, Y) and mass
+              countershaft=(200.0, 250.0), mass=30.9)          # output shaft (X, Y): placeholder; dry mass after '17 (manual p. 1-4)
 CHAIN = dict(pitch=15.875, width=17.0, break_kN=35.6)      # DID 520VO O-ring: 8000 lb average tensile (DID listing)
 FRONT_T, REAR_T = 13, 50                                   # sprockets
 CHAIN_Z = -180.0                                           # chain line (left): outboard of the engine case, inboard of the spool posts

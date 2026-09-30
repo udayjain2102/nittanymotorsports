@@ -18,8 +18,9 @@ Whatever engine is chosen, measure it into `powertrain.py` and make `python repo
 | KTM / Husqvarna 450 SX-F | ~55 hp | electric | check | check | Light, but parts cost more |
 | Predator 420 + Comet 40-series CVT (kit) | 13 hp | pull / electric kit | ~$380 engine + CVT | **no** (`python powertrain.py`, Option A) | By its listed size it is too tall for the space under the fuel cell (434 vs 388 mm) and too long or too wide once the CVT is added. The listed size includes the fuel tank, muffler and air filter, so measure the bare engine before ruling it out |
 
-**Chosen 2026-09-30: Honda CRF450R 2018+.** Still needed from the service manual or a real engine: primary and gear ratios,
-rev limit, mass, mount points and countershaft position (`ENGINE` in `powertrain.py` still has generic values for these).
+**Chosen 2026-09-30: Honda CRF450R 2018+.** From the 2017–18 service manual (now in `powertrain.py`): primary 2.357 (66/28), gears
+2.133 / 1.706 / 1.421 / 1.211 / 1.043, stock sprockets 13/49, dry mass 30.9 kg. Still needed from a real engine: mount points,
+countershaft position and envelope; rev limit not found yet.
 
 ## Drivetrain (chosen)
 

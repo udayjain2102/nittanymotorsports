@@ -240,7 +240,7 @@ Part values came from Wilwood and Tilton listings. The pad friction (0.40), line
 | 2000 N pedal (T.3.2.2) | 296 bar front, 145 bar rear (limit 300 bar, unverified). Safety factors: pedal blade 3.8, pivot bolt 6.8, balance bar 2.1, frame 1.31. |
 | Pedal travel | 18 mm at 2000 N. With one circuit lost, the pedal travels 74–84 mm before the master cylinder bottoms. |
 | BOTS | Trips at **45 mm** pad travel: 26 mm beyond normal travel, at least 29 mm before either master cylinder bottoms |
-| Rotor heat | One stop from top speed (110 km/h): +103 °C front, +47 °C rear |
+| Rotor heat | One stop from top speed (117 km/h): +117 °C front, +50 °C rear |
 | Packaging | The front of the master cylinders is at X = 2085. That keeps the pedal box 25 mm clear of the anti-intrusion plate without moving the bulkhead. |
 
 Frame changes this needed:
@@ -324,7 +324,7 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
 | Bracket and pickup stiffness | not modelled | toe 0.10° in (front), 0.18° out (rear) at 1.5 g; camber ≤ 0.04° | `compliance.py`: frame FEA at the pickups plus link stretch, upright solved on its six links. No arm or rod end is bent: every link is two-force, and the pushrods land on the uprights. The rear outside wheel toes *out*, a small oversteer effect. About half of that is link stretch and half frame flex. No single tube upsize changes it by more than 0.01°, and a clamp nearer the rear axle halves the frame part, so 0.18° is the conservative figure. TEST_PLAN T2.7 measures it. |
 | Handling balance (from the NAU 2025 FSAE suspension report's roll-stiffness method) | not checked; really **40 % of the lateral load transfer on the front** with 45 % of the weight there, so the rear saturates first (oversteer) | **49.6 % front** | `roll.lltd()` (Milliken: elastic part split by roll stiffness, plus each axle's geometric part). Fixed by swapping the ride frequencies to 3.0 Hz front / 2.6 Hz rear. That breaks the old "rear stiffer for a flat ride" rule, but balance matters more on a light car. Springs are now ~243 / 215 lb/in and brake dive falls from 30 to 22 mm. A front anti-roll bar of about 100 N·m/deg would do the same, but it would have to cross the front ring top where the T.1.2 template passes, so it's left as a later tuning part. |
 | Rear bump steer (found while doing the above) | not checked; really **0.76° toe-out per 25 mm** of bump (roll oversteer) | **0.00°** | `steering.py` now checks the rear too. The toe link is re-aimed at the rear arms' instant centre (`mule.SUSP['rear']['steer']`). |
-| Lap simulation | none | acceleration 4.49 s, skidpad 5.17 s, autocross 59.2 s (50 km/h) | `lapsim.py`, point mass, grip 1.3 (calibrated: the 2025 Michigan skidpad winner implies 1.34). The autocross is a representative 0.8 km course built to the D.11.1.1 layout rules. Sensitivity: 0.1 grip = 0.16 s accel, 0.21 s skidpad, 2.4 s autocross; 10 kg = 0.01 s accel. A point mass has no tyre load sensitivity, so mass looks almost free; in reality it isn't. Drag alone would allow 148 km/h, above the 110 km/h gearing limit. |
+| Lap simulation | none | acceleration 4.48 s, skidpad 5.12 s, autocross 58.6 s (51 km/h) | `lapsim.py`, point mass, grip 1.3 (calibrated: the 2025 Michigan skidpad winner implies 1.34). The autocross is a representative 0.8 km course built to the D.11.1.1 layout rules. Sensitivity: 0.1 grip = 0.16 s accel, 0.21 s skidpad, 2.4 s autocross; 10 kg = 0.01 s accel. A point mass has no tyre load sensitivity, so mass looks almost free; in reality it isn't. Drag alone would allow 146 km/h, above the 117 km/h gearing limit. |
 | Benchmark, Pugh matrix | none | Pugh matrices, plus a benchmark against the FSAE Michigan 2025 event times, in `PDS.md` | The mule's point-mass times sit between the 10th-place car and the median. The vehicle-number columns (other teams' mass, stiffness, etc.) wait for published design reports. |
 | Buck, part numbers | none | Buck plan below; every CAD body named `NM26-<system>-<nnn>`, listed in `NM26_Mule_parts.csv` (and `cad/NM26_Assembly_parts.csv` for the detailed model) | `mule.PART_CODE` |
 
@@ -384,9 +384,9 @@ Still to do at build: 5 mm radii on the leading edges, 3 mm on the vertical edge
 | | Closed | Open (DRS) |
 |---|---|---|
 | Downforce / drag at 60 km/h | 126 / 24 N | 43 / 8 N |
-| Downforce at 110 km/h | about 424 N | |
+| Downforce at 117 km/h (top speed) | about 476 N | |
 
-The wing sits behind the rear axle, so at top speed it adds 525 N to the rear axle and takes 99 N off the front (7 %). That shows up as mild understeer at high speed. TEST_PLAN T5.5 measures the real downforce.
+The wing sits behind the rear axle, so at top speed it adds 587 N to the rear axle and takes 110 N off the front (8 %). That shows up as mild understeer at high speed. TEST_PLAN T5.5 measures the real downforce.
 
 **Mounts.**
 - 200 N push (IN.6.2.2): 0.1 mm deflection, against 25 mm allowed.

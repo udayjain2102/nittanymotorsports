@@ -151,7 +151,7 @@ These match `NM26_FSAE_Concept.step`. STEP exports are rotated to Z-up, so they 
 | `lapsim.py` |
 | Shock | 230×65 mm at 36 % of stroke; pushrod arm 90 / 70 mm; mount brackets | `rocker.py` |
 | Steering stop | 23° inner wheel | `steering.py` `LOCK_DEG` |
-| **Engine: Honda CRF450R 2018+** | 48 N·m (published). Still generic until the service manual / a measured engine: redline 11 500 rpm, primary 2.6, gears 2.0–1.0, envelope, countershaft at X=200/Y=250, 32 kg | `powertrain.py` `ENGINE` |
+| **Engine: Honda CRF450R 2018+** | 48 N·m (published); primary 66/28, gears 32/15–24/23, 30.9 kg (service manual). Still generic until an engine is measured: redline 11 500 rpm, envelope, countershaft at X=200/Y=250 | `powertrain.py` `ENGINE` |
 | Kit-engine option (not used) | Predator 420 + Comet 40-series CVT at listed size; fit check only, printed by `python powertrain.py` | `powertrain.py` `KIT`, `CVT` |
 | Chain drive | DID 520VO (35.6 kN average tensile, from DID), 13T/50T, chain line Z = −180 (left), ±20 mm eccentric carriers | `powertrain.py` |
 | Lumped masses for inertia relief | engine 32 kg, driver 80 kg, fuel 5 kg, spool 8 kg, at their mount nodes | `fea.py` `LUMPED` |

@@ -178,3 +178,8 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - `.gitattributes` paths fixed (they still pointed at pre-reorganisation locations); stale `mule/.pytest_cache` removed.
 - Kept as is: Python module names (each already names its system) and every CAD file. Fusion versions stay in the Fusion project, and older STEP versions stay in git history.
 - 166/166 checks, 82/82 tests.
+
+## 2026-09-30 - CRF450R 2018+ gear ratios from the service manual
+- **Source:** the 2017–18 CRF450R/RX service manual on ManualsLib, pages 1-4 and 1-5. The scan's text is garbled, but each ratio is printed with its tooth counts and they agree exactly: primary 2.357 (66/28); gears 2.133 (32/15), 1.706 (29/17), 1.421 (27/19), 1.211 (23/19), 1.043 (24/23); final 3.769 (13/49) R, 3.846 (13/50) RX. Engine dry weight 30.9 kg for "after '17". Honda's 2018 spec page confirms electric start and 13/49. The widely quoted 2.739 / 1.800 … set is the 2004 model's, not 2018's.
+- **Entered** in `powertrain.ENGINE` (ratios as fractions of teeth, mass 30.9). Top speed 110 → 117 km/h at the placeholder 11,500 rpm; 1st gear 928 vs 859 N·m traction (pass); acceleration 4.48 s; rotor heat and wing top-speed loads rise with top speed (all pass). TEST_PLAN T5.1 table, T6.2, PDS, BUILD_PLAN, READMEs, WORKDONE and WHATS_NEXT updated.
+- Still generic: rev limit, engine envelope, mount and countershaft positions.

@@ -333,16 +333,16 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 ## Stage 5: low-speed running (closed lot, cones, spotter, fire extinguishers on hand)
 
-### T5.1 Gearing check (engine data are placeholders)
-- **Predicted** at 5000 rpm (`powertrain.py`, placeholder engine):
+### T5.1 Gearing check (CRF450R 2018+ ratios from the service manual)
+- **Predicted** at 5000 rpm (`powertrain.py`, CRF450R primary and gear ratios, 13/50 sprockets):
 
   | Gear | 1 | 2 | 3 | 4 | 5 |
   |---|---|---|---|---|---|
-  | Speed (km/h) | 24.0 | 30.0 | 36.1 | 42.1 | 48.0 |
+  | Speed (km/h) | 24.8 | 31.0 | 37.2 | 43.7 | 50.7 |
 
 - **Procedure:** hold 5000 rpm in 1st, 2nd and 3rd; log the speed with phone GPS.
 - **Pass:** within ±5 % of the table. If not, the placeholder ratios are wrong: put the real ones in `powertrain.ENGINE`.
-- **Later, once the engine is real:** time a 75 m standing start (D.9). The point-mass prediction is 4.49 s with DRS open (`lapsim.py`, lower bound; FSAE Michigan 2025 median 4.617 s). A real run 10–20 % slower is normal (launch, shifts, driver).
+- **Later, once the engine is real:** time a 75 m standing start (D.9). The point-mass prediction is 4.48 s with DRS open (`lapsim.py`, lower bound; FSAE Michigan 2025 median 4.617 s). A real run 10–20 % slower is normal (launch, shifts, driver).
 
 ### T5.2 Shakedown and fastener check
 - **Procedure:**
@@ -398,7 +398,7 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 - **Record** the lock pressure and the balance-bar setting, then put the implied grip back into `loads.py` `MU` if it is far from 1.5.
 
 ### T6.2 Rotor temperature
-- **Predicted:** +30 °C front and +14 °C rear for one stop from 60 km/h. That is the full-speed prediction scaled by v²: 103 °C / 47 °C from 110 km/h.
+- **Predicted:** +31 °C front and +13 °C rear for one stop from 60 km/h. That is the full-speed prediction scaled by v²: 117 °C / 50 °C from 117 km/h.
 - **Procedure:** measure the IR temperature of all four rotors immediately before and after one hard stop from 60 km/h.
 - **Pass:**
   - within ±50 % of the prediction;
@@ -454,5 +454,5 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 | T4.5 wing push (200 N) | | ≤ 0.1 mm, no set | | | |
 | T5.5 wing downforce / DRS | | 126 N at 60 km/h closed; closes on brake | | | | | | |
 | T6.1 lock force | | 567 N (μ 1.5), 525 N (μ 1.0) | | | |
-| T6.2 rotor ΔT from 60 km/h | | 30 / 14 °C | | | |
+| T6.2 rotor ΔT from 60 km/h | | 31 / 13 °C | | | |
 | T7.1 skidpad lap | | 4.81–5.89 s | | | |
