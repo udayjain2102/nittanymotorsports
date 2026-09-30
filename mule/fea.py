@@ -83,8 +83,9 @@ LUMPED = [(("em_fb", "em_ft", "em_rb"), 32.0), (("mh_bot", "fh_bot", "mh_bar"), 
 
 def inertia_relief(fr, loads):
     """Balance applied nodal forces with a rigid-body acceleration field of the frame's tube mass plus LUMPED masses,
-    as in the real car, instead of reacting them at arbitrary supports. Returns (balanced loads, 3-2-1 supports);
-    the 3-2-1 supports then carry ~zero load and only stop rigid-body motion."""
+    as in the real car, instead of reacting them at arbitrary supports. Returns (balanced loads, supports): one node
+    clamped in all 6 DOF, which carries ~zero load and only stops rigid-body motion. (A 3-2-1 set picked by distance
+    from the CG once landed all on the front bulkhead plane, left K singular and gave CPU-dependent stresses in CI.)"""
     n = len(fr.P); mass = np.zeros(n)
     for i, j, s, _ in fr.el:
         L = np.linalg.norm(fr.P[j] - fr.P[i]); mm = props(s)[0] * L * 7.85e-6
@@ -106,10 +107,7 @@ def inertia_relief(fr, loads):
     out = {k: np.asarray(v, float).copy() for k, v in loads.items()}
     for i in range(n):
         out[i] = out.get(i, np.zeros(3)) - mass[i] * (a0 + np.cross(al, r[i]))
-    far = np.argsort(np.linalg.norm(r, axis=1))[::-1]
-    a_, b_ = far[0], next(k for k in far if np.linalg.norm(fr.P[k] - fr.P[far[0]]) > 400)
-    c_ = next(k for k in far if np.linalg.norm(np.cross(fr.P[b_] - fr.P[a_], fr.P[k] - fr.P[a_])) > 1e5)
-    return out, {a_: range(3), b_: [1, 2], c_: [1]}
+    return out, {0: range(6)}
 
 def selfcheck():  # cantilever tip deflection vs P L^3 / 3EI
     L, P = 1000.0, 100.0

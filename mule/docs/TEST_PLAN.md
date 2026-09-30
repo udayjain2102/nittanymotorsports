@@ -342,7 +342,7 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 - **Procedure:** hold 5000 rpm in 1st, 2nd and 3rd; log the speed with phone GPS.
 - **Pass:** within ±5 % of the table. If not, the placeholder ratios are wrong: put the real ones in `powertrain.ENGINE`.
-- **Later, once the engine is real:** time a 75 m standing start (D.9). The point-mass prediction is 4.47 s with DRS open (`lapsim.py`, lower bound; FSAE Michigan 2025 median 4.617 s). A real run 10–20 % slower is normal (launch, shifts, driver).
+- **Later, once the engine is real:** time a 75 m standing start (D.9). The point-mass prediction is 4.49 s with DRS open (`lapsim.py`, lower bound; FSAE Michigan 2025 median 4.617 s). A real run 10–20 % slower is normal (launch, shifts, driver).
 
 ### T5.2 Shakedown and fastener check
 - **Procedure:**

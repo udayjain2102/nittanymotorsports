@@ -89,7 +89,7 @@ Revisit the wing only after the tilt margin grows (weigh the parts) and the car 
 
 | Event | Best | 10th | Median | NM26 mule, point mass at grip 1.3 |
 |---|---|---|---|---|
-| Acceleration, 75 m | 4.169 s | 4.324 s | 4.617 s | 4.49 s (placeholder engine) |
+| Acceleration, 75 m | 4.169 s | 4.324 s | 4.617 s | 4.49 s (CRF450R torque, generic gear ratios) |
 | Skidpad | 5.080 s | 5.287 s | 5.515 s | 5.17 s |
 | Autocross | 48.878 s | 52.019 s | 55.725 s | 59.2 s on our own 0.8 km course, so indicative only |
 
