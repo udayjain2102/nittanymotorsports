@@ -6,7 +6,7 @@
   the two ends' notches, and cut length long-point to long-point.
 - Nodes: every joint position for the jig, heights measured from the table (bottom of the lower rails).
 
-Outputs fab/cut_sheet.csv, fab/hoop_bends.csv, fab/nodes.csv, fab/jig_plan.png.
+Outputs fab/tube_cut_sheet.csv, fab/hoop_bend_program.csv, fab/jig_node_coordinates.csv, fab/jig_plan.png.
 Run: python fab.py
 """
 import csv, math, pathlib
@@ -159,7 +159,7 @@ def node_names():
 
 def write(out=pathlib.Path(__file__).parent / "fab"):
     out.mkdir(exist_ok=True); pcs = pieces(); nn = node_names()
-    with open(out / "cut_sheet.csv", "w", newline="") as f:
+    with open(out / "tube_cut_sheet.csv", "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["piece", "role", "tube (in)", "centreline length mm", "cut length mm (long point to long point)",
                     "end A node", "end A copes onto", "end A angle deg", "end B node", "end B copes onto", "end B angle deg",
@@ -175,7 +175,7 @@ def write(out=pathlib.Path(__file__).parent / "fab"):
             w.writerow([p["id"], p["role"], f"{od / 25.4:.3f} x {t / 25.4:.3f}", f"{Lc:.1f}", f"{cut:.1f}",
                         nn.get(a["node"], "?"), recv_label(a), f"{a['angle']:.1f}",
                         nn.get(b["node"], "?"), recv_label(b), f"{b['angle']:.1f}", f"{phase(a, b):.0f}", " ".join(inter)])
-    with open(out / "hoop_bends.csv", "w", newline="") as f:
+    with open(out / "hoop_bend_program.csv", "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["piece", "hoop", "tube (in)", "CLR mm", "step", "feed Y mm", "rotate B deg", "bend C deg"])
         for p in pcs:
@@ -186,7 +186,7 @@ def write(out=pathlib.Path(__file__).parent / "fab"):
                 w.writerow([p["id"], p["role"], f"{od / 25.4:.3f} x {t / 25.4:.3f}", clr, i, f"{y:.1f}", f"{b:.1f}", f"{c:.1f}"])
             w.writerow([p["id"], p["role"], "", clr, "end", f"{last:.1f}", "", f"developed length {dev:.0f} mm (+50 mm grip each end)"])
             w.writerow([p["id"], p["role"], "", "", "note", "", "", "legs square-cut at the lower rail nodes (open lower ends OK, F.5.3.3); 1in tubes cope onto the hoop"])
-    with open(out / "nodes.csv", "w", newline="") as f:
+    with open(out / "jig_node_coordinates.csv", "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["node", "X fwd from rear axle mm", "height above table mm", "Z right of centreline mm"])
         for k, n in sorted(nn.items(), key=lambda kv: (kv[0][0], kv[0][2])):
@@ -215,4 +215,4 @@ if __name__ == "__main__":
         rows, last, dev, mn = bend_program(p["pts"], CLR_BY_SIZE[p["size"]])
         print(f"{p['id']} {p['role']}: {len(rows)} bends, developed {dev:.0f} mm, shortest straight {mn:.0f} mm")
         assert mn >= 0, f"{p['role']}: bends overlap (straight between bends < 0) - fix hoop geometry"
-    print(f"{len(pcs)} pieces ({len(bent)} bent); wrote fab/cut_sheet.csv, fab/hoop_bends.csv, fab/nodes.csv, fab/jig_plan.png")
+    print(f"{len(pcs)} pieces ({len(bent)} bent); wrote fab/tube_cut_sheet.csv, fab/hoop_bend_program.csv, fab/jig_node_coordinates.csv, fab/jig_plan.png")

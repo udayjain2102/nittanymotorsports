@@ -3,8 +3,7 @@
 *.svg        -diff  linguist-generated
 *.png        binary
 *.jpg        binary
-mule/REPORT.md          linguist-generated
-mule/cutlist.csv        linguist-generated
+mule/docs/REPORT.md     linguist-generated
 mule/fab/*.csv          linguist-generated
 mule/cad/*.csv          linguist-generated
-mule/NM26_Mule_parts.csv linguist-generated
+mule/cad/simple/*.csv linguist-generated

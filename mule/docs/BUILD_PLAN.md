@@ -3,7 +3,7 @@
 Goal: a car that drives and follows the FSAE 2026 **safety** rules (roll hoops, side impact, harness, brakes, shutdown, impact attenuator, firewall). It deliberately skips competition-only items (intake restrictor, aero, SES/IAD paperwork, noise test, cost report).
 
 Files in this folder:
-- `mule.py` — parametric frame (CadQuery). It runs 27 geometric rule checks and refuses to export if any check fails. Outputs `NM26_Mule.step`, `cutlist.csv` and `views/*.svg`.
+- `mule.py` — parametric frame (CadQuery). It runs 27 geometric rule checks and refuses to export if any check fails. Outputs `NM26_Mule.step`, `tube_order_list.csv` and `views/simple_*.svg`.
 - `views.py` → `views/mule_3view.png` (side, top and front layout).
 - `fea.py`: frame beam FEA. `suspension.py`: front-view suspension kinematics. `loads.py`: suspension link forces, link buckling, and frame stress under wheel loads. `springs.py`: spring and shock sizing. `steering.py`: bump steer, Ackermann, rack travel and full-lock clearance. Each script exits with an error if a target is missed.
 - `NM26_Frame_FEA.step`: tubes only (93 bodies) for Fusion Simulation. In Fusion, Combine (Join) all bodies first.
@@ -35,7 +35,7 @@ What's worth keeping from the concept: the 4-corner double-wishbone layout, the 
 - The driver sits upright at 20° (T.2.1.d), so a **5-point harness is allowed**. Hip-to-pedal distance is 915 mm.
 - Main hoop top is at 1280 mm and front hoop top at 850 mm. Helmet clearance to the hoop line is **65 mm** (the rule needs ≥50).
 - Lower side-impact tube bottom is 60 mm above the ground (V.1.4.2 requires ≤90 and prefers ≤75).
-- The frame is **146 members, about 50.1 kg** of 4130 (section 2l explains the latest changes). See `cutlist.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
+- The frame is **146 members, about 50.1 kg** of 4130 (section 2l explains the latest changes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
 - These changes came out of the FEA (see section 2b).
 - Roll hoops = **1.25″×0.095″**. This exceeds the Size A minimum and was chosen after the FEA. Size A = 1.0″×0.095″ (main hoop braces, shoulder bar). Size B = 1.0″×0.065″ (side impact, bulkhead, hoop braces, belt tube). Size C = 1.0″×0.049″ (supports, cross members, rings). The script checks each size against the F.3.4.1 inertia and area minimums.
 
@@ -161,9 +161,9 @@ On its own, the front pushrod geometry gets 40 % softer toward bump. Moving the 
 
 | File | Contents |
 |---|---|
-| `fab/cut_sheet.csv` | Every straight piece with its tube size and centreline length. Also: the cut length long-point to long-point (cut the stock ~10 mm long and fine-fit), which piece each end copes onto, the cope angle, the phase between the two notches, and where intermediate nodes (tabs, pickups) fall along the tube. |
-| `fab/hoop_bends.csv` | Bend programs for both hoops as feed / rotation / bend (Y-B-C) on a 4″ CLR die, plus developed length. Main hoop is 2659 mm, front hoop 1868 mm; add 50 mm of grip at each end. The hoops are planar, so every rotation is 0. |
-| `fab/nodes.csv` | Every joint: X from the rear axle, height above the jig table, and Z from the centreline. |
+| `fab/tube_cut_sheet.csv` | Every straight piece with its tube size and centreline length. Also: the cut length long-point to long-point (cut the stock ~10 mm long and fine-fit), which piece each end copes onto, the cope angle, the phase between the two notches, and where intermediate nodes (tabs, pickups) fall along the tube. |
+| `fab/hoop_bend_program.csv` | Bend programs for both hoops as feed / rotation / bend (Y-B-C) on a 4″ CLR die, plus developed length. Main hoop is 2659 mm, front hoop 1868 mm; add 50 mm of grip at each end. The hoops are planar, so every rotation is 0. |
+| `fab/jig_node_coordinates.csv` | Every joint: X from the rear axle, height above the jig table, and Z from the centreline. |
 | `fab/jig_plan.png` | Top view with fixture posts at the lower nodes. |
 
 Joint rules the script follows:
@@ -175,7 +175,7 @@ Suggested order: bend both hoops and check them against the bend sheet. Then set
 
 ## 2i. Uprights and hubs (`uprights.py`)
 
-Each hub rotates on two SKF 6209-2RS1 bearings (45×85×19; the 6009 fell to s0 1.46 with the 330 mm CG) pressed into a machined 7075-T6 upright. The rear hub is splined for the CV. The wheel bolts to a 4×100 hub face 25 mm outboard of the wheel centre plane, and the 200 mm rotor sits just inboard of that face with the caliper on the upright. Section view: `views/corners.png`.
+Each hub rotates on two SKF 6209-2RS1 bearings (45×85×19; the 6009 fell to s0 1.46 with the 330 mm CG) pressed into a machined 7075-T6 upright. The rear hub is splined for the CV. The wheel bolts to a 4×100 hub face 25 mm outboard of the wheel centre plane, and the 200 mm rotor sits just inboard of that face with the caliper on the upright. Section view: `views/suspension_corners.png`.
 
 | Check (worst of 3g bump / 1.5g corner / 1.5g brake, and 830 N·m rear drive) | Front | Rear |
 |---|---|---|
@@ -328,7 +328,7 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
 | Benchmark, Pugh matrix | none | Pugh matrices, plus a benchmark against the FSAE Michigan 2025 event times, in `PDS.md` | The mule's point-mass times sit between the 10th-place car and the median. The vehicle-number columns (other teams' mass, stiffness, etc.) wait for published design reports. |
 | Buck, part numbers | none | Buck plan below; every CAD body named `NM26-<system>-<nnn>`, listed in `NM26_Mule_parts.csv` (and `cad/NM26_Assembly_parts.csv` for the detailed model) | `mule.PART_CODE` |
 
-**Full-scale buck (before cutting any tube).** Build it in a weekend from 2×4s, plywood and ¾″ EMT conduit, using `fab/nodes.csv` for the coordinates:
+**Full-scale buck (before cutting any tube).** Build it in a weekend from 2×4s, plywood and ¾″ EMT conduit, using `fab/jig_node_coordinates.csv` for the coordinates:
 1. Floor board at the lower-rail outline. Mark the pedal face, the seat base and the hip point from `mule.py`.
 2. Main hoop and front hoop from bent conduit, at their true stations and heights. Mark the front ring with its posts only; it has no top cross.
 3. Seat from foam blocks at the 20° back angle. Add a pedal block at the pedal face and a steering wheel on a stick at `WHEEL_C`.
@@ -458,7 +458,7 @@ Buying used where possible and machining uprights in-house, the total comes to r
 
 | Subsystem | Item | Qty | Est. $ | Notes |
 |---|---|---|---|---|
-| Frame | 4130 N round tube, 1.25×0.095 / 1.0×0.095 / 0.065 / 0.049 | ~6 / 4 / 17 / 21 m | 700–1,000 | Lengths from `cutlist.csv` plus 25% |
+| Frame | 4130 N round tube, 1.25×0.095 / 1.0×0.095 / 0.065 / 0.049 | ~6 / 4 / 17 / 21 m | 700–1,000 | Lengths from `tube_order_list.csv` plus 25% |
 | | Tabs and plate (4130 0.090″, 0.125″), 1.5 mm AIP | — | 150 | |
 | | TIG filler (ER70S-2), notcher holesaws | — | 200 | |
 | Engine | Used 450–510 cc single (KTM 450/500 EXC-F, Yamaha WR450F, Honda CRF450X) with harness and ECU | 1 | 1,500–3,500 | Electric start preferred. Measure it and update `powertrain.py` `ENGINE`. |
@@ -488,7 +488,7 @@ Buying used where possible and machining uprights in-house, the total comes to r
 ## 5. Build sequence
 
 1. **Freeze the layout (1 week).** Seat a real tall driver and a real short driver in a plywood/2×4 mock-up at the `mule.py` dimensions. Adjust `HIP_Y`, `SEAT_BACK_DEG` and `H_MAIN`, then re-run until everything passes.
-2. **Check the plywood cockpit templates (T.1.1, T.1.2) against the mock-up (1 day).** Suspension and steering are already designed (`suspension.py`, `steering.py`, `sideview.py`); pickup coordinates are in `fab/nodes.csv`.
+2. **Check the plywood cockpit templates (T.1.1, T.1.2) against the mock-up (1 day).** Suspension and steering are already designed (`suspension.py`, `steering.py`, `sideview.py`); pickup coordinates are in `fab/jig_node_coordinates.csv`.
 3. **Frame jig and bends (1 week).** Laser-cut or plywood node fixtures on a flat table. Bend both hoops first, since they're single pieces.
 4. **Weld the frame (3–4 weeks).** Work in this order: hoops and side impact, then front bulkhead, then rear box, then tabs (suspension, harness, engine, pedals). Check the templates (T.1.1, T.1.2) before welding the tabs.
 5. **Rolling chassis (2 weeks).** Arms, uprights, hubs, steering, wheels. Set alignment: camber −2.5° front / −2.0° rear, zero toe to start.

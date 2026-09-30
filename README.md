@@ -93,11 +93,11 @@ references/                   other teams' papers (local only, not in git)
 | `cad/parts/NM26-<system>-<nnn>_<name>.step` | One file per detailed part, already in its assembly position (Z-up). Every name is unique: frame tubes carry their size, role, side and number (bottom to top), and tabs carry the frame point they are welded at |
 | `cad/NM26_Assembly_parts.csv` | Part number, name, sub-assembly, colour, file, and **what each file contains**, for every detailed part |
 | `cad/view_*.svg`, `cad/view_*.png` | Drawings of the detailed assembly (iso, side, front, top) |
-| `views/*.svg`, `views/*.png`, `views/NM26_fusion_view.jpg` | Drawings of the simple model, plus the Fusion screenshot of the detailed car at the top of this page; `colour_key.png` explains the colours; `corners.png` shows the suspension corners |
-| `fab/cutlist.csv` | Frame tube lengths and masses by size and role |
-| `fab/cut_sheet.csv` | Every frame piece: size, cut length, cope angles at each end |
-| `fab/hoop_bends.csv` | Bend programs (feed / rotation / bend) for both roll hoops |
-| `fab/nodes.csv` | Frame-jig coordinates of every joint |
+| `views/simple_*.svg`, `views/*.png`, `views/NM26_fusion_view.jpg` | Drawings of the simple model, plus the Fusion screenshot of the detailed car at the top of this page; `colour_key.png` explains the colours; `suspension_corners.png` shows the suspension corners |
+| `fab/tube_order_list.csv` | Frame tube lengths and masses by size and role |
+| `fab/tube_cut_sheet.csv` | Every frame piece: size, cut length, cope angles at each end |
+| `fab/hoop_bend_program.csv` | Bend programs (feed / rotation / bend) for both roll hoops |
+| `fab/jig_node_coordinates.csv` | Frame-jig coordinates of every joint |
 | `fab/jig_plan.png` | Jig plan drawing |
 
 ### Code (`mule/`)
