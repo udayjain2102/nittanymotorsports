@@ -1,0 +1,142 @@
+# NM26 mule: project log
+
+This file records what was done, how it was done, and what came out, in the order it happened. The current design lives in the code. `README.md` explains how to run it, and `BUILD_PLAN.md` has the full narrative, the rules checklist, the BOM and the build sequence. If this log and the code disagree, the code wins: re-run `pytest -q tests`.
+
+## Goal and scope
+- Start: `NM26_FSAE_Concept.step` and `FSAE_Rules_2026_V1.pdf`. Goal: "a working go cart".
+- Chosen scope: an **FSAE-lite mule**. It drives and meets the key safety rules (hoops, side impact, harness, brakes, shutdown, impact attenuator, firewall). It skipped aero at first (a DRS rear wing was added at the team's request in step 29), and it skips the intake restrictor, SES/IAD paperwork, noise and cost.
+- Deliverables: build plan + BOM, rules checklist, real parametric CAD, critique of the concept. All of them are in `BUILD_PLAN.md`.
+- Standing instruction: everything gets tests and documentation.
+
+## Tooling
+- Python 3.11 venv with `cadquery matplotlib numpy pytest`. Python 3.14 had no wheels for CadQuery; pip needed the sandbox disabled because of an SSL error.
+- Axes: X forward (rear axle at X = 0), Y up (ground at 0), Z to the driver's right. Units are mm, N and kg. STEP exports are rotated +90° about X to Z-up for Fusion.
+- Fusion notes (see memory): the user's Fusion is Y-up. To rotate there, use Move type Rotate about an Origin axis. I can't operate the macOS file picker. Fusion Simulation's results translator failed with an Autodesk server 500 error on every solve, so **the in-house beam FEA is the frame check**.
+
+## Chronology (what, how, result)
+
+| # | Step | Method | Result |
+|---|---|---|---|
+| 1 | Concept critique | Read the STEP and the rules | Found 7 issues: short wheelbase, missing parts, and others. See BUILD_PLAN §1. |
+| 2 | Layout + frame (`mule.py`) | Parametric node/member model with the 95th-percentile driver template; 27 rule checks | Wheelbase 1750, tracks 1220/1180, hoops 1280/850, helmet clearance 65 mm |
+| 3 | Frame FEA (`fea.py`) | 3D Euler beam, 12 DOF per element, rigid joints, welded Sy 180 MPa, cantilever self-check | Hoops failed at first (FoS < 1). Fixed with lateral diagonals, braces at the hoop top corners, 1.25×0.095 hoops, a front lower brace, and a wider front hoop top. |
+| 4 | Fusion cross-check | Frame-only STEP with one body per tube (OCCT segfaulted fusing hollow tubes); Combine in Fusion; 9–10 mm mesh; Rosetta for local mesh | Solves ran, but the results translator failed with an Autodesk 500 error. Abandoned. |
+| 5 | Belly pan, driver placeholder removed | 1.6 mm 5052 pan, two 25 mm drain holes | Done |
+| 6 | Suspension (`suspension.py`) | Front-view double-wishbone kinematics, roll centre / instant centre, ±50 mm | Roll centre 35 mm front / 50 mm rear; camber gain −0.68 / −0.72° per 25 mm. Needed the lower pickups raised onto the verticals, and the verticals upsized to H. |
+| 7 | Loads (`loads.py`) | Six-link upright statics: 3 g bump, 1.5 g corner, 1.5 g brake; Euler buckling; frame with **inertia relief** | The first frame FoS of 0.97 was an artefact of the supports. Inertia relief fixed that, and lower pickup crosses plus a rear rail brought it to 1.23. Rear pushrod went to 3/4×0.049. |
+| 8 | Springs (`springs.py`) | Motion ratios, 2.6/2.8 Hz ride | Springs about 280 / 600 lb/in, stroke 59 / 50 mm |
+| 9 | Rockers (`rocker.py`) | Bellcrank design, shock inside its stroke, bracket clash search | All 12 checks pass. Rear direct-acting would have needed a 1019 lb/in spring, so it got a rocker too. |
+| 10 | Steering (`steering.py`) | Bump steer via kingpin rotation, Ackermann, 3D lock clearance | Bump steer ≤ 0.09°, Ackermann 64 %, rack travel 28.7 mm, lock 23° (sets the 10 mm gap). The rack was lowered to Y = 180 to clear the shins. |
+| 11 | Fabrication (`fab.py`) | Collinear merge into pieces, Y-B-C bend programs, cope angles and phase, jig table | Hoops redrawn so their nodes lie on straight legs (the front hoop bends overlapped by 45 mm). The bigger tube always receives the cope. |
+| 12 | Uprights (`uprights.py`) | Bearing statics and L10, hub von Mises, arm stress, stud slip | 16 checks pass. 6009-2RS bearings, 4140 hub 45/30, 7075 upright, 4×M12 on 100 PCD |
+| 13 | Powertrain (`powertrain.py`) | Gearing, chain length, wrap and adjustment, clearances, CV angle, engine mount min-norm, launch FEA | 13 checks pass: 113 km/h, 60-link chain, CV 10.5°, launch FoS 1.21. **Engine values are placeholders.** |
+| 14 | Brakes + pedal box (`brakes.py`) | Lock pressure per axle, balance-bar lever rule, compliance-based pedal travel, BOTS window, rotor ΔT, blade/pivot/bar stress, frame at 2000 N | 13 checks pass: lock at 551 N, balance 57 % front, 289 bar at 2000 N (limit unverified), BOTS at 45 mm, frame FoS 1.31 |
+| 15 | Physical test plan (`TEST_PLAN.md`) | Reference 2020 FSAE test-plan format; every pass criterion taken from our scripts; `tests/test_test_plan.py` guards against drift | 7 stages, 26 tests. New finding: the 60° tilt margin is only 3° at the assumed 300 mm CG, so the CG must be measured ≤ 340 mm. |
+| 16 | Generated report (`report.py` → `REPORT.md`) | Runs every module's checks, the FEA and loads, and pytest with a result-collecting plugin, then writes markdown tables. `NM26_Frame_FEA.step` was regenerated because it predated the pedal-box tubes. | 97/97 design checks, 45/45 tests pass |
+| 17 | Catalogue values | Web search: SKF 6009-2RS1 C0 is 14.6 kN (not 15.2); DID 520VO is 35.6 kN | Bearing and chain values updated to catalogue |
+| 18 | Cockpit templates (`cockpit.py`) | T.1.1 and T.1.2 templates from the rules drawings, swept through capsule models of the frame, rack, rockers, shocks and seat. The template "ceiling" only counts tubes over the template footprint. | **T.1.1 failed by 26 mm**, fixed by widening the cockpit 260 → 292. **T.1.2 failed at the front ring**. Two fixes were rejected: rack ahead of the pedals (4.4° bump steer) and ring top raised to 570 (ring posts bent, front-hoop FoS 0.66). Chosen: no ring-top cross, 1.5″ ring posts, front shock moved to the front hoop. Both pass. |
+| 19 | Side view (`sideview.py`) | SVSA instant centres, caster/trail from the kingpin, pitch from ride rates, RC migration in heave, bump steer with the rack held at lock, rack ratio | Caster 4.6° (UBJ 19 mm rearward), trail 11.5 mm, anti 0 %, dive 26 mm, lock bump steer 0.11°, 5.5:1. Turning circle 5.7 m (hairpin needs 4.5; not a mule requirement). |
+| 20 | Combined loads + mass/CG (`loads.py`, `mass.py`) | Corner+brake at μ, and a kerb strike in a 1 g corner. Item-by-item mass budget. | Budget 288 kg / CG 323 mm / 15.3 kg unsprung, so the assumptions went to CG 330 and 15 kg. Knock-ons: 6209 bearings, 0.75″ rear MC, rear lower rail and mid cross upsized. Tilt 61.3° (margin about 1°). |
+| 21 | Harness (`harness.py`) | T.2 angles from the driver template, tab tear-out and weld, 20 g crash on the frame with inertia relief, checked against welded ultimate | **Lap belt was 15°** (needs 45–65°). Tabs moved under the hips (55°), with a tab brace and a floor cross; anti-sub floor cross with a V; 1.5″ shoulder bar. Crash FoS 1.17. |
+| 22 | Shutdown and wiring (`shutdown.py`) | Netlist simulation of the kill relay; fuses vs ampacity; voltage drop; T.9 locations | All 14 checks pass; 0.23 V drop to pump and ignition |
+| 23 | Design-review notes (Hayward, *Car Design Workshop*) | Compared each standard-practice target with the design | Applied: PDS, mass/CG budget, combined and kerb loads, bump steer at lock, caster, anti trade-off, RC migration, loaded radius. Gaps are listed under open items. |
+| 24 | Fusion import of the updated STEP | Fusion Open, then the macOS picker (driven with full-screen control) | Imported upright; not yet saved to the cloud |
+| 25 | Colour key | One `mule.COLORS` table drives the CAD colours, the README key (written by `report.py`) and `views/colour_key.png` | Red used to mean eight different things; now one colour per system |
+| 26 | Hayward gaps (BUILD_PLAN §2m) | Grid searches on ball-joint inset/lean and the rocker pickup; new `roll.py` (static camber, RC in roll, jacking), `compliance.py` (pickup FEA plus link stretch, six-link upright), `lapsim.py` (point-mass acceleration and skidpad); Pugh matrices and a benchmark template in PDS; buck plan; CAD part numbers and `parts.csv` | Scrub 53 → 38 mm (tyre-to-arm gap at lock stops it lower). Motion ratio 0.59/0.50 → 0.72/0.75, after finding V.3.1.1 needs 50 mm *total* travel (now +50/−25). Lock-to-lock 233 → 179°. Camber −2.5/−2.0°. Compliance toe 0.10/0.13°. Acceleration 4.27 s, skidpad 4.81 s. 150 checks, 71 tests. |
+| 27 | Remaining items | Web checks of catalogue values (SKF, DID, Kaz, AF4.1 hoop loads, FSAE Michigan 2025 results); hoop-load direction envelope; steering effort and kickback; rear bump steer check; autocross sim with calibrated grip; compliance source split | Found rear bump steer of 0.76°/25 mm, never checked before; fixed to 0.00°. Main hoop FoS 1.28 in the worst direction. Kaz rack with 85 mm arms: 178°, 95 N. Point-mass times: 4.49 / 5.17 / 59.2 s. Only supplier, part and team items remain. 153 checks, 73 tests. |
+| 28 | Two reference PDFs (JCU 2020 rear-suspension paper; NAU 2025 FSAE suspension initial design report) | Compared each method and value with the design; checked the NAU numbers against the 2026 rules | Found two gaps: no front/rear load-transfer balance check (the NAU roll-stiffness method), and V.3.1.4 critical suspension fasteners missing from the checklist. Balance was really 40 % front vs 45 % weight (oversteer); fixed with 3.0/2.6 Hz ride, 49.6 %. Solid-axle option recorded in the PDS. The NAU report's wheelbase "< 1500 mm" and track "< 1550 mm" limits are wrong for 2026 (the rules set a 1525 mm minimum wheelbase and only a ≥ 75 % track ratio, V.1.3.2): not used. 154 checks, 73 tests. |
+| 29 | Moveable rear wing (team request) | Read T.7 and IN.6.2 (moving aero is not banned; it must be stiff and must not oscillate); new `aero.py` (T.7 geometry at both flap positions, forces from assumed coefficients, axle split, mount FEA, first-mode frequency, servo and spring sizing, DRS logic); wing added to the CAD, mass budget, lap sim and 12 V circuit | The wing's 7.4 kg high up dropped the tilt angle to about 60.2°, so the rear track widened 1180 → 1220 mm (all checks re-run): tilt 60.9°. Design CG raised to 345 mm. Lighter mounts were rejected because they resonate at 15–29 Hz, near wheel hop. Brake pressure at 2000 N rose to 296 bar. Wing worth −0.67 s per autocross lap (point mass). |
+
+## Current results (all checks pass; see REPORT.md for every check and test)
+
+| Area | Number |
+|---|---|
+| Frame | 146 members, 50.1 kg, 81 pieces (2 bent). Torsion 2138 N·m/deg. |
+| Hoop loads 6/5/9 kN (AF4.1/AF4.2, worst of 4 directions) | Main FoS 1.28, front FoS 1.36; deflection ≤ 3.9 mm (limit 25) |
+| Worst wheel-load case (10 cases) | FoS 1.26; worst link buckling FoS 4.3 |
+| Launch | Frame FoS 1.23 |
+| 2000 N pedal | Frame FoS 1.31; pedal 3.8, pivot 6.8, balance bar 2.1 |
+| Harness crash, 20 g | Frame FoS 1.17 vs welded ultimate |
+| Suspension | Roll centre 37/52 mm, motion ratio 0.72/0.75, ride 3.0/2.6 Hz, springs about 243/215 lb/in, LLTD 49.6 % front, bump steer ≤ 0.12° (0.27° at lock), caster 4.6°, scrub 38 mm, static camber −2.5/−2.0° |
+| Steering | Kaz rack, 4.1:1, 178° lock-to-lock, Ackermann 50 %, 95 N rim force at 1.5 g; rear bump steer 0.00° |
+| Compliance at 1.5 g | toe 0.10° in (front), 0.18° out (rear) |
+| Events (point mass, grip 1.3) | acceleration 4.49 s, skidpad 5.17 s, autocross 59.2 s; FSAE Michigan 2025 medians 4.62 / 5.52 / 55.7 s |
+| Mass | 296 kg with the rear wing, 46.1 % front, CG 340 mm; tilt 60.9° |
+| Rear wing | 0.47 m², 126 N at 60 km/h closed (assumed coefficients), DRS spring-return, push 0.1 mm, 159 Hz; autocross −0.67 s |
+
+## Model versions (what each exported STEP contains)
+
+| Version (step) | New in the model |
+|---|---|
+| 2 | Frame, driver template, tyres, pedal/seat/IA placeholder boxes |
+| 3–5 | Hoop fixes (braces, 1.25″ hoops), belly pan; driver dummy removed. This is the copy first imported to Fusion (rotated to upright there). |
+| 6–10 | A-arms, pushrods, rockers and shocks, steering rack and tie rods |
+| 12 | Uprights, hubs, rotors, calipers |
+| 13 | Engine placeholder, sprockets, chain, spool, bearing carriers, CV half-shafts, spool posts, engine-mount crosses |
+| 14 | Real pedal box (pedals, balance bar, master cylinders, reservoirs) and its floor crosses |
+| 18–22 | Cockpit 584 mm wide; front ring without a top cross and with 1.5″ posts; front shocks on the front hoop; lap tabs, braces and floor cross; anti-sub floor cross and V; 1.5″ shoulder bar; upsized mid cross and rear rail; 6209 bearings; caster; battery, switches, relay and brake light |
+| 25 | Same geometry, colours by system (README colour key) |
+| 26 | Front ball joints moved (scrub 38 mm), new rocker geometry (motion ratio 0.72/0.75), part numbers in every body name |
+| 27 | 85 mm front steering arms; rear toe link raised to 300/323 mm (rear bump steer 0) |
+| 29 | Rear wing with DRS flap, struts and servo (Lime, NM26-AER); rear track 1220 mm; ride 3.0/2.6 Hz springs |
+
+## Errors hit and how they were fixed
+- **Layout and frame:**
+  - The engine sat on the axle and the helmet was too close to the hoop line. Fixed by stretching the wheelbase and re-tuning the seat angle and hoops.
+  - The hoops were overstressed (see step 3).
+  - When the hoop nodes moved onto straight legs, front hoop FoS fell to 1.09. Moving the lower brace to the hoop top fixed it.
+- **Tube joints:**
+  - 1.25″ tubes were being coped onto 1″ tubes. Changed the receiver ranking and square-cut those ends.
+- **Clearance and packaging:**
+  - The rear-ring top cross passed through the engine, so it was removed.
+  - A plan-view clearance check gave false positives, so I replaced it with a true 3D check.
+  - The Ackermann inner/outer labels were swapped; fixed.
+- **Chain and launch:**
+  - The chain-line check logic was backwards; fixed.
+  - Launch failures were fixed by upsizing the engine-mount crosses and the rails.
+  - Mounts at Z = ±140 were worse (FoS 1.06), so they were reverted to ±100.
+- **Pedal box:**
+  - The first stack-up moved the bulkhead forward 20 mm, and tyre-to-A-arm lock clearance dropped to 7 mm. I shortened the stack-up instead (10° lean, 25 mm pushrod) and kept the bulkhead at X = 2130.
+- **Test bugs fixed along the way:**
+  - the rocker pivot sign;
+  - the overhung-bearing assumption;
+  - tautological asserts, which were removed. That includes one "always True" brake check.
+
+## Open items
+
+Everything left needs parts, a supplier or a person. None of it can be done in the code.
+
+- **Verified against sources (2026-09-29):**
+  - SKF 6209-2RS1 ratings: C 35.1 kN, C0 21.6 kN (SKF data).
+  - DID 520VO chain: 8,000 lbf = 35.6 kN (didchain.com).
+  - Hoop load case: 6.0 / 5.0 / −9.0 kN, from FSAE Alternative Frame rules AF4.1/AF4.2. The code now takes the worst of the four axis assignments.
+  - Kaz Technologies rack: 4.71 in/rev, 82.5 mm travel (kaztechnologies.com).
+  - FSAE Michigan 2025 event times (fsaeonline.com).
+- **Needs a supplier's written answer** (not published online):
+  - maximum pressure for the Wilwood GP200 / PS-1 calipers, the Tilton 78-series master cylinders and the hoses. At 2000 N (T.3.2.2) the design reaches 296 bar ≈ 4,290 psi, only 4 bar under the assumed 300 bar limit. If a part is rated lower, use a bigger MC bore (this raises the lock-up pedal force) or pick parts rated higher.
+- **Needs the real parts:**
+  - the engine values (`powertrain.ENGINE`, placeholder);
+  - the item masses in `mass.py`: weigh them, because the CG decides the tilt margin (about 1°);
+  - pad μ and line compliance (bench);
+  - battery max discharge and switch ratings.
+- **Needs the team:**
+  - build the buck (BUILD_PLAN §2m) before cutting tube;
+  - freeze `parts.csv` into the BOM before ordering;
+  - fill the other-teams columns of the PDS benchmark from published design reports;
+  - run TEST_PLAN.md stages 1–7. T2.7 measures the compliance toe, predicted 0.18° out at the rear.
+- **Decided, with the reason recorded:**
+  - front scrub stays 38 mm: going lower needs a frame-pickup move (PDS Pugh matrix);
+  - no rear wing (PDS Pugh matrix: tilt margin);
+  - turning circle 5.7 m (a competition hairpin needs 4.5 m);
+  - anti-dive and anti-squat 0 %;
+  - the lap sim is a point mass: it has no tyre load sensitivity or transients, so treat its times as lower bounds;
+  - seat shell and firewall are CAD placeholders, built to the checklist rules.
+- **Cleanup:** the 1.4 GB scratch venv (CadQuery) is still needed to regenerate the CAD. Delete it when the design is frozen.
+
+## 2026-09-29 (late) - detailed CAD: one file per part + assembly (`cad_parts.py`)
+- **Ask:** a final Fusion model at the realism of a rendered FSAE corner (treaded tyre, CV boots, coil springs, finned motor), with every part in its own file and one final assembly.
+- **Done:** `cad_parts.py` reuses the mule.py geometry (nodes, links, `rocker.analyse`, `brakes.geometry`, `powertrain.sprockets`, `shutdown.LOC`) and models each part with its features. Output in `cad/`: 258 part STEPs (positioned, Z-up), `NM26_Assembly.step` (28 MB, 9 sub-assemblies, 302 solids), `parts.csv`, `view_*.svg/png`. Part numbers stay `NM26-<sys>-<nnn>`, restarting from 001 in this model (the frame is now 172 tube/bracket parts, not 5 size groups, so numbers differ from the primitive model's `parts.csv`).
+- **Bug found and fixed:** CadQuery's `Assembly.add(sub)` copies the sub-assembly, so parts added to a sub-assembly afterwards never reached the root (the first assembly STEP was 3 KB, empty). Sub-assemblies are now filled first and attached in `Build.finish()`.
+- **Checks:** every solid `isValid()` with positive volume (asserted in the script); part and assembly STEPs re-imported and bounding boxes confirmed Z-up (tyre z 0..521, car height 1296); `tests/test_cad_parts.py` (2 tests) checks files = csv = assembly products. 80 tests pass.
+- **Simplifications (placeholders, same as before):** engine is a finned generic single, not a chosen engine; chain is two straight runs (no wrap or links); coil-over spring is a second solid in its part file (not fused to the damper); frame tubes are straight between bend nodes (hoops are bent in reality); no fasteners other than lug nuts and wheel studs.
+- Rendering: ImageMagick's SVG renderer produced blank PNGs for the CadQuery SVGs; `view_*.png` were rasterised from the SVG paths with matplotlib instead.
