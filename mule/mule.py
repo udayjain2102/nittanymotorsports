@@ -3,7 +3,7 @@
 Axes (same as NM26_FSAE_Concept.step): X forward (rear axle at 0), Y up (ground at 0),
 Z lateral (+Z = driver's right). Units: mm.
 
-Run:  python mule.py            -> asserts rules, writes cad/simple/NM26_Mule.step, views/*.svg, fab/cutlist.csv
+Run:  python mule.py            -> asserts rules, writes cad/simple/NM26_Mule.step, views/simple_*.svg, fab/tube_order_list.csv
 Tune the PARAMETERS block; everything else is derived from it.
 """
 import math, csv, pathlib
@@ -473,7 +473,7 @@ if __name__ == "__main__":
     print(f"hip={tuple(round(v) for v in HIP)} shoulder={tuple(round(v) for v in SHOULDER)} "
           f"head={tuple(round(v) for v in HEAD)} pedal_x={X_PEDAL:.0f} bulkhead_x={X_BH}")
     rows = cutlist(); total_mass = 0
-    with open(out / "fab" / "cutlist.csv", "w", newline="") as f:
+    with open(out / "fab" / "tube_order_list.csv", "w", newline="") as f:
         wr = csv.writer(f); wr.writerow(["size", "OD_mm", "wall_mm", "role", "pieces", "total_length_mm", "mass_kg"])
         for (s, role), (n, L) in sorted(rows.items()):
             od, t = SIZES[s]; m = tube_props(s)[1] * L * STEEL_DENSITY; total_mass += m
@@ -491,7 +491,7 @@ if __name__ == "__main__":
     shape = asm.toCompound()
     (out / "views").mkdir(exist_ok=True)
     for nm, d in [("side", (0, 0, 1)), ("front", (1, 0, 0)), ("top", (0, 1, 0)), ("iso", (1, 0.6, 1))]:
-        cq.exporters.export(shape, str(out / "views" / f"{nm}.svg"),
+        cq.exporters.export(shape, str(out / "views" / f"simple_{nm}.svg"),
                             opt={"projectionDir": d, "showHidden": False, "width": 1200, "height": 700})
     assert all(p for _, p, _ in res), "rule check failed"
-    print("wrote cad/simple/NM26_Mule.step, cad/simple/NM26_Mule_parts.csv, views/*.svg, fab/cutlist.csv")
+    print("wrote cad/simple/NM26_Mule.step, cad/simple/NM26_Mule_parts.csv, views/simple_*.svg, fab/tube_order_list.csv")

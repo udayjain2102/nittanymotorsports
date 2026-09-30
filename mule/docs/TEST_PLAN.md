@@ -43,13 +43,13 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 
 ### T1.1 Frame mass and node positions
 - **Objective:** check that the frame was built as modelled.
-- **Predicted:** 50.1 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/nodes.csv`.
+- **Predicted:** 50.1 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
 - **Procedure:**
   1. Weigh the frame.
   2. Measure the 12 hardpoint nodes (suspension pickups, rocker and shock mounts) from the jig table. Use a height gauge and a tape from the jig datum.
 - **Pass:**
   - mass 50–58 kg;
-  - every suspension and rocker pickup within ±2 mm of `fab/nodes.csv`;
+  - every suspension and rocker pickup within ±2 mm of `fab/jig_node_coordinates.csv`;
   - hoops within ±3 mm.
 
 ### T1.2 Torsional stiffness

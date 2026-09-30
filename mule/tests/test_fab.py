@@ -47,5 +47,5 @@ def test_every_tube_end_has_a_joint_and_never_copes_onto_a_smaller_tube():
 
 def test_outputs_written(tmp_path):
     fab.write(tmp_path)
-    for f in ("cut_sheet.csv", "hoop_bends.csv", "nodes.csv", "jig_plan.png"):
+    for f in ("tube_cut_sheet.csv", "hoop_bend_program.csv", "jig_node_coordinates.csv", "jig_plan.png"):
         assert (tmp_path / f).stat().st_size > 0

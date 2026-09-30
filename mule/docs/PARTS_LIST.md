@@ -35,7 +35,7 @@ rev limit, mass, mount points and countershaft position (`ENGINE` in `powertrain
 
 | Part | Choice | Source / check |
 |---|---|---|
-| Frame tube | 4130: 1.25×0.095, 1.0×0.095, 1.0×0.065, 1.0×0.049 in | `fab/cutlist.csv` |
+| Frame tube | 4130: 1.25×0.095, 1.0×0.095, 1.0×0.065, 1.0×0.049 in | `fab/tube_order_list.csv` |
 | Wheel bearings | SKF 6209-2RS1 (45×85×19 mm) | `uprights.py` |
 | Hubs | 4140 Q&T, turned in-house | `uprights.py` |
 | Uprights | Fabricated steel first, machined 7075 later | `uprights.py` (re-check steel before cutting) |

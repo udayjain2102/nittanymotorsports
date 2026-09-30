@@ -65,7 +65,7 @@ for ax, axle in zip(axs, ("front", "rear")):
         ax.plot([p[2], p[2]], [r, p[1]], color="0.4", lw=4, alpha=.5); ax.plot(p[2], p[1], "ko", ms=4)
     ax.set_xlim(wz - 260, wz + 150); ax.set_ylim(-10, 560); ax.set_aspect("equal"); ax.grid(alpha=.3)
     ax.set_title(f"{axle} corner, front view (outboard ->)"); ax.set_xlabel("Z (mm)"); ax.legend(fontsize=7, loc="upper left")
-fig.tight_layout(); fig.savefig(__file__.replace("views.py", "views/corners.png"), dpi=110)
+fig.tight_layout(); fig.savefig(__file__.replace("views.py", "views/suspension_corners.png"), dpi=110)
 
 # colour key for the 3D model (same table as mule.COLORS)
 fig2, axk = plt.subplots(figsize=(9, 0.42 * len(m.COLORS)))

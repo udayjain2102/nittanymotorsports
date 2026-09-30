@@ -171,3 +171,10 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - **Also fixed on the way:** `fea.inertia_relief` chose 3-2-1 supports that all sat on the front bulkhead plane and did not stop rotation about Y and Z (singular stiffness matrix). It now clamps one node in 6 DOF; results unchanged; new test `test_inertia_relief_stress_independent_of_support_node` fails on the old code. This was not the CI cause.
 - `test_loads.py` now prints every load case when the frame check fails.
 - Also: the CRF450R torque (48 N·m) moves the acceleration prediction from 4.47 s to 4.49 s; TEST_PLAN and PDS updated.
+
+## 2026-09-30 - folder clean-up and clearer file names
+- Renamed generated files to say what they are (generators, tests and docs updated): `fab/cutlist.csv` → `fab/tube_order_list.csv`, `fab/cut_sheet.csv` → `fab/tube_cut_sheet.csv`, `fab/nodes.csv` → `fab/jig_node_coordinates.csv`, `fab/hoop_bends.csv` → `fab/hoop_bend_program.csv`, `views/corners.png` → `views/suspension_corners.png`, and the simple-model drawings `views/{front,iso,side,top}.svg` → `views/simple_*.svg` (so they aren't confused with the detailed model's `cad/view_*.svg`).
+- Local (git-ignored) reference PDFs renamed: `JCU_2020_FSAE_rear_suspension_design.pdf`, `NAU_2025_FSAE_suspension_initial_design_report.pdf`.
+- `.gitattributes` paths fixed (they still pointed at pre-reorganisation locations); stale `mule/.pytest_cache` removed.
+- Kept as is: Python module names (each already names its system) and every CAD file. Fusion versions stay in the Fusion project, and older STEP versions stay in git history.
+- 166/166 checks, 82/82 tests.

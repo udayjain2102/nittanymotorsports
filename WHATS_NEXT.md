@@ -20,8 +20,8 @@ The frame's engine mounts are welded in step 1, so the engine has to be chosen f
 - [ ] Fix anything that fails in `mule/mule.py` **before** ordering tube, and re-run `python report.py`.
 
 ## Step 1: frame ($1,100–1,600)
-- [ ] Order 4130 tube from `mule/fab/cutlist.csv` (+25 %), plus tabs, plate and filler.
-- [ ] Build the jig from `mule/fab/nodes.csv`; cut and cope from `mule/fab/cut_sheet.csv`; bend hoops from `mule/fab/hoop_bends.csv`.
+- [ ] Order 4130 tube from `mule/fab/tube_order_list.csv` (+25 %), plus tabs, plate and filler.
+- [ ] Build the jig from `mule/fab/jig_node_coordinates.csv`; cut and cope from `mule/fab/tube_cut_sheet.csv`; bend hoops from `mule/fab/hoop_bend_program.csv`.
 - [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 2138 N·m/deg).
 - [ ] Take photos and results to the next funding request.
 
