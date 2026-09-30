@@ -77,6 +77,7 @@ references/                   other teams' papers (local only, not in git)
 | `README.md` | How to set up and run the code, the output files, the CAD colour key, every assumption, known limits |
 | `PDS.md` | Product design specification: the requirements R1–R15 with targets and results, decisions, Pugh matrices, the FSAE Michigan 2025 benchmark |
 | `BUDGET_PLAN.md` | Phased funding plan: what each phase buys, cheap choices, the upgrade path, price sources |
+| `PARTS_LIST.md` | Bought parts the design uses and the options still open, engine candidates first |
 | `BUILD_PLAN.md` | The design narrative by system (§1–2n), the FSAE rules checklist, the bill of materials, the build sequence, the buck plan |
 | `TEST_PLAN.md` | Physical tests, stages 1–7: what each proves, the predicted value, the procedure, pass criteria, and a results log |
 | `PROJECT_LOG.md` | Chronological record of every step, method, result, error and fix; current results; open items |

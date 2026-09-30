@@ -14,7 +14,7 @@ Where a price was looked up, the source is listed at the bottom.
 | 2. Rolling chassis | Suspension, steering, uprights, wheels and tyres: it rolls and steers | **$1,800–2,500** | T2: travel, camber, bump steer, steering |
 | 3. Engine and drive | Engine, chain drive, spool, CV shafts, fuel | **$1,300–1,900** (cheap engine) or $2,600–4,000 (used 450) | T5.1 gearing |
 | 4. Brakes, safety, electrics | Brakes, harness, seat, crash foam, shutdown circuit: **it drives** | **$1,800–2,600** | T3, T4, T5, T6 |
-| **Total to a driving car** | | **about $6,100–8,800** with the cheap engine | |
+| **Total to a driving car** | | **about $6,100–8,800** with the cheap engine; **about $7,400–10,900** with a used 450 (now recommended: the kit engine does not fit the bay, see Phase 3) | |
 | 5. Upgrades (any order, later) | 450 engine, Kaz rack, rear wing + DRS, new tyres, data logging | $300–3,000 each | T5.5, T7 |
 
 The old one-shot estimate was $9–15k. The savings come from: a kit engine first, used wheels, tyres and shocks,
@@ -71,8 +71,10 @@ and tune the chassis.
 **Option B, used 450 now:** a used running 450 engine is about $1,500–2,800 (a new Honda crate engine is
 listed at about $2,800; complete used bikes are $3,500+). Add cooling, exhaust and wiring: $2,600–4,000 in total.
 
-Either way, the frame keeps the 450 engine bay and mount nodes. Option A mounts on an adapter plate, so the
-upgrade is a bolt-in swap plus mounts, and the chain drive, spool and CVs are reused.
+Either way, the frame keeps the 450 engine bay and mount nodes. **Update 2026-09-30:** the adapter-plate check
+(`python powertrain.py`, Option A) shows that the Predator 420 + CVT does **not** fit that bay at its listed size: it is too
+tall for the space under the fuel cell, and too long or too wide once the CVT is added. Unless a measured bare engine is
+smaller, Option A needs the fuel cell moved, so Option B is now the recommendation. See `PARTS_LIST.md`.
 **Before buying**, the chosen engine goes into `powertrain.py` and `report.py` must pass: mounts, chain line, gearing and launch load.
 
 ## Phase 4: brakes, safety, electrics: first drive ($1,800–2,600)
