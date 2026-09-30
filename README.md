@@ -9,22 +9,28 @@ turns red if a change breaks one.
 
 ![NM26 mule in Fusion](mule/views/NM26_fusion_view.jpg)
 
+**Status (30 September 2026):** the design is complete and checked; nothing is built yet. Engine chosen: **Honda
+CRF450R 2018+** (the 13 hp kit engine doesn't fit the engine bay). Next: measure a CRF450R and get its service manual,
+build the plywood mock-up, then order frame tube. The full to-do list is in [`WHATS_NEXT.md`](WHATS_NEXT.md).
+
 ## I just want to…
 
 | …do this | Go here |
 |---|---|
 | **Look at the car in CAD** | Download [`mule/cad/NM26_Assembly.step`](mule/cad/NM26_Assembly.step) and open it in Fusion (File > Open > Open from my computer), SolidWorks, Onshape or FreeCAD. It arrives upright, one component per part. Team members with Fusion access: `adi laptop files > Nittany Motorsports > NM26_Assembly_v4` (current; Fusion split the import into `_v4`, `_v4_part2` and `_v4_part3`). Older versions sit in `adi laptop files`, named `..._v1_no_wing`, `..._v2_first_wing`, `NM26_Mule_simple_v1–v3`, `NM26_FSAE_Concept_original`. |
 | **Find one part** | [`mule/cad/NM26_Assembly_parts.csv`](mule/cad/NM26_Assembly_parts.csv) lists every part number, what the part is and its file in `mule/cad/parts/` |
-| **Get it funded in small steps** | [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md): five phases of about $2,500 or less, about $6–9k to a driving car, upgrades after |
+| **Get it funded in small steps** | [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md): five phases of about $2,500 or less, about $7.4–10.9k to a driving car with a used 450, upgrades after |
+| **See which parts and engine we're using** | [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md): the chosen parts, engine options with prices, and which script sizes each part |
 | **Know what to buy and build** | [`mule/docs/BUILD_PLAN.md`](mule/docs/BUILD_PLAN.md): §4 bill of materials, §5 build order, the rules checklist; tube cuts and bends are in [`mule/fab/`](mule/fab) |
 | **Test the built car** | [`mule/docs/TEST_PLAN.md`](mule/docs/TEST_PLAN.md): each test, the predicted value and the pass criteria |
 | **See the requirements and results** | [`mule/docs/PDS.md`](mule/docs/PDS.md) (targets) and [`mule/docs/REPORT.md`](mule/docs/REPORT.md) (every check and its result) |
+| **See what's been done, and what's next** | [`WORKDONE.md`](WORKDONE.md) (summary of all work) and [`WHATS_NEXT.md`](WHATS_NEXT.md) (the to-do list, in order) |
 | **Understand why something is the way it is** | [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md), step by step, including every mistake found and fixed |
 | **Change the design** | See below |
 
 ## Quick start (run the design code)
 
-Needs Python 3.11 (CadQuery does not support newer versions everywhere yet). About 5 minutes the first time.
+Needs Python 3.11 (CadQuery does not support newer versions everywhere yet). About 5 minutes the first time. No MATLAB needed.
 
 ```bash
 git clone https://github.com/udayjain2102/nittanymotorsports.git
@@ -65,7 +71,7 @@ mule/                         the car: all design scripts (*.py) sit here becaus
   docs/                       requirements, build plan, test plan, project log, generated report
   cad/                        detailed CAD: assembly, parts/, parts list, routing, drawings
     simple/                   simple CAD model, its parts list, and the frame-only FEA model
-  fab/                        shop data: cut sheet, hoop bends, jig nodes, cut list
+  fab/                        shop data: tube order list, cut sheet, hoop bend programs, jig coordinates
   views/                      drawings of the simple model and the colour key
   tests/                      automated tests (pytest)
 references/                   other teams' papers (local only, not in git)
@@ -108,7 +114,7 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 | `fea.py` | Frame beam FEA: torsional stiffness, roll-hoop loads (AF4.1/AF4.2) |
 | `suspension.py`, `steering.py`, `sideview.py`, `roll.py`, `compliance.py` | Suspension and steering kinematics: roll centres, camber, bump steer (front and rear), Ackermann, caster, steering ratio and effort, handling balance, static camber, jacking, compliance steer |
 | `loads.py`, `springs.py`, `rocker.py`, `uprights.py` | Wheel loads through the links into the frame, springs and dampers, rockers and shocks, uprights, hubs and bearings |
-| `powertrain.py`, `brakes.py` | Gearing, chain, CV shafts, engine mounts, launch load; brake sizing, pedal box, BOTS, 2000 N pedal test |
+| `powertrain.py`, `brakes.py` | Engine (CRF450R 2018+), gearing, chain, CV shafts, engine mounts, launch load, kit-engine fit check; brake sizing, pedal box, BOTS, 2000 N pedal test |
 | `cockpit.py`, `harness.py`, `mass.py`, `shutdown.py` | Cockpit templates, harness mounts and 20 g crash, mass and CG budget with the tilt test, 12 V shutdown circuit and wiring |
 | `aero.py` | Rear wing with DRS flap: rules geometry, forces, mounts, servo, failsafe logic |
 | `lapsim.py` | Point-mass acceleration, skidpad and autocross, with the wing; benchmark times |
@@ -119,8 +125,8 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 ### Repo files (top level)
 | File | Contains |
 |---|---|
-| `WHATS_NEXT.md` | The to-do list, in order: supplier emails, funding steps, build, tests, upgrades |
-| `WORKDONE.md` | Overview of all the work done so far: every system, the problems found and fixed, CAD, documents, GitHub, open items |
+| `WHATS_NEXT.md` | The to-do list, in order: measure the engine, mock-up, funding steps, build, tests, upgrades |
+| `WORKDONE.md` | Overview of all the work done so far: every system, the problems found and fixed, CAD, documents, GitHub, each day's work, open items |
 | `requirements.txt` | The four Python packages the code needs (CadQuery, NumPy, Matplotlib, pytest) |
 | `.github/workflows/tests.yml` | GitHub Actions: installs the packages and runs `python report.py` on every push and pull request |
 | `.gitattributes` | Marks CAD, drawings and generated reports as generated, so diffs show only real changes |

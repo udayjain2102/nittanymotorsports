@@ -58,7 +58,7 @@ shell, padded head restraint, pedal box with cheeks and pivot, dash with E-stop/
 switch, mushroom E-stop, inertia switch, relay, ECU, fan, battery with strap, BOTS, fuel cell with pump and filler),
 and `routes()`: the `08_routing` sub-assembly, brake lines (purple), throttle cable (purple), fuel line (brown) and
 12 V wiring (pink) as tubes along the frame from the `shutdown.py` netlist and the pedal/caliper positions. The engine
-is still a generic 450 cc single at the right size and place; swap in the chosen engine's model when it is known.
+is still a generic 450 cc single at the right size and place; swap in a CRF450R model once one is measured.
 
 In Fusion, open `NM26_Assembly.step` for the full car (each part becomes a component). To assemble from the part
 files instead, Insert each part STEP and leave it at the origin: no joints are needed to line the parts up. The frame
@@ -151,7 +151,8 @@ These match `NM26_FSAE_Concept.step`. STEP exports are rotated to Z-up, so they 
 | `lapsim.py` |
 | Shock | 230×65 mm at 36 % of stroke; pushrod arm 90 / 70 mm; mount brackets | `rocker.py` |
 | Steering stop | 23° inner wheel | `steering.py` `LOCK_DEG` |
-| **Engine (placeholder: generic 450 single)** | redline 11 500 rpm, 50 N·m, primary 2.6, gears 2.0–1.0, envelope, countershaft at X=200/Y=250, 32 kg. **Replace with your engine's numbers.** | `powertrain.py` `ENGINE` |
+| **Engine: Honda CRF450R 2018+** | 48 N·m (published). Still generic until the service manual / a measured engine: redline 11 500 rpm, primary 2.6, gears 2.0–1.0, envelope, countershaft at X=200/Y=250, 32 kg | `powertrain.py` `ENGINE` |
+| Kit-engine option (not used) | Predator 420 + Comet 40-series CVT at listed size; fit check only, printed by `python powertrain.py` | `powertrain.py` `KIT`, `CVT` |
 | Chain drive | DID 520VO (35.6 kN average tensile, from DID), 13T/50T, chain line Z = −180 (left), ±20 mm eccentric carriers | `powertrain.py` |
 | Lumped masses for inertia relief | engine 32 kg, driver 80 kg, fuel 5 kg, spool 8 kg, at their mount nodes | `fea.py` `LUMPED` |
 | Hub bearings / hub / upright | SKF 6209-2RS1 ×2 per corner (C 35.1 kN, C0 21.6 kN from SKF), 4140 Q&T hub 45/30 mm, 7075-T6 upright | `uprights.py` |
