@@ -15,6 +15,7 @@ turns red if a change breaks one.
 |---|---|
 | **Look at the car in CAD** | Download [`mule/cad/NM26_Assembly.step`](mule/cad/NM26_Assembly.step) and open it in Fusion (File > Open > Open from my computer), SolidWorks, Onshape or FreeCAD. It arrives upright, one component per part. Team members with Fusion access: `adi laptop files > Nittany Motorsports > NM26_Assembly_v4` (current; Fusion split the import into `_v4`, `_v4_part2` and `_v4_part3`). Older versions sit in `adi laptop files`, named `..._v1_no_wing`, `..._v2_first_wing`, `NM26_Mule_simple_v1–v3`, `NM26_FSAE_Concept_original`. |
 | **Find one part** | [`mule/cad/NM26_Assembly_parts.csv`](mule/cad/NM26_Assembly_parts.csv) lists every part number, what the part is and its file in `mule/cad/parts/` |
+| **Get it funded in small steps** | [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md): five phases of about $2,500 or less, about $6–9k to a driving car, upgrades after |
 | **Know what to buy and build** | [`mule/docs/BUILD_PLAN.md`](mule/docs/BUILD_PLAN.md): §4 bill of materials, §5 build order, the rules checklist; tube cuts and bends are in [`mule/fab/`](mule/fab) |
 | **Test the built car** | [`mule/docs/TEST_PLAN.md`](mule/docs/TEST_PLAN.md): each test, the predicted value and the pass criteria |
 | **See the requirements and results** | [`mule/docs/PDS.md`](mule/docs/PDS.md) (targets) and [`mule/docs/REPORT.md`](mule/docs/REPORT.md) (every check and its result) |
@@ -73,6 +74,7 @@ references/                   other teams' papers (local only, not in git)
 |---|---|
 | `README.md` | How to set up and run the code, the output files, the CAD colour key, every assumption, known limits |
 | `PDS.md` | Product design specification: the requirements R1–R15 with targets and results, decisions, Pugh matrices, the FSAE Michigan 2025 benchmark |
+| `BUDGET_PLAN.md` | Phased funding plan: what each phase buys, cheap choices, the upgrade path, price sources |
 | `BUILD_PLAN.md` | The design narrative by system (§1–2n), the FSAE rules checklist, the bill of materials, the build sequence, the buck plan |
 | `TEST_PLAN.md` | Physical tests, stages 1–7: what each proves, the predicted value, the procedure, pass criteria, and a results log |
 | `PROJECT_LOG.md` | Chronological record of every step, method, result, error and fix; current results; open items |
