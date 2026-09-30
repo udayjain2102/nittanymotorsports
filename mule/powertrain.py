@@ -178,8 +178,47 @@ def checks():
         ("frame FoS >= 1.2 under full-traction launch", fos >= 1.2, f"{fos:.2f} ({where})"),
     ]
 
+# Option A (budget step 3): a horizontal-shaft kit engine + go-kart CVT on a steel adapter plate bolted to the SAME
+# em_fb/em_rb mount tabs, so the frame is built once for the 450 and the upgrade is a bolt-in swap.
+# Crank runs across the car (Z); CVT on the left drives a jackshaft behind the block that carries the front sprocket.
+KIT = dict(name="Predator 420 (Harbor Freight 60340)", hp=13, redline=3600, peak_torque=26.8, mass=33.1,
+           dims=(480.0, 434.0, 351.0))   # listing L x H x W, mm, incl. fuel tank, muffler, air filter: MEASURE the bare block
+CVT = dict(name="Comet 40-series TAV (8-18 hp)", hp_max=18, low=2.7, high=0.9, width=110.0)   # ratios typical: verify
+PLATE_T = 6.0                            # adapter plate on the lower mount crosses, mm
+FUEL_FLOOR = 480.0                       # fuel cell underside (mule.py fuel_cell_6L)
+
+def kit_bay():
+    """Free space for the kit block: behind the firewall, ahead of the 450 envelope's rear face (the jackshaft and
+    driven pulley sit behind it, over the spool), above the plate, under the fuel cell, inside the rear-ring tubes."""
+    y0 = m.Y_LOW + m.SIZES["A"][0] / 2 + PLATE_T
+    z_in = m.N["rr_bot"][2] - m.SIZES["A"][0] / 2
+    return ENGINE["box"][0], m.X_MAIN - 40, y0, FUEL_FLOOR, z_in
+
+def kit_fit(dims, cvt_w, hp, hp_max):
+    """Best of the two yaw orientations of the block (crank along Z either way). Returns check rows."""
+    x0, x1, y0, y1, z_in = kit_bay(); L_, H, W = dims
+    rows = [("CVT rated for the engine power", hp_max >= hp, f"{hp_max} hp vs {hp} hp"),
+            ("block height fits under the fuel cell", H <= y1 - y0, f"{H:.0f} vs {y1 - y0:.0f} mm")]
+    for lx, lz in ((L_, W), (W, L_)):
+        fit = [("block length fits between jackshaft and firewall", lx <= x1 - x0, f"{lx:.0f} vs {x1 - x0:.0f} mm"),
+               ("block + CVT fit between the rear-ring tubes", lz + cvt_w <= 2 * z_in, f"{lz + cvt_w:.0f} vs {2 * z_in:.0f} mm")]
+        if all(ok for _, ok, _ in fit): break
+    return rows + fit
+
+def kit_checks():
+    rows = kit_fit(KIT["dims"], CVT["width"], KIT["hp"], CVT["hp_max"])
+    r = m.TIRE_R_LOADED / 1000; final = REAR_T / FRONT_T
+    top = KIT["redline"] / (CVT["high"] * final) / 60 * 2 * math.pi * r * 3.6
+    wheel_T = KIT["peak_torque"] * CVT["low"] * final
+    Tc = wheel_T / (pitch_r(REAR_T) / 1000)
+    return rows + [("geared top speed at governed rpm (CVT high)", top >= 60, f"{top:.0f} km/h"),
+                   ("chain tension safety >= 4 at kit torque", CHAIN["break_kN"] * 1e3 / Tc >= 4,
+                    f"{wheel_T:.0f} N*m at the axle (450 launch is traction-limited at {traction_torque():.0f})")]
+
 if __name__ == "__main__":
     res = checks()
     for n, p, d in res: print(("PASS " if p else "FAIL ") + f"{n:52s} {d}")
     print(f"scatter shield (T.5.2.7): {SHIELD['t']} mm steel, >= {SHIELD['width_x'] * CHAIN['width']:.0f} mm wide, centred on the chain line")
     assert all(p for _, p, _ in res), "powertrain check failed"
+    print(f"\nOption A, {KIT['name']} + {CVT['name']} on an adapter plate (not selected, not asserted):")
+    for n, p, d in kit_checks(): print(("PASS " if p else "FAIL ") + f"{n:52s} {d}")
