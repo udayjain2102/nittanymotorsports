@@ -13,7 +13,7 @@ turns red if a change breaks one.
 
 | …do this | Go here |
 |---|---|
-| **Look at the car in CAD** | Download [`mule/cad/NM26_Assembly.step`](mule/cad/NM26_Assembly.step) and open it in Fusion (File > Open > Open from my computer), SolidWorks, Onshape or FreeCAD. It arrives upright, one component per part. Team members with Fusion access: `adi laptop files > Nittany Motorsports > NM26_Assembly_DRS_wing`. |
+| **Look at the car in CAD** | Download [`mule/cad/NM26_Assembly.step`](mule/cad/NM26_Assembly.step) and open it in Fusion (File > Open > Open from my computer), SolidWorks, Onshape or FreeCAD. It arrives upright, one component per part. Team members with Fusion access: `adi laptop files > Nittany Motorsports > NM26_Assembly_v4` (current; Fusion split the import into `_v4`, `_v4_part2` and `_v4_part3`). Older versions sit in `adi laptop files`, named `..._v1_no_wing`, `..._v2_first_wing`, `NM26_Mule_simple_v1–v3`, `NM26_FSAE_Concept_original`. |
 | **Find one part** | [`mule/cad/NM26_Assembly_parts.csv`](mule/cad/NM26_Assembly_parts.csv) lists every part number, what the part is and its file in `mule/cad/parts/` |
 | **Know what to buy and build** | [`mule/docs/BUILD_PLAN.md`](mule/docs/BUILD_PLAN.md): §4 bill of materials, §5 build order, the rules checklist; tube cuts and bends are in [`mule/fab/`](mule/fab) |
 | **Test the built car** | [`mule/docs/TEST_PLAN.md`](mule/docs/TEST_PLAN.md): each test, the predicted value and the pass criteria |
