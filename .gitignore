@@ -4,3 +4,4 @@ __pycache__/
 .claude/
 # third-party reference papers: kept locally, not ours to publish
 /*.pdf
+references/

@@ -8,7 +8,7 @@ import mule as m
 import powertrain as P
 import springs as S
 
-PLAN = (pathlib.Path(__file__).resolve().parents[1] / "TEST_PLAN.md").read_text()
+PLAN = (pathlib.Path(__file__).resolve().parents[1] / "docs" / "TEST_PLAN.md").read_text()
 
 
 def quoted(s):

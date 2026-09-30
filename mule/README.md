@@ -2,7 +2,7 @@
 
 This folder holds the parametric design for a drivable mule that follows the FSAE 2026 safety rules. Every number in the design comes from these scripts. Each script checks its own targets and exits with an error when one is missed. `tests/` runs all of those checks together.
 
-The requirements (numbers plus how each is verified) are in [PDS.md](PDS.md). The design narrative (critique of the concept, rules checklist, BOM and build order) lives in [BUILD_PLAN.md](BUILD_PLAN.md). The physical test plan, with pass criteria taken from these scripts, is [TEST_PLAN.md](TEST_PLAN.md). The chronological log of what was done is [PROJECT_LOG.md](PROJECT_LOG.md).
+The requirements (numbers plus how each is verified) are in [PDS.md](docs/PDS.md). The design narrative (critique of the concept, rules checklist, BOM and build order) lives in [BUILD_PLAN.md](docs/BUILD_PLAN.md). The physical test plan, with pass criteria taken from these scripts, is [TEST_PLAN.md](docs/TEST_PLAN.md). The chronological log of what was done is [PROJECT_LOG.md](docs/PROJECT_LOG.md).
 
 ## Setup
 
@@ -15,10 +15,10 @@ pip install -r ../requirements.txt     # cadquery, numpy, matplotlib, pytest
 
 ```bash
 pytest -q tests            # everything (about 45 s; the cockpit template sweep is the slow part)
-python mule.py             # rule checks, then writes NM26_Mule.step, cutlist.csv, views/*.svg
+python mule.py             # rule checks, then writes cad/simple/NM26_Mule.step, fab/cutlist.csv, views/*.svg
 python cad_parts.py        # detailed CAD (~3 min): cad/parts/*.step (one file per part), cad/NM26_Assembly.step, cad/NM26_Assembly_parts.csv
 python fab.py              # fab/cut_sheet.csv, fab/hoop_bends.csv, fab/nodes.csv, fab/jig_plan.png
-python report.py           # REPORT.md: every design check + every test with its outcome (regenerate after any change)
+python report.py           # docs/REPORT.md: every design check + every test with its outcome (regenerate after any change)
 ```
 
 Every script can also be run on its own (`python fea.py` and so on). Each one prints its numbers and exits non-zero on a failed check.
@@ -27,13 +27,13 @@ Every script can also be run on its own (`python fea.py` and so on). Each one pr
 
 | File | What it is | Open with |
 |---|---|---|
-| `NM26_Mule.step` | **CAD**: the full car assembly (frame, suspension, uprights, powertrain, brakes, pedal box, pan) | Fusion, SolidWorks, Onshape, FreeCAD |
-| `NM26_Frame_FEA.step` | **CAD**: frame only, one solid per tube, for simulation | Fusion Simulation (Combine the bodies first) |
-| `fab/cut_sheet.csv`, `fab/hoop_bends.csv`, `fab/nodes.csv`, `cutlist.csv` | Shop data: tube cuts and copes, bend programs, jig coordinates | Excel / Sheets |
+| `cad/simple/NM26_Mule.step` | **CAD**: the full car assembly (frame, suspension, uprights, powertrain, brakes, pedal box, pan) | Fusion, SolidWorks, Onshape, FreeCAD |
+| `cad/simple/NM26_Frame_FEA.step` | **CAD**: frame only, one solid per tube, for simulation | Fusion Simulation (Combine the bodies first) |
+| `fab/cut_sheet.csv`, `fab/hoop_bends.csv`, `fab/nodes.csv`, `fab/cutlist.csv` | Shop data: tube cuts and copes, bend programs, jig coordinates | Excel / Sheets |
 | `views/*.png`, `views/*.svg`, `fab/jig_plan.png` | 2D drawings | Any image viewer |
-| `NM26_Mule_parts.csv` | Part number (`NM26-<system>-<nnn>`), name and colour of every body in `NM26_Mule.step` (the simple model) | Excel / Sheets |
-| `REPORT.md` | Every check and test, with results (generated) | Markdown |
-| `PROJECT_LOG.md`, `BUILD_PLAN.md`, `TEST_PLAN.md` | History, design narrative plus BOM, physical test plan | Markdown |
+| `cad/simple/NM26_Mule_parts.csv` | Part number (`NM26-<system>-<nnn>`), name and colour of every body in `NM26_Mule.step` (the simple model) | Excel / Sheets |
+| `docs/REPORT.md` | Every check and test, with results (generated) | Markdown |
+| `docs/PROJECT_LOG.md`, `docs/BUILD_PLAN.md`, `docs/TEST_PLAN.md` | History, design narrative plus BOM, physical test plan | Markdown |
 
 The `.py` files are the source. The STEP files are generated from `mule.py`, so edit the scripts, not the STEP.
 
@@ -130,9 +130,9 @@ These match `NM26_FSAE_Concept.step`. STEP exports are rotated to Z-up, so they 
 | `mass.py` | Mass and CG budget for every item | The load-case assumptions (mass, CG, split, unsprung) cover the budget; tilt ≥ 60° |
 | `harness.py` | T.2 belt geometry, tab tear-out and weld strength, 20 g harness crash load on the frame | Lap 45–65°, anti-sub ≤ 20°, shoulder −20..+10°, tabs ≥ 15 kN, frame FoS ≥ 1 vs welded UTS |
 | `shutdown.py` | 12 V system and shutdown circuit as a simulated netlist, with wire sizing | Each shutdown device kills ignition and the fuel pump; fuses/ampacity; switch ratings; voltage drop; locations (T.9) |
-| `report.py` | Writes `REPORT.md`, listing every check and every test with its result | — |
+| `report.py` | Writes `docs/REPORT.md`, listing every check and every test with its result | — |
 | `fab.py` | Fabrication package: pieces, cope/notch data, hoop bend programs, jig node table. | Hoops bendable (straight between bends ≥ 0), CLR ≥ 3×OD, no tube coping onto a smaller one |
-| `tests/test_test_plan.py` | Keeps the predicted numbers quoted in `TEST_PLAN.md` in sync with the code | Fails if any quoted prediction drifts |
+| `tests/test_test_plan.py` | Keeps the predicted numbers quoted in `docs/TEST_PLAN.md` in sync with the code | Fails if any quoted prediction drifts |
 | `views.py` | Layout PNGs: `views/mule_3view.png` and the corner front views `views/corners.png`. | — |
 | `frame_fea_export.py` | Frame-only STEP for Fusion Simulation. Combine the bodies in Fusion first. | — |
 
