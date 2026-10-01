@@ -20,9 +20,9 @@ Every system is a Python script in `mule/` that computes the design and checks i
 | System | Script | What was done | Key result |
 |---|---|---|---|
 | Concept review | — | Critiqued the concept STEP against the rules | 7 problems found (wheelbase too short, missing parts, etc.) |
-| Frame layout and rules | `mule.py` | Parametric frame (143 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 46.4 kg frame, 78 pieces (50.1 kg / 81 before the 1 Oct optimisation) |
+| Frame layout and rules | `mule.py` | Parametric frame (126 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 44.3 kg frame, 73 pieces (50.1 kg / 81 before the 1 Oct optimisation, 46.4 kg before the C2 rear) |
 | Frame rules | `frame_rules.py` | 34 checks for every geometric FSAE frame rule (triangulation, tube size per job, hoops, braces, supports, side impact, shoulder bar, mounts, open wheel) | All pass; each key check proven to fail when its rule is broken |
-| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Roll-over (AF4 support, welded 4130): main 1.08, front 1.02; torsion 2004 N·m/deg FEA |
+| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Roll-over (AF4 support, welded 4130): main 1.09, front 1.02; torsion 1946 N·m/deg FEA |
 | Suspension kinematics | `suspension.py`, `sideview.py`, `roll.py` | Double wishbones front and rear; roll centres, camber, caster, anti-dive/squat, roll gradient, static camber, jacking, handling balance | RC 37/52 mm, caster 4.6°, scrub 38 mm, camber −2.5/−2.0°, LLTD 49.6 % front (mild understeer) |
 | Loads into the frame | `loads.py`, `compliance.py` | Six-link upright statics for 10 load cases; link buckling; compliance steer | Worst frame FoS 1.26; toe change 0.10°/0.18° at 1.5 g |
 | Springs, rockers, shocks | `springs.py`, `rocker.py` | Pushrod + bell-crank layout, 230×65 MTB coil shocks | Motion ratio 0.72/0.75, 3.0/2.6 Hz ride, ~243/215 lb/in springs |
@@ -188,7 +188,7 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
   - Deleting tubes and re-sizing saves ~1 kg, and that version fails the tolerance check.
   - A shorter wheelbase barely changes tube length (the front of the frame follows the driver, not the axle), and it hurts brakes and steering.
   - The weight is set by the ~43 m of tube this layout type needs. The 30–32 kg frames in research use lighter load cases or packaging (10″ wheels, narrow track).
-- **Clean-sheet designs, each on its own branch; `main` stays the verified 46.4 kg frame:**
+- **Clean-sheet designs, each on its own branch (the 46.4 kg frame was `main` until C2 was merged):**
   - *B1 front box* (branch `clean-sheet-B`): front suspension station ahead of the leg template with a top cross. 51 kg, **rejected**.
   - *C1 "short"* (branch `clean-sheet-short`): seat 15°, front hoop 900 mm, rear end −200 mm, front rocker re-tuned,
     rear side-bay diagonal removed. After the last optimiser pass (rear engine-mount cross to 1.5″ for launch): **46.5 kg,
@@ -199,6 +199,8 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
     pickup rail and cross deleted, rear rocker re-tuned. The rear posts no longer bend and drop to 1.0″ × 0.049″.
     **44.3 kg, 73 pieces, torsion 1946 N·m/deg**, every check passing: 2.1 kg lighter than `main`. `fab.py` was also
     fixed to cope a tube onto a neighbour it meets at 20° or more.
+  - **C2 merged into `main`** (1 October): CAD (simple and detailed), shop data, drawings, frame STEP and the shop
+    quote package regenerated; 89 leftover part files of the old frame removed from `cad/parts/`.
   - *C3 direct-acting front shocks*: not started.
 - **Tooling:** the session scratchpad (Python environment, scratch optimiser) was wiped once. The optimiser now lives in
   the repo as `frame_opt.py` so it can't be lost.

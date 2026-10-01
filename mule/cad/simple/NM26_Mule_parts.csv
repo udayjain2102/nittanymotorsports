@@ -31,10 +31,10 @@ NM26-UPR-007,upright_rear_R,Light grey
 NM26-UPR-008,hub_rear_R,Light grey
 NM26-UPR-009,rotor_rear_R,Light grey
 NM26-BRK-003,caliper_rear_R,Purple
-NM26-SUS-013,lower_rr_lsus_rear_R,Blue
-NM26-SUS-014,lower_r_lsus_rear_R,Blue
-NM26-SUS-015,upper_rr_sus_rear_R,Blue
-NM26-SUS-016,upper_r_sus_rear_R,Blue
+NM26-SUS-013,lower_rr_bot_rear_R,Blue
+NM26-SUS-014,lower_r_bot_rear_R,Blue
+NM26-SUS-015,upper_rr_top_rear_R,Blue
+NM26-SUS-016,upper_r_top_rear_R,Blue
 NM26-SUS-017,steer_rear_R,Blue
 NM26-SUS-018,pushrod_rear_R,Cyan
 NM26-WHL-004,tire_rear_L,Black
@@ -42,10 +42,10 @@ NM26-UPR-010,upright_rear_L,Light grey
 NM26-UPR-011,hub_rear_L,Light grey
 NM26-UPR-012,rotor_rear_L,Light grey
 NM26-BRK-004,caliper_rear_L,Purple
-NM26-SUS-019,lower_rr_lsus_rear_L,Blue
-NM26-SUS-020,lower_r_lsus_rear_L,Blue
-NM26-SUS-021,upper_rr_sus_rear_L,Blue
-NM26-SUS-022,upper_r_sus_rear_L,Blue
+NM26-SUS-019,lower_rr_bot_rear_L,Blue
+NM26-SUS-020,lower_r_bot_rear_L,Blue
+NM26-SUS-021,upper_rr_top_rear_L,Blue
+NM26-SUS-022,upper_r_top_rear_L,Blue
 NM26-SUS-023,steer_rear_L,Blue
 NM26-SUS-024,pushrod_rear_L,Cyan
 NM26-SUS-025,rocker_front_R_arm_pushrod,Navy

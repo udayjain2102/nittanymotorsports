@@ -1,7 +1,7 @@
 # What's next
 
 In order. Tick them off here as they're done. The costs come from [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md), the parts from [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md).
-Last updated 2026-10-01. Engine chosen (CRF450R 2018+); frame 46.4 kg, every check passing; total to a driving car about **$7,400–10,900**.
+Last updated 2026-10-01. Engine chosen (CRF450R 2018+); frame 44.3 kg (C2 node-mounted rear, merged), every check passing; total to a driving car about **$7,400–10,900**.
 
 ## This week (no money needed)
 - [ ] Ask nearby FSAE teams for used 13″ wheels, slicks, MTB coil shocks, rod ends and uprights.
@@ -13,13 +13,13 @@ Last updated 2026-10-01. Engine chosen (CRF450R 2018+); frame 46.4 kg, every che
 - [ ] Send the shop the whole `mule/quote/` folder (frame STEP, material list, shop data, cover note) for a preliminary quote, in 4130 and 1020 DOM.
 - [ ] Ask the faculty advisor or an FSAE alum to review the roll-over criterion (welded 4130: 340 MPa yield, 410 MPa ultimate; `SIM_TO_REAL.md`) and the TIG procedure. If the shop quotes 1020 DOM, the criterion has to be redone for that steel.
 
-## Clean-sheet frame designs (each on its own branch; `main` stays the verified 46.4 kg frame)
+## Clean-sheet frame designs (each on its own branch; `main` is now C2, 44.3 kg)
 Realistic target with the current safety standards: **~44–45 kg** for the frame types tried so far; the 30s need a different packaging (see WORKDONE §8).
 - [x] B1 front box ahead of the leg template: 51 kg, rejected (branch `clean-sheet-B`).
 - [x] C1 "short" (branch `clean-sheet-short`): 46.5 kg, 74 pieces, torsion 2305 (main: 46.4 kg, 78, 2004). Same mass, stiffer, more margin, fewer pieces; helmet clearance thinner (54 vs 65 mm). **No weight win**; keep as the candidate if stiffness/fewer pieces matter more than 0.1 kg.
 - [x] **C2 node-mounted rear** (branch `clean-sheet-C2`): **44.3 kg**, 73 pieces, torsion 1946, every check passing. −2.1 kg against `main`, the best concept so far. Thinner: robust tilt 60.3°, rear upright arm FoS 1.6. Combining it with C1's seat/front hoop is untested.
 - [ ] C3 direct-acting front shocks: no front rockers (needs a new shock model in `rocker.py`/`springs.py`).
-- [ ] Pick the winner and merge it into `main`; regenerate CAD, shop data and the quote package (`quote_package.py`).
+- [x] Winner so far: C2, merged into `main`; CAD, shop data and the quote package regenerated. If C3 or a C1+C2 combination beats it, merge that the same way.
 - [ ] Give `frame_opt.py` a rule that a straight run of one tube keeps one size (it can currently size two collinear parts differently, which can't be coped).
 
 ## Before ordering frame tube: pin down the engine
@@ -36,7 +36,7 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 ## Step 1: frame ($1,100–1,600)
 - [ ] Order 4130 tube from `mule/fab/tube_order_list.csv` (+25 %), plus tabs, plate and filler.
 - [ ] Build the jig from `mule/fab/jig_node_coordinates.csv`; cut and cope from `mule/fab/tube_cut_sheet.csv`; bend hoops from `mule/fab/hoop_bend_program.csv`.
-- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 2004 N·m/deg FEA, pass ≥ 1000 measured).
+- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 1946 N·m/deg FEA, pass ≥ 1000 measured).
 - [ ] Take photos and results to the next funding request.
 
 ## Steps 2–4: to a driving car

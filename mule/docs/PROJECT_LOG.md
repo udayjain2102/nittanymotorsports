@@ -297,3 +297,12 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - Result: **44.3 kg, 126 members, 73 pieces, torsion 1946 N·m/deg**; 210/210 checks, 92/92 tests. Against `main`
   (46.4 kg, 78 pieces, 2004): −2.1 kg, −5 pieces, −3 % torsion. Thinner: robust tilt 60.3° (60.4), rear upright arm
   FoS 1.6 (1.8); front hoop roll-over and wheel-load tolerance margins unchanged (1.00 / 1.02).
+
+## 2026-10-01: C2 merged into `main`
+- `clean-sheet-C2` merged. Regenerated: `mule.py` (simple CAD, tube order list, views), `fab.py` (cut sheet, bend
+  programs, jig), `views.py`, `frame_fea_export.py`, `cad_parts.py` (290 detailed parts), `quote_package.py`
+  (152-part frame weldment STEP, material list), `report.py` (210/210 checks, 92/92 tests).
+- `cad_parts.py` doesn't delete part files it no longer writes: 89 old-frame STEP files in `cad/parts/` broke the
+  quote package's part count and were removed (only files named in `NM26_Assembly_parts.csv` are kept).
+- Docs updated to 44.3 kg / 126 members / 73 pieces / 1946 N·m/deg: BUILD_PLAN, PDS, BUDGET_PLAN, FRAME_RESEARCH,
+  TEST_PLAN, WHATS_NEXT, WORKDONE.
