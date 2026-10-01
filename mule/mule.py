@@ -175,7 +175,7 @@ SIDE = [
     ("sp_bot", "sp_mid", "C", "Spool carrier post"), ("sp_mid", "sp_c", "C", "Spool carrier post"), ("sp_c", "sp_top", "C", "Spool carrier post"),
     ("sp_c", "rr_top", "C", "Spool carrier brace (chain pull)"), ("sp_c", "rr_lsus", "C", "Spool carrier brace (chain pull)"),
     # (rear side bay diagonal r_sus -> sp_mid removed in C1: the shorter rear brings the chain within 7 mm of it)
-    ("mh_bot", "em_fb", "A", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "A", "Rear-ring bottom cross + rear engine mounts"),
+    ("mh_bot", "em_fb", "A", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),
     ("mh_sis", "em_ft", "A", "Main hoop mid cross / firewall + top engine mounts"),
 ]
 CROSS = [
@@ -184,7 +184,7 @@ CROSS = [
     ("fh_top", "H", "Front hoop"),   # no front hoop base cross: removed in the 2026-10-01 optimisation (not rule-required, lightly loaded)
     ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
     ("sb", "H", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
-    ("em_rb", "A", "Rear-ring bottom cross + rear engine mounts"),  # no top cross here: it would pass through the engine
+    ("em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),  # no top cross here: it would pass through the engine
     ("r_bot", "C", "Rear bulkhead"), ("r_top", "C", "Rear bulkhead"),
     ("r_lsus", "C", "Rear pickup cross (rocker/shock loads)"), ("ring_lsus", "B", "Front pickup cross (rocker/shock loads, rack)"),
     ("pb0m", "B", "Pedal box cross (rear)"), ("pb1m", "A", "Pedal box cross (front)"),

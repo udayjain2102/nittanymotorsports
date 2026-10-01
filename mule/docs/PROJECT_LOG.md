@@ -278,3 +278,13 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - The robustness test that expected the 1.25″ shoulder bar to fail was removed: the bar now passes because its neighbours
   are stronger.
 - New: `tests/test_frame_opt.py`. CAD, shop data, quote package and docs regenerated.
+
+## 2026-10-01: clean-sheet C1 "short" finished (branch `clean-sheet-short`)
+- Re-ran `frame_opt.py` after making the lower main-hoop-brace support one size. One change: rear-ring bottom cross
+  (rear engine mounts) 1.25″ × 0.095″ → 1.5″ × 0.095″ (launch case). Then nothing else could shrink.
+- Result: **46.5 kg, 141 members, 74 pieces, torsion 2305 N·m/deg**; 210/210 checks, 92/92 tests.
+- Against `main` (46.4 kg, 78 pieces, 2004): same mass (+0.1 kg), 4 fewer pieces, +15 % torsion, more margin under
+  tolerances (front hoop roll-over 1.09 vs 1.00, wheel loads 1.07 vs 1.02), tyre-at-lock gap 19 vs 10 mm.
+  Thinner: helmet to the main-hoop/front-hoop line 54 vs 65 mm (limit 50), sprocket-to-frame 12 vs 18 mm (limit 10).
+- Conclusion: the shorter layout does not save weight; it trades the same mass for stiffness and margin.
+  `TEST_PLAN.md` frame numbers updated for this branch.
