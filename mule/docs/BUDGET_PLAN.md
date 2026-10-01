@@ -33,7 +33,7 @@ fabricated steel uprights instead of machined aluminium, a cheaper rack first, a
 ## Phase 1: frame ($1,100–1,600)
 | Item | Est. $ |
 |---|---|
-| 4130 tube: 1.5/1.25/1.0 in sizes per `fab/tube_order_list.csv` + 25 % | 700–1,000 |
+| 4130 tube: 1.5/1.25/1.0 in sizes per `fab/tube_order_list.csv` + 25 % (9 × 20 ft sticks, `quote/material_list.csv`) | 1,000–1,700 + freight (re-priced 1 Oct 2026, see `JUGAAD_PLAN.md`; was 700–1,000) |
 | Tabs, plate, anti-intrusion plate | 150 |
 | TIG filler, notcher hole saws, jig lumber/steel | 200–300 |
 | Bend service for the two hoops (if the school has no bender) | 0–150 |

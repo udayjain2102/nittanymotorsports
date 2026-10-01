@@ -4,9 +4,9 @@ In order. Tick them off here as they're done. The costs come from [`mule/docs/BU
 Last updated 2026-10-01. Engine chosen (CRF450R 2018+); frame 44.3 kg (C2 node-mounted rear, merged), every check passing; total to a driving car about **$7,400–10,900**.
 
 ## Funding is smaller: jugaad plan
-- [ ] Tell Claude the funding limit; [`mule/docs/JUGAAD_PLAN.md`](mule/docs/JUGAAD_PLAN.md) turns into the request list (about $4,000–8,300 to a driving car, vs $7.4–10.9k).
-- [ ] Price the levers for real: donor CRF450R 2018+ listings, local 1020 DOM price per foot, what other teams will give.
-- [ ] Decide 4130 (shop or TIG) vs 1020 DOM (team MIG): 1020 checked at 45.3 kg, every check passing (branch `jugaad-1020`); needs weld coupons and an advisor's OK.
+- [ ] No limit yet. [`mule/docs/JUGAAD_PLAN.md`](mule/docs/JUGAAD_PLAN.md): about $6,200–10,700 paying for everything, about $4,000–6,000 with a donated engine and sponsored tube (real prices, 1 Oct 2026).
+- [ ] Before applying: ask for an engine donation / crashed 2018+ CRF450R (dealers, riders, alumni), a tube sponsor (local steel distributor), and used parts from nearby teams.
+- [ ] Decide steel by who welds it: 4130 (TIG, 44.3 kg) or 1020 DOM (team MIG, 45.3 kg, branch `jugaad-1020`). Same price per foot.
 
 ## This week (no money needed)
 - [ ] Ask nearby FSAE teams for used 13″ wheels, slicks, MTB coil shocks, rod ends and uprights.
