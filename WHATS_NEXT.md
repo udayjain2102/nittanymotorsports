@@ -11,7 +11,7 @@ Last updated 2026-09-30. Engine chosen (CRF450R 2018+); total to a driving car i
 
 ## Frame quote
 - [ ] Send the shop the whole `mule/quote/` folder (frame STEP, material list, shop data, cover note) for a preliminary quote, in 4130 and 1020 DOM.
-- [ ] Frame topology redesign toward ~33 kg (now 46.2 kg): pickups on triangulated nodes, closed front ring that passes T.1.2, braced shoulder bar. Re-run `python quote_package.py` after.
+- [ ] Frame topology redesign toward ~33 kg (now 46.4 kg): pickups on triangulated nodes, closed front ring that passes T.1.2, braced shoulder bar. Re-run `python quote_package.py` after.
 
 ## Before ordering frame tube: pin down the engine
 The frame's engine mounts are welded in step 1, so the engine has to be known first.
@@ -27,7 +27,7 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 ## Step 1: frame ($1,100–1,600)
 - [ ] Order 4130 tube from `mule/fab/tube_order_list.csv` (+25 %), plus tabs, plate and filler.
 - [ ] Build the jig from `mule/fab/jig_node_coordinates.csv`; cut and cope from `mule/fab/tube_cut_sheet.csv`; bend hoops from `mule/fab/hoop_bend_program.csv`.
-- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 1969 N·m/deg FEA, pass ≥ 1000 measured).
+- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 2004 N·m/deg FEA, pass ≥ 1000 measured).
 - [ ] Take photos and results to the next funding request.
 
 ## Steps 2–4: to a driving car

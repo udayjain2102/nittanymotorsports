@@ -41,7 +41,7 @@ def main():
     out += ["\n## Key results\n", "| Quantity | Value | From |", "|---|---|---|",
             f"| Frame | {len(mule.MEMBERS)} members, {frame_kg:.1f} kg, {len(pcs)} pieces | `mule.py`, `fab.py` |",
             f"| Torsional stiffness | {f['torsion']:.0f} N·m/deg | `fea.py` |",
-            f"| Hoop loads 6/5/9 kN, safety factor | main {f['fos']['Main hoop']:.2f}, front {f['fos']['Front hoop']:.2f} | `fea.py` |",
+            f"| Roll-over loads 6/5/9 kN (AF4 support), safety factor vs welded 4130 yield | main {f['fos']['Main hoop']:.2f}, front {f['fos']['Front hoop']:.2f} | `fea.py` |",
             f"| Wheel-load cases, worst frame safety factor | {ffos:.2f} | `loads.py` |",
             f"| Worst link buckling safety factor | {buck:.1f} ({link}) | `loads.py` |",
             f"| Springs front / rear | {sp['front']['lbs_in']:.0f} / {sp['rear']['lbs_in']:.0f} lb/in | `springs.py` |",

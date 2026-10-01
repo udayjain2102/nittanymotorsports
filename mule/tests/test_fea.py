@@ -8,7 +8,7 @@ def test_cantilever_and_inertia_relief():
 
 def test_hoop_cases_and_torsion():
     r = fea.run(verbose=False)
-    assert r["fos"]["Main hoop"] > 1.2 and r["fos"]["Front hoop"] > 1.2, r["fos"]
+    assert r["fos"]["Main hoop"] >= 1.0 and r["fos"]["Front hoop"] >= 1.0, r["fos"]   # vs welded 4130 yield (fea.SY_ROLL)
     assert r["torsion"] > 1400, r["torsion"]
     assert max(r["defl"].values()) <= 25, r["defl"]          # AF4.1/AF4.2 deflection limit
 

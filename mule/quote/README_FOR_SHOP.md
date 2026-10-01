@@ -8,7 +8,7 @@ Nittany Motorsports NM26 test car ("mule"), a Formula SAE-style tube frame. Plea
 | `NM26_Frame_Weldment.step` | The frame as built: every tube and tab as a separate named part, in final position. Units mm, Z up, X forward from the rear axle centreline, origin at ground level on the car centreline. |
 | `material_list.csv` | Raw material: tube by size (piece count, total cut length, longest piece, 20 ft sticks), tab plate, bushing bar. **Stick counts are minimums; please add 15–25 % for notching scrap and mistakes.** |
 | `tube_cut_sheet.csv` | Every straight piece: size, cut length (long point to long point), the tube each end copes onto, cope angle, notch phase. |
-| `hoop_bend_program.csv` | Feed / rotation / bend (Y-B-C) programs for the two roll hoops (1.25" × 0.095", CLR as listed). |
+| `hoop_bend_program.csv` | Feed / rotation / bend (Y-B-C) programs for the two roll hoops (main 1.5" × 0.095", front 1.25" × 0.095", CLR as listed). |
 | `jig_node_coordinates.csv`, `jig_plan.png` | Coordinates of every joint above a flat table, for the fixture. |
 
 ## Specification

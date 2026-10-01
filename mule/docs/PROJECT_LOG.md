@@ -255,3 +255,26 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
     - the results log has a "model input updated" column.
   - PDS, BUILD_PLAN, budget, READMEs and WORKDONE carry the new numbers.
 - 210 checks, 91 tests.
+
+## 2026-10-01 - roll-over model error: AF4 support, welded-4130 criterion, frame_opt.py (46.2 -> 46.4 kg)
+- **Found while working on clean-sheet concept C1:** the roll-over cases in `fea.run` held the car at its suspension
+  pickups. AF4.1/AF4.2, where the 6/5/9 kN loads come from, fix translations at the bottom nodes of both roll hoops
+  ([FSAE forum](https://www.fsae.com/forums/archive/index.php/t-11827.html)), and AF5.6 allows inertia relief instead.
+  Both give the same answer (369 vs 371 MPa main, 422 vs 416 front). The old support gave 146 / 142 MPa. The frame was
+  far weaker in roll-over than reported: FoS 0.48 / 0.43 against the FSAE welded yield.
+- **Criterion (user chose option A):** AF4's own pass criterion is "no failure" (load below tensile, compressive, shear
+  or buckling capacity) with no margin factor.
+  - Base 4130 normalized tube: Fty 75 / Ftu 95 ksi (MIL-HDBK-5J).
+  - No public welded-4130 table exists (Abbott Aerospace says so too). Welds are therefore taken at 85 % of the ER70S-2
+    filler minimums (AWS A5.18: 58 / 70 ksi), the weld-allowable rule MIL-HDBK-5 uses. That gives `fea.SY_ROLL` = 340 MPa
+    and `SU_ROLL` = 410 MPa.
+  - Gates: nominal FoS ≥ 1.0 on 340, and FoS ≥ 1.0 on 410 in every tolerance sample.
+  - All other load cases keep the FSAE welded values (180 MPa, FoS 1.2).
+  - The criterion is only valid for 4130 with ER70S-2 filler; revisit it if 1020 DOM is chosen.
+- **`frame_opt.py`:** the scratch optimiser was lost when the session scratchpad was wiped, so it now lives in the repo.
+  It re-sized the frame under every gate: main hoop 1.25 → 1.5″, upper bulkhead supports 0.049 → 0.095 wall, lower
+  bulkhead support 0.049 → 0.065. Shrunk: main hoop braces 0.095 → 0.065, shoulder bar 1.5 → 1.25″, front hoop lower brace,
+  MH brace-plane diagonal, main hoop mid cross. Result: 46.4 kg, torsion 2004.
+- The robustness test that expected the 1.25″ shoulder bar to fail was removed: the bar now passes because its neighbours
+  are stronger.
+- New: `tests/test_frame_opt.py`. CAD, shop data, quote package and docs regenerated.

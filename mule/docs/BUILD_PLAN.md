@@ -35,14 +35,15 @@ What's worth keeping from the concept: the 4-corner double-wishbone layout, the 
 - The driver sits upright at 20° (T.2.1.d), so a **5-point harness is allowed**. Hip-to-pedal distance is 915 mm.
 - Main hoop top is at 1280 mm and front hoop top at 850 mm. Helmet clearance to the hoop line is **65 mm** (the rule needs ≥50).
 - Lower side-impact tube bottom is 60 mm above the ground (V.1.4.2 requires ≤90 and prefers ≤75).
-- The frame is **143 members, about 46.2 kg** of 4130 (section 2l explains the latest changes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
+- The frame is **143 members, about 46.4 kg** of 4130 (section 2l explains the latest changes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
 - These changes came out of the FEA (see section 2b).
 - Tube schedule after the 2026-10-01 optimisation (each tube at the smallest size its loads and its F.3.2.1 rule size allow; `frame_rules.py` checks the rule size per job):
-  - 1.5″×0.095″: front suspension-ring posts (no top cross, T.1.2), shoulder harness bar (1.25″ failed the tolerance check).
-  - 1.25″×0.095″: both roll hoops, rear bulkhead posts, main hoop mid cross.
-  - 1.0″×0.095″: diagonal side impact (harness case under tolerances), main hoop braces, rear suspension ring, engine-mount crosses, front pedal-box cross, front part of the lower main-hoop-brace support.
-  - 1.0″×0.065″ (Size B): side impact, front bulkhead, front hoop braces and lower brace, harness tubes, MH brace-plane diagonal, lower bulkhead support (pedal box), rear pedal-box cross, front pickup cross.
-  - 1.0″×0.049″ (Size C): bulkhead and main-hoop-brace supports, rear rails and posts, other structural tubes.
+  - 1.5″×0.095″: main hoop (AF4 roll-over), front suspension-ring posts (no top cross, T.1.2).
+  - 1.25″×0.095″: front hoop, shoulder harness bar, rear bulkhead posts.
+  - 1.0″×0.095″: diagonal side impact, upper bulkhead supports, rear suspension ring, engine-mount and main-hoop mid crosses, front pedal-box cross, front part of the lower main-hoop-brace support.
+  - 1.0″×0.065″ (Size B): upper and lower side impact, front bulkhead, front and main hoop braces, harness tubes, lower bulkhead supports, rear pedal-box cross, front pickup cross.
+  - 1.0″×0.049″ (Size C): main-hoop-brace supports, brace-plane diagonals, front hoop lower brace, cockpit floor V, rear rails, posts and diagonals.
+  - Sized by `frame_opt.py` against every gate; re-run it after any geometry change.
 
 Modelling limits to know before cutting tube:
 - Hoops are drawn as straight segments between bend nodes. When you bend them, keep the radius ≥ 3×OD = 76 mm (F.5.2.1).
@@ -56,7 +57,7 @@ Modelling limits to know before cutting tube:
 
 | Case | Original | Final |
 |---|---|---|
-| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (1969 after the 2026-10-01 weight optimisation and robustness fix) |
+| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (2004 after the 2026-10-01 weight optimisation, robustness fix and AF4 roll-over correction; robustness fix) |
 | Main hoop top load 6/5/9 kN: peak stress | 1009 MPa | **140 MPa (safety factor 1.28, worst of the 4 load directions)** |
 | Front hoop top load 6/5/9 kN: peak stress | 867 MPa | **133 MPa (safety factor 1.36)** |
 
@@ -306,16 +307,16 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
   - voltage drop to the pump and ignition is 0.23 V;
   - battery, master switch and brake light positions are legal.
 
-**Frame totals now** (after the 2026-10-01 weight optimisation and robustness fix, see PROJECT_LOG): 143 members, **46.2 kg**, 78 pieces (2 bent). Torsion is **1969 N·m/deg** FEA (target ≥ 1500 FEA, ≥ 1000 measured). Safety factors, nominal and worst of 16 tube-tolerance samples (`robustness.py`):
+**Frame totals now** (after the 2026-10-01 optimisation, robustness fix and AF4 roll-over correction, see PROJECT_LOG): 143 members, **46.4 kg**, 78 pieces (2 bent). Torsion is **2004 N·m/deg** FEA (target ≥ 1500 FEA, ≥ 1000 measured). Safety factors, nominal and worst of 16 tube-tolerance samples (`robustness.py`):
 
-| Case | FoS nominal | FoS worst with tolerances |
-|---|---|---|
-| Main hoop | 1.24 | 1.09 |
-| Front hoop | 1.27 | 1.07 |
-| Wheel loads | 1.23 | 1.03 |
-| Launch | 1.26 | 1.07 |
-| 2000 N pedal | 1.32 | 1.18 |
-| Harness crash (vs welded ultimate) | 1.20 | 1.08 |
+| Case | Criterion | FoS nominal | FoS worst with tolerances |
+|---|---|---|---|
+| Main hoop roll-over (AF4 support) | welded 4130: yield 340 / ultimate 410 MPa | 1.08 | 1.11 (vs ultimate) |
+| Front hoop roll-over (AF4 support) | as above | 1.02 | 1.00 (vs ultimate) |
+| Wheel loads | FSAE welded yield 180 MPa, FoS 1.2 | 1.23 | 1.02 |
+| Launch | as above | 1.21 | 1.06 |
+| 2000 N pedal | as above | 1.32 | 1.18 |
+| Harness crash | FSAE welded ultimate 300 MPa | 1.19 | 1.07 |
 
 ## 2m. Design-review gaps closed (Hayward, *Car Design Workshop*)
 
