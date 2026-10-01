@@ -1,4 +1,4 @@
-# NM26 FSAE-lite Mule — Critique, Rules Checklist, BOM, Build Plan
+# NM26 Mule — Critique, Rules Checklist, BOM, Build Plan
 
 Goal: a car that drives and follows the FSAE 2026 **safety** rules (roll hoops, side impact, harness, brakes, shutdown, impact attenuator, firewall). It deliberately skips competition-only items (intake restrictor, aero, SES/IAD paperwork, noise test, cost report).
 
@@ -37,7 +37,12 @@ What's worth keeping from the concept: the 4-corner double-wishbone layout, the 
 - Lower side-impact tube bottom is 60 mm above the ground (V.1.4.2 requires ≤90 and prefers ≤75).
 - The frame is **143 members, about 45.3 kg** of 4130 (section 2l explains the latest changes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
 - These changes came out of the FEA (see section 2b).
-- Roll hoops = **1.25″×0.095″**. This exceeds the Size A minimum and was chosen after the FEA. Size A = 1.0″×0.095″ (main hoop braces, shoulder bar). Size B = 1.0″×0.065″ (side impact, bulkhead, hoop braces, belt tube). Size C = 1.0″×0.049″ (supports, cross members, rings). The script checks each size against the F.3.4.1 inertia and area minimums.
+- Tube schedule after the 2026-10-01 optimisation (each tube at the smallest size its loads and its F.3.2.1 rule size allow; `frame_rules.py` checks the rule size per job):
+  - 1.5″×0.095″: front suspension-ring posts (no top cross, T.1.2).
+  - 1.25″×0.095″: both roll hoops, shoulder harness bar, rear bulkhead posts, main hoop mid cross.
+  - 1.0″×0.095″: main hoop braces, rear suspension ring, engine-mount crosses, front pedal-box cross, front part of the lower main-hoop-brace support.
+  - 1.0″×0.065″ (Size B): side impact, front bulkhead, front hoop braces and lower brace, harness tubes, MH brace-plane diagonal, lower bulkhead support (pedal box), rear pedal-box cross, front pickup cross.
+  - 1.0″×0.049″ (Size C): bulkhead and main-hoop-brace supports, rear rails and posts, other structural tubes.
 
 Modelling limits to know before cutting tube:
 - Hoops are drawn as straight segments between bend nodes. When you bend them, keep the radius ≥ 3×OD = 76 mm (F.5.2.1).
@@ -84,7 +89,7 @@ Unequal-length double wishbones front and rear. Each A-arm's inboard pickups are
 | Wheel travel | +50 / −25 mm | +50 / −25 mm | V.3.1.1 requires 50 mm usable in total |
 
 Notes:
-- The pickups sit part-way up the verticals, not at existing nodes, so those verticals were upsized to 1.25″×0.095″. The FEA includes this.
+- The pickups sit part-way up the verticals, not at existing nodes, so those verticals bend (front ring 1.5″×0.095″, rear ring 1.0″×0.095″ after the 2026-10-01 optimisation). This is the main reason the frame is heavier than documented FSAE frames; see `FRAME_RESEARCH.md`.
 - No cross tubes at the pickup heights, because they would hit the driver's shins at the front and the engine at the rear.
 - **Not done yet:** side-view geometry (caster, anti-dive, anti-squat). Steering is covered in section 2f and rockers in 2g.
 
@@ -202,7 +207,7 @@ Each hub rotates on two SKF 6209-2RS1 bearings (45×85×19; the 6009 fell to s0 
 
 ## 2j. Powertrain (`powertrain.py`)
 
-**The engine numbers are placeholders** for a generic 450 cc single: redline 11 500 rpm, 50 N·m, primary 2.6, 5 speeds, 32 kg, envelope X 150–470. Replace them with the chosen engine's manual values and measured countershaft position, then re-run `pytest`.
+**Engine: Honda CRF450R 2018+.** From the 2017–18 service manual: primary 66/28, gears 32/15, 29/17, 27/19, 23/19, 24/23, dry mass 30.9 kg; published torque 48 N·m. Still generic until an engine is measured: redline 11 500 rpm, envelope X 150–470, countershaft position, mount points. Enter the measured values in `powertrain.ENGINE` and re-run `report.py`.
 
 | Item | Value |
 |---|---|
