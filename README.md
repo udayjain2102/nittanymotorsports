@@ -21,6 +21,7 @@ build the plywood mock-up, then order frame tube. The full to-do list is in [`WH
 | **Find one part** | [`mule/cad/NM26_Assembly_parts.csv`](mule/cad/NM26_Assembly_parts.csv) lists every part number, what the part is and its file in `mule/cad/parts/` |
 | **Get it funded in small steps** | [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md): five phases of about $2,500 or less, about $7.4–10.9k to a driving car with a used 450, upgrades after |
 | **See which parts and engine we're using** | [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md): the chosen parts, engine options with prices, and which script sizes each part |
+| **Get the frame quoted by a shop** | [`mule/quote/`](mule/quote): send the whole folder; [`README_FOR_SHOP.md`](mule/quote/README_FOR_SHOP.md) explains it. Rebuild with `python quote_package.py` after any frame change |
 | **Know what to buy and build** | [`mule/docs/BUILD_PLAN.md`](mule/docs/BUILD_PLAN.md): §4 bill of materials, §5 build order, the rules checklist; tube cuts and bends are in [`mule/fab/`](mule/fab) |
 | **Test the built car** | [`mule/docs/TEST_PLAN.md`](mule/docs/TEST_PLAN.md): each test, the predicted value and the pass criteria |
 | **See the requirements and results** | [`mule/docs/PDS.md`](mule/docs/PDS.md) (targets) and [`mule/docs/REPORT.md`](mule/docs/REPORT.md) (every check and its result) |
@@ -72,6 +73,7 @@ mule/                         the car: all design scripts (*.py) sit here becaus
   cad/                        detailed CAD: assembly, parts/, parts list, routing, drawings
     simple/                   simple CAD model, its parts list, and the frame-only FEA model
   fab/                        shop data: tube order list, cut sheet, hoop bend programs, jig coordinates
+  quote/                      frame quote package for the shop: frame STEP, material list, shop data, cover note
   views/                      drawings of the simple model and the colour key
   tests/                      automated tests (pytest)
 references/                   other teams' papers (local only, not in git)
@@ -118,7 +120,7 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 | `cockpit.py`, `harness.py`, `mass.py`, `shutdown.py` | Cockpit templates, harness mounts and 20 g crash, mass and CG budget with the tilt test, 12 V shutdown circuit and wiring |
 | `aero.py` | Rear wing with DRS flap: rules geometry, forces, mounts, servo, failsafe logic |
 | `lapsim.py` | Point-mass acceleration, skidpad and autocross, with the wing; benchmark times |
-| `fab.py`, `views.py`, `frame_fea_export.py`, `cad_parts.py` | Shop data, drawings, the frame-only STEP, the detailed per-part CAD |
+| `fab.py`, `views.py`, `frame_fea_export.py`, `cad_parts.py`, `quote_package.py` | Shop data, drawings, the frame-only STEP, the detailed per-part CAD, the shop quote package |
 | `report.py` | Writes `docs/REPORT.md` (all checks and tests) and the README colour key |
 | `tests/` | `pytest -q tests`: hand calculations, limiting cases, and a guard that `docs/TEST_PLAN.md` quotes current numbers |
 

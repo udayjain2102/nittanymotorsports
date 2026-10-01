@@ -14,7 +14,7 @@ This page lists the car's requirements. Each one has a number and a way to verif
 | # | Requirement | Target | Predicted (code) | Verified by |
 |---|---|---|---|---|
 | R1 | Roll structure strength, 6/5/9 kN hoop loads | FoS ≥ 1.2 vs welded yield | 1.28 main / 1.36 front, worst of 4 load directions; deflection ≤ 3.9 mm vs 25 (`fea.py`) | T1.2, T1.3 |
-| R2 | Chassis torsional stiffness | ≥ 1500 N·m/deg (FSAE practice 1000–3000) | 2138 (`fea.py`) | T1.2 twist test |
+| R2 | Chassis torsional stiffness | ≥ 1500 N·m/deg (FSAE practice 1000–3000) | 1886 (`fea.py`) | T1.2 twist test |
 | R3 | Frame under wheel, launch and pedal loads | FoS ≥ 1.2 | 1.26 / 1.22 / 1.31 (`loads.py`, `powertrain.py`, `brakes.py`) | T5.2, T7.2 |
 | R4 | Harness mounts survive a crash | 20 g, FoS ≥ 1 vs welded UTS; tabs ≥ 15 kN | 1.17; 31.7 kN (`harness.py`) | T1.3, T4.3c |
 | R5 | Rules geometry (hoops, helmet, SIS, IA, belts, templates) | every listed rule passes | 27 + 2 + 8 checks (`mule.py`, `cockpit.py`, `harness.py`) | T4.3, T4.3b |
@@ -102,7 +102,7 @@ A point mass has no driver, no tyre warm-up and no transients, so real times wil
 | Mass with driver | 296 kg | | | |
 | CG height | 340 mm | | | |
 | Wheelbase / track F/R | 1750 / 1220 / 1220 mm | | | |
-| Frame torsion | 2138 N·m/deg | | | |
+| Frame torsion | 1886 N·m/deg | | | |
 | Ride frequency F/R | 3.0 / 2.6 Hz | | | |
 | Motion ratio F/R | 0.72 / 0.75 | | | |
 | Scrub / KPI / caster | 38 mm / 9.6° / 4.6° | | | |
