@@ -42,6 +42,7 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 - [ ] Upgrades, one request each: new tyres → Kaz rack → rear wing + DRS → data logging.
 
 ## Keeping the repo useful
+- Every FSAE rule is a hard requirement. A design change must keep all automated checks passing, and `mule/docs/RULES_MATRIX.md` lists the build/inspection items to tick off.
 - Every design change: edit the code, run `python report.py` in `mule/`, add a line to `mule/docs/PROJECT_LOG.md`, then commit and push (GitHub re-runs every check).
 - A day's work goes into `WORKDONE.md` as a short summary; the detail stays in `PROJECT_LOG.md`.
 - No MATLAB needed: everything runs in Python (see the README quick start for the setup).

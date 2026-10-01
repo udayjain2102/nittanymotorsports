@@ -402,9 +402,9 @@ The wing sits behind the rear axle, so at top speed it adds 587 N to the rear ax
 
 **Lap-sim value** (point mass, wing closed in corners and braking, open on straights): autocross −0.67 s (about 1 %), skidpad −0.04 s, acceleration ±0.00 s. Most of the benefit is in faster corners, and it grows with speed.
 
-## 3. Rules checklist (FSAE-lite scope)
+## 3. Rules checklist (full FSAE 2026 rules: nothing is skipped or traded)
 
-✅ = checked in `mule.py`. ☐ = must be verified on the real part or at build. — = skipped for the mule.
+✅ = checked by code (`mule.py`, `frame_rules.py` and the other modules). ☐ = must be verified on the real part or at build. Every frame-relevant rule, with its status, is listed in [RULES_MATRIX.md](RULES_MATRIX.md).
 
 **Vehicle (V)**
 - ✅ V.1.2 Wheelbase ≥1525 · ✅ V.1.3.2 Track ratio ≥75% · ✅ V.1.4.2 Lower SIS ≤90 mm off the ground
@@ -421,7 +421,7 @@ The wing sits behind the rear axle, so at top speed it adds 587 N to the rear ax
 - ☐ F.5.8.1 Main hoop is **one uncut bent piece** of steel · ☐ F.5.2.1 Bend radius ≥76 mm · ☐ F.5.3.3 Cap open tube ends
 - ☐ F.5.15 Neck guard if a tube runs alongside the driver's neck
 - ✅ F.8.4.2 / F.8.5.6 IA size and height · ✅ F.8.6.3 Pedals 25 mm from the AIP · ☐ F.8.2 AIP is 1.5 mm steel, welded with welds ≥25 mm long
-- — SES, IAD report, IA crush test (competition paperwork). **Still buy the Standard Foam IA**: it's cheap, and it's the part that protects the driver's legs.
+- ☐ SES and IAD report (F.2, F.8.8): required paperwork. Using the Standard Foam IA means no crush test of our own (F.8.4.1, F.8.8.3).
 
 **Cockpit and driver (T.1, T.2)**
 - ✅ T.1.1 / T.1.2 Cockpit opening and cross-section templates (`cockpit.py`, section 2l) · ☐ confirm with plywood templates (TEST_PLAN T4.3b)
@@ -447,7 +447,7 @@ The wing sits behind the rear axle, so at top speed it adds 587 N to the rear ax
 - ☐ IC.5.3 Fuel tank mounted solidly, not carrying structural loads, behind the firewall · ☐ IC.1.2 Fuel and intake inside the tire envelope
 - ✅ IC.9 Shutdown circuit designed and simulated (`shutdown.py`): primary master switch (rotary, driver's right, at the main hoop, shoulder height, all battery current), 40 mm cockpit E-stop, BOTS and inertia switch in series with a normally-open kill relay feeding ignition and fuel pump · ☐ wire it and run TEST_PLAN T4.4
 - ✅ T.9.4 Inertia switch included · ✅ T.9.2.1 Battery inside the structure below the shoulder bar · ☐ T.9.2.2 main fuse 100 A ≤ the battery's max discharge (check the battery you buy)
-- — IC.2 Intake restrictor, IC.4 electronic throttle control, IC.7 noise test (competition only; a stock throttle cable is fine)
+- ☐ IC.2 20 mm intake restrictor (already in the CAD airbox) and IC.7 noise limit: required. IC.4 electronic throttle rules apply only if an electronic throttle is fitted; the mechanical cable throttle complies.
 
 **Equipment (VE)**
 - ☐ VE.2.1 Orange 25–30 mm jacking bar at the rear · ☐ VE.2.2 Push bar · ☐ VE.2.3 Two 10BC dry-chemical fire extinguishers (off the car) · ☐ VE.3 Driver gear (helmet, suit, gloves)

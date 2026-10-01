@@ -5,7 +5,7 @@ every method, result and error, is [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJEC
 
 **Starting point:** the concept CAD (`NM26_FSAE_Concept.step`) and the 2026 FSAE rules PDF.
 **Result:** a complete, rules-checked design for a drivable test car (a "mule"), all generated from Python code:
-- 166 automated design checks and 82 automated tests, all passing, also run by GitHub on every push;
+- 200 automated design checks and 88 automated tests, all passing, also run by GitHub on every push;
 - CAD in two levels of detail;
 - shop data to build the frame;
 - a physical test plan, a build plan, a bill of materials and a phased budget;
@@ -155,6 +155,14 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
 - **Research:** `mule/docs/FRAME_RESEARCH.md` sums up how lighter FSAE frames are built, with sources. Light frames
   (~32 kg) use about as much tube as ours but nearly all 1″ × 0.049″, because their suspension pickups sit on nodes.
   The three reference reports (Trinity, JCU, NAU) were re-read for frame lessons.
+- **FSAE rules made non-negotiable:** an audit of every frame-relevant 2026 rule (V.1, F, T.1, T.2) found about 20
+  geometric rules nothing checked. `frame_rules.py` now checks them (34 checks): tube size per job, side-view
+  triangulation, hoop shape and lean, braces, bent-member supports, no mounts on the main hoop or its braces, bulkhead and
+  brace supports, side impact, shoulder bar, steering protection, hips inside the Major Structure, open-wheel zones.
+  Tests prove each key check fails when its rule is broken. The current frame passes all of them.
+  `mule/docs/RULES_MATRIX.md` lists every rule with its status (83 automated, 94 build/inspection items, 45 not
+  applicable, 15 definitions). The build plan's "FSAE-lite" skips are gone: SES/IAD paperwork, the 20 mm restrictor and
+  the noise limit are now required items.
 - **Next:** a clean-sheet frame (the user chose the most open option: wheelbase, seat angle, rear length and engine
   position can all change). Three concepts will cover lowest weight, fewer parts and simplest build, after a deep
   research pass on documented frame geometries.

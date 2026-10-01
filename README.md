@@ -3,7 +3,7 @@
 ![design checks and tests](https://github.com/udayjain2102/nittanymotorsports/actions/workflows/tests.yml/badge.svg)
 
 A drivable FSAE test car ("mule") built to the 2026 FSAE safety rules, with a rear wing and DRS. Every number in the
-design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 166 design checks
+design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 200 design checks (every frame-relevant FSAE 2026 rule is listed in [`mule/docs/RULES_MATRIX.md`](mule/docs/RULES_MATRIX.md))
 and every automated test, and writes `mule/docs/REPORT.md`. GitHub runs the same checks on every push; the badge above
 turns red if a change breaks one.
 
@@ -24,6 +24,7 @@ build the plywood mock-up, then order frame tube. The full to-do list is in [`WH
 | **Get the frame quoted by a shop** | [`mule/quote/`](mule/quote): send the whole folder; [`README_FOR_SHOP.md`](mule/quote/README_FOR_SHOP.md) explains it. Rebuild with `python quote_package.py` after any frame change |
 | **Know what to buy and build** | [`mule/docs/BUILD_PLAN.md`](mule/docs/BUILD_PLAN.md): §4 bill of materials, §5 build order, the rules checklist; tube cuts and bends are in [`mule/fab/`](mule/fab) |
 | **Test the built car** | [`mule/docs/TEST_PLAN.md`](mule/docs/TEST_PLAN.md): each test, the predicted value and the pass criteria |
+| **Check we meet every FSAE rule** | [`mule/docs/RULES_MATRIX.md`](mule/docs/RULES_MATRIX.md): every frame-relevant 2026 rule, automated check or build item, nothing traded |
 | **See the requirements and results** | [`mule/docs/PDS.md`](mule/docs/PDS.md) (targets) and [`mule/docs/REPORT.md`](mule/docs/REPORT.md) (every check and its result) |
 | **See what's been done, and what's next** | [`WORKDONE.md`](WORKDONE.md) (summary of all work) and [`WHATS_NEXT.md`](WHATS_NEXT.md) (the to-do list, in order) |
 | **Understand why something is the way it is** | [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md), step by step, including every mistake found and fixed |
@@ -85,6 +86,8 @@ references/                   other teams' papers (local only, not in git)
 | `README.md` | How to set up and run the code, the output files, the CAD colour key, every assumption, known limits |
 | `PDS.md` | Product design specification: the requirements R1–R15 with targets and results, decisions, Pugh matrices, the FSAE Michigan 2025 benchmark |
 | `BUDGET_PLAN.md` | Phased funding plan: what each phase buys, cheap choices, the upgrade path, price sources |
+| `RULES_MATRIX.md` | Every frame-relevant FSAE 2026 rule (V.1, F, T.1, T.2) with its status: automated check, build/inspection item, or not applicable and why |
+| `FRAME_RESEARCH.md` | How lighter FSAE steel frames are built (sources), applied to NM26 |
 | `PARTS_LIST.md` | Bought parts the design uses and the options still open, engine candidates first |
 | `BUILD_PLAN.md` | The design narrative by system (§1–2n), the FSAE rules checklist, the bill of materials, the build sequence, the buck plan |
 | `TEST_PLAN.md` | Physical tests, stages 1–7: what each proves, the predicted value, the procedure, pass criteria, and a results log |
@@ -112,6 +115,7 @@ references/                   other teams' papers (local only, not in git)
 Each design script checks itself when run (`python <file>`); `report.py` runs them all.
 | File | Designs and checks |
 |---|---|
+| `frame_rules.py` | FSAE frame-structure rules not covered by `mule.py`: tube size per job, side-view triangulation, hoops, braces, bulkhead and brace supports, side impact, shoulder bar, mounts off the main hoop, steering protection, hips in the Major Structure, open-wheel zones |
 | `mule.py` | **The single source of geometry**: frame nodes and tubes, suspension points, CAD export, 27 FSAE rule checks |
 | `fea.py` | Frame beam FEA: torsional stiffness, roll-hoop loads (AF4.1/AF4.2) |
 | `suspension.py`, `steering.py`, `sideview.py`, `roll.py`, `compliance.py` | Suspension and steering kinematics: roll centres, camber, bump steer (front and rear), Ackermann, caster, steering ratio and effort, handling balance, static camber, jacking, compliance steer |

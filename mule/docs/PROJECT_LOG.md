@@ -192,3 +192,31 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - **Result:** 143 members, 45.3 kg, 78 pieces; torsion 2138 → 1886 N·m/deg; FoS: main hoop 1.22, front hoop 1.27, wheel loads 1.22, launch 1.26, pedal 1.32, harness 1.08 (vs welded UTS). All 166 checks pass.
 - **Also tried:** shortening the rear overhang (rear bulkhead at −200 or −175 instead of −300). It saves only ~0.2 kg, because the launch case then needs heavier MH brace supports and engine crosses, and it brings the chain within 5 mm of the rear tubes. Not applied.
 - **Why it stops at ~45 kg:** the hoops and shoulder bar are set by the 20 g harness and hoop loads (thinner fails by 24–29 %), the suspension pickups sit mid-span on bending "ring" posts, and ~20 kg is rule-minimum tube. Published 4130 FSAE frames are ~30–33 kg, so the next step is a topology redesign (pickups on triangulated nodes, a closed front ring that still passes T.1.2, a braced shoulder bar), not tube sizes.
+
+## 2026-10-01 - FSAE rules audit: frame_rules.py and RULES_MATRIX.md
+- **Ask:** every FSAE rule must be met; nothing can be traded for weight.
+- **Audit:** 265 rule items in V.1, F, T.1, T.2 of the 2026 rulebook were classified. About 20 geometric frame rules had
+  no check. `frame_rules.py` adds 34 checks:
+  - tube size per job (F.3.2.1);
+  - side-view triangulation (F.1.17 / F.5.6.2);
+  - hoop bends at nodes, one-piece hoops from the lowest member, hoop lean;
+  - braces (count, straight, direction, end nodes);
+  - bent multi-tube members supported at kinks (F.5.2.3);
+  - no engine or suspension mounts on the main hoop or its braces (F.5.11.4);
+  - front bulkhead support geometry (F.6.2.3);
+  - side impact members (F.6.4);
+  - shoulder bar (F.6.5);
+  - main hoop brace supports (F.6.6);
+  - steering rack inside the Primary Structure (F.5.14);
+  - hips inside the Major Structure (T.1.3.1, 200 mm hip half-width assumed);
+  - open-wheel zones (V.1.1).
+- **Triangulation test, how it was made fair:**
+  - A full 3D pin-jointed truss fails any open-cockpit frame, because the hoops carry side loads in bending, which the rules allow.
+  - The test is therefore per side, in side view, using every structural tube (F.1.17 counts Structural tubes).
+  - Only movement of Primary Structure joints counts.
+  - A straight tube running through a joint is held straight there. Without this, mid-post joints show up as false hinges.
+- `tests/test_frame_rules.py` breaks the rules one at a time (diagonal removed, main hoop undersized, brace kinked,
+  mount on a brace, tube in the tyre zone) and confirms each check fails.
+- The current frame passes all checks. `report.py` runs them: 200 checks, 88 tests.
+- `docs/RULES_MATRIX.md` lists every rule: 83 automated, 94 build/inspection, 45 N/A (with the reason), 15 definitions.
+  The BUILD_PLAN §3 "FSAE-lite" skips are now required items: SES/IAD paperwork, the 20 mm restrictor and the noise limit.
