@@ -364,3 +364,8 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   hydraulic COMPLIANCE value looks 20× low; lapsim uses an unrestricted 48 N·m curve (no 20 mm restrictor); tilt
   model ignores tyre/spring compliance and several mass items (extinguisher, IA, intake, scatter shield, fluids);
   no fatigue check on hubs/uprights; only frame_rules has mutation tests, so most `checks()` could be weakened unnoticed.
+- Frame audit (same day) confirmed against the 2026 PDF: F.3.4.2 welded steel Sy 180 / Su 300 MPa "for ANY steel"
+  in SES calculations; no AF section exists in 2026 (the 6/5/9 kN hoop loads are legacy); F.5.2.3 support tube must
+  match the bent tube's diameter and thickness. Other findings (F.5.6.3 bend at mh_bar, fab overhang at node
+  centrelines, virtual hoop corner nodes, no frontal-impact or buckling case, robustness overfit to SEED 2026, 80 kg
+  harness driver) are listed in WHATS_NEXT "Frame audit". Not yet fixed in code.
