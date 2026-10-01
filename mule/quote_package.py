@@ -49,7 +49,9 @@ def material_rows():
 
 def frame_step(path):
     asm = cq.Assembly(name="NM26_Frame_Weldment")
-    files = sorted((HERE / "cad" / "parts").glob("NM26-FRM-*.step"))
+    # only the parts cad_parts.py listed this run: cad/parts/ also keeps files from older frame versions
+    files = sorted(HERE / "cad" / "parts" / r["file"] for r in csv.DictReader(open(HERE / "cad" / "NM26_Assembly_parts.csv"))
+                   if r["sub_assembly"] == "01_frame_weldment")
     for f in files:
         asm.add(cq.importers.importStep(str(f)), name=f.stem)
     asm.save(str(path))
