@@ -99,7 +99,7 @@ def strut_members():
 
 def _solve(point_loads):
     fr = fea.Frame(m.MEMBERS + strut_members())
-    sup = {fr.find(p): range(3) for p in fea.pickups(["r_lsus", "r_sus", "rr_lsus", "rr_sus", "ring_lsus", "ring_sus", "bh_lsus", "bh_sus"])}
+    sup = {fr.find(p): range(3) for p in fea.pickups([n for ax in ("rear", "front") for k in ("inner_low", "inner_up") for n in m.SUSP[ax][k]])}
     loads = {}
     for p, F in point_loads:
         k = fr.find(p); loads[k] = loads.get(k, 0) + np.asarray(F, float)

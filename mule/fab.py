@@ -111,8 +111,9 @@ def _axis_at(piece, k):
     return unit(sum(dirs)) if len(dirs) == 2 and np.dot(*dirs) > 0 else dirs[0]
 
 def receiver(pcs, piece, k):
-    """Best tube for this piece end at node k to cope onto: bigger first, then through-tubes, heavier, longer."""
-    cands = []
+    """Best tube for this piece end at node k to cope onto: bigger first, then one it meets at >= 20 deg (a shallower
+    cope can't be fitted), then through-tubes, heavier, longer."""
+    cands = []; d = _axis_at(piece, k)
     for q in pcs:
         if q is piece: continue
         ks = [key(p) for p in q["pts"]]
@@ -120,7 +121,8 @@ def receiver(pcs, piece, k):
         through = 0 < ks.index(k) < len(ks) - 1
         od, t = m.SIZES[q["size"]]
         length = sum(np.linalg.norm(np.subtract(q["pts"][i + 1], q["pts"][i])) for i in range(len(q["pts"]) - 1))
-        cands.append(((od, through, t, length), q))   # bigger tube always receives: can't cope 1.25" onto 1"
+        ang = math.degrees(math.acos(abs(np.clip(np.dot(d, _axis_at(q, k)), -1, 1))))
+        cands.append(((od, ang >= 20, through, t, length), q))   # bigger tube always receives: can't cope 1.25" onto 1"
     return max(cands, key=lambda c: c[0])[1] if cands else None
 
 def cope_ends(pcs):

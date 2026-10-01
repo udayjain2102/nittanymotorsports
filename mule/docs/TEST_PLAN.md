@@ -43,7 +43,7 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 
 ### T1.1 Frame mass and node positions
 - **Objective:** check that the frame was built as modelled.
-- **Predicted:** 46.4 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
+- **Predicted:** 44.3 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
 - **Procedure:**
   1. Weigh the frame.
   2. Measure the 12 hardpoint nodes (suspension pickups, rocker and shock mounts) from the jig table. Use a height gauge and a tape from the jig datum.
@@ -54,7 +54,7 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 
 ### T1.2 Torsional stiffness
 - **Objective:** confirm the beam FEA, and find weak welds or joints.
-- **Predicted:** 2004 N·m/deg (`fea.py`). The model has rigid joints, so the real frame will be softer: FSAE frames typically measure about ⅔ of rigid-joint FEA (≈1340), and `robustness.py`'s worst tolerance sample gives 1514. **Expect 1300–1500 measured.**
+- **Predicted:** 1946 N·m/deg (`fea.py`). The model has rigid joints, so the real frame will be softer: FSAE frames typically measure about ⅔ of rigid-joint FEA (≈1300), and `robustness.py`'s worst tolerance sample gives 1439. **Expect 1300–1450 measured.**
 - **Procedure:**
   1. Bolt the rear pickups to a rigid fixture.
   2. Put a beam across the front lower pickups and hang weights at a measured arm, so torque T = W × arm. Use 200, 400 and 600 N·m.
@@ -450,8 +450,8 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 | Test | Date | Predicted | Measured (runs) | Pass? | Model input updated (real-to-sim loop, `SIM_TO_REAL.md`) |
 |---|---|---|---|---|---|
-| T1.1 mass | | 46.4 kg + 4 kg tabs | | | |
-| T1.2 torsion | | 2004 N·m/deg FEA; expect 1300–1500 measured | | | |
+| T1.1 mass | | 44.3 kg + 4 kg tabs | | | |
+| T1.2 torsion | | 1946 N·m/deg FEA; expect 1300–1450 measured | | | |
 | T2.2 camber gain F/R | | −0.72 / −0.75 °/25 mm | | | |
 | T2.3 bump steer F/R | | ≤ 0.11° / 0.00° |
 | T2.7 compliance toe at 1.5 g-equivalent side load F/R | | 0.10° in / 0.18° out | | | | | | |
