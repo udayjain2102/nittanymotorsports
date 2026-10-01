@@ -17,7 +17,7 @@ Last updated 2026-10-01. Engine chosen (CRF450R 2018+); frame 46.4 kg, every che
 Realistic target with the current safety standards: **~44–45 kg** for the frame types tried so far; the 30s need a different packaging (see WORKDONE §8).
 - [x] B1 front box ahead of the leg template: 51 kg, rejected (branch `clean-sheet-B`).
 - [x] C1 "short" (branch `clean-sheet-short`): 46.5 kg, 74 pieces, torsion 2305 (main: 46.4 kg, 78, 2004). Same mass, stiffer, more margin, fewer pieces; helmet clearance thinner (54 vs 65 mm). **No weight win**; keep as the candidate if stiffness/fewer pieces matter more than 0.1 kg.
-- [ ] C2 node-mounted rear: rear suspension mounts on the main-hoop-brace support joints, rear bending posts deleted.
+- [x] **C2 node-mounted rear** (branch `clean-sheet-C2`): **44.3 kg**, 73 pieces, torsion 1946, every check passing. −2.1 kg against `main`, the best concept so far. Thinner: robust tilt 60.3°, rear upright arm FoS 1.6. Combining it with C1's seat/front hoop is untested.
 - [ ] C3 direct-acting front shocks: no front rockers (needs a new shock model in `rocker.py`/`springs.py`).
 - [ ] Pick the winner and merge it into `main`; regenerate CAD, shop data and the quote package (`quote_package.py`).
 - [ ] Give `frame_opt.py` a rule that a straight run of one tube keeps one size (it can currently size two collinear parts differently, which can't be coped).
