@@ -19,7 +19,7 @@ E, G, SY_WELD = 200e3, 77e3, 180.0  # MPa (N/mm^2)
 # filler minimums (AWS A5.18: 58 ksi yield, 70 ksi ultimate), the weld-allowable rule MIL-HDBK-5 uses. Nominal: FoS >= 1.0 on
 # SY_ROLL (no yield at a weld); with tube tolerances (robustness.py): FoS >= 1.0 on SU_ROLL (AF4 "no failure").
 # Valid for 4130 with ER70S-2. All other load cases keep the FSAE "any steel" welded values (SY_WELD 180, FoS >= 1.2).
-SY_ROLL, SU_ROLL = 0.85 * 58 * 6.895, 0.85 * 70 * 6.895   # 340, 410 MPa
+SY_ROLL, SU_ROLL = 294.0, 394.0   # 1020 DOM, MIG ER70S-6: heat-affected zone anneals to plain 1020 (yield 294, ultimate 394 MPa; filler 0.85 x 58/70 ksi = 340/410 is not the limit)
 
 def props(s):
     od, t = m.SIZES[s]; idd = od - 2 * t

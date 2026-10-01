@@ -153,14 +153,14 @@ SIDE = [
     ("fh_sis", "mh_sis", "B", "Upper side impact"),
     ("fh_bot", "as", "B", "Lower side impact"), ("as", "lap", "B", "Lower side impact"), ("lap", "mh_bot", "B", "Lower side impact"),
     ("as", "as_c", "B", "Anti-sub floor cross"), ("as_c", "mh_bot", "C", "Cockpit floor V (anti-sub)"), ("as_c", "fh_bot", "C", "Cockpit floor V (anti-sub)"),
-    ("mh_bar", "sb", "H", "Shoulder harness bar"),
+    ("mh_bar", "sb", "J", "Shoulder harness bar"),
     ("fh_bot", "lap_up", "A", "Diagonal side impact"), ("lap_up", "mh_sis", "A", "Diagonal side impact"),   # A, not B: the 20 g harness case under tube tolerances (robustness.py)
     ("lap", "lap_up", "B", "Lap belt tab brace"),
     # front hoop brace (B) to bulkhead
     ("fh_top", "bh_top", "B", "Front hoop brace"),
     # front bulkhead (B) + supports (C)
     ("bh_bot", "bh_lsus", "B", "Front bulkhead"), ("bh_lsus", "bh_sus", "B", "Front bulkhead"), ("bh_sus", "bh_top", "B", "Front bulkhead"),
-    ("bh_top", "ring_top", "A", "FBH support upper"), ("ring_top", "fh_sis", "A", "FBH support upper"),
+    ("bh_top", "ring_top", "H", "FBH support upper"), ("ring_top", "fh_sis", "H", "FBH support upper"),
     ("fh_top", "ring_top", "C", "Front hoop lower brace"),
     ("bh_bot", "pb1", "B", "FBH support lower (pedal box)"), ("pb1", "pb0", "B", "FBH support lower (pedal box)"), ("pb0", "ring_bot", "B", "FBH support lower (pedal box)"),
     ("ring_bot", "fh_bot", "B", "FBH support lower"),
@@ -185,10 +185,10 @@ CROSS = [
     ("ring_bot", "C", "Front susp ring"),   # no ring_top cross: T.1.2 template passes there
     ("fh_top", "H", "Front hoop"),   # no front hoop base cross: removed in the 2026-10-01 optimisation (not rule-required, lightly loaded)
     ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
-    ("sb", "H", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
+    ("sb", "J", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
     ("em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),  # no top cross here: it would pass through the engine
     ("r_bot", "C", "Rear bulkhead"), ("r_top", "C", "Rear bulkhead"),
-    ("ring_lsus", "B", "Front pickup cross (rocker/shock loads, rack)"),
+    ("ring_lsus", "A", "Front pickup cross (rocker/shock loads, rack)"),
     ("pb0m", "B", "Pedal box cross (rear)"), ("pb1m", "A", "Pedal box cross (front)"),
 ]
 DIAG = [  # single diagonals (right node -> left node)

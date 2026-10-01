@@ -327,3 +327,15 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   spring diameter).
 - So C3 needs a front outrigger tower on each side (≈ 0.6 m of 1.0″ tube per side, ≈ 1.2 kg) carrying the full spring
   load, which roughly cancels the two rockers it removes, and adds an upper-wishbone clash risk. Not pursued unless asked.
+
+## 2026-10-01: jugaad study: C2 frame in 1020 DOM, MIG-welded by the team (branch `jugaad-1020`)
+- Reason: funding will be smaller than BUDGET_PLAN assumes; 1020 DOM is cheaper than 4130 and easier for students to
+  MIG-weld. FSAE F.3.4 credits every steel with the same welded values, so only our self-imposed roll-over criterion
+  changes: welded 1020 is limited by its heat-affected zone, which anneals to plain 1020 (yield 294, ultimate 394 MPa)
+  instead of the ER70S filler limit used for 4130 (340/410).
+- The 4130-sized C2 frame fails roll-over in 1020 (main 0.95, front 0.88). `frame_opt.py` re-sized it: shoulder bar
+  1.5″, upper front-bulkhead supports 1.25″ × 0.095″, front pickup cross 1.0″ × 0.095″; toe-compliance upsizes kept.
+- Result: **45.3 kg (+1.0 kg vs 4130), 73 pieces, torsion 1996 N·m/deg**, roll-over 1.08 / 1.04 nominal, 1.27 / 1.12
+  worst with tolerances; 210/210 checks, 92/92 tests. (`robustness.py` labels still say "4130"; the numbers use 1020.)
+- Brakes, same study: pedal ratio 5.0 → 4.0 cuts the 2000 N test pressure 296 → 237 bar front but raises lock-up
+  pedal force 567 → 709 N. Small win; the hydraulics still need a written rating.
