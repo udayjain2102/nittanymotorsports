@@ -1,7 +1,7 @@
 # What's next
 
 In order. Tick them off here as they're done. The costs come from [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md), the parts from [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md).
-Last updated 2026-09-30. Engine chosen (CRF450R 2018+); total to a driving car is now about **$7,400–10,900**.
+Last updated 2026-10-01. Engine chosen (CRF450R 2018+); frame 46.4 kg, every check passing; total to a driving car about **$7,400–10,900**.
 
 ## This week (no money needed)
 - [ ] Ask nearby FSAE teams for used 13″ wheels, slicks, MTB coil shocks, rod ends and uprights.
@@ -9,9 +9,18 @@ Last updated 2026-09-30. Engine chosen (CRF450R 2018+); total to a driving car i
 - [ ] Submit the funding request for **step 0 ($100–200)** and **step 1 ($1,100–1,600)**.
 - [ ] Borrow or find a CRF450R 2018+ to measure (a dealer, a team member's bike or another FSAE team). The frame can't be finalised without its mount points.
 
-## Frame quote
+## Frame quote and review
 - [ ] Send the shop the whole `mule/quote/` folder (frame STEP, material list, shop data, cover note) for a preliminary quote, in 4130 and 1020 DOM.
-- [ ] Frame topology redesign toward ~33 kg (now 46.4 kg): pickups on triangulated nodes, closed front ring that passes T.1.2, braced shoulder bar. Re-run `python quote_package.py` after.
+- [ ] Ask the faculty advisor or an FSAE alum to review the roll-over criterion (welded 4130: 340 MPa yield, 410 MPa ultimate; `SIM_TO_REAL.md`) and the TIG procedure. If the shop quotes 1020 DOM, the criterion has to be redone for that steel.
+
+## Clean-sheet frame designs (each on its own branch; `main` stays the verified 46.4 kg frame)
+Realistic target with the current safety standards: **~44–45 kg** for the frame types tried so far; the 30s need a different packaging (see WORKDONE §8).
+- [x] B1 front box ahead of the leg template: 51 kg, rejected (branch `clean-sheet-B`).
+- [ ] **C1 "short"** (branch `clean-sheet-short`): seat 15°, front hoop 900 mm, rear end −200 mm. Re-run `frame_opt.py` (rear engine-mount cross after the fabrication fix), then `report.py`; then compare with `main` on mass, pieces and margins.
+- [ ] C2 node-mounted rear: rear suspension mounts on the main-hoop-brace support joints, rear bending posts deleted.
+- [ ] C3 direct-acting front shocks: no front rockers (needs a new shock model in `rocker.py`/`springs.py`).
+- [ ] Pick the winner and merge it into `main`; regenerate CAD, shop data and the quote package (`quote_package.py`).
+- [ ] Give `frame_opt.py` a rule that a straight run of one tube keeps one size (it can currently size two collinear parts differently, which can't be coped).
 
 ## Before ordering frame tube: pin down the engine
 The frame's engine mounts are welded in step 1, so the engine has to be known first.
@@ -37,7 +46,7 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 - [ ] Step 4, brakes, safety and electrics ($1,800–2,600): buy only brake parts rated for 296 bar or more; buy the harness new. Then TEST_PLAN stages 3–6. **First drive.**
 
 ## After it drives
-- [ ] Weigh the car and enter real masses in `mule/mass.py`: the tilt margin is only 0.9°.
+- [ ] Weigh the car and enter real masses in `mule/mass.py`: the tilt margin is only 0.4–0.9°.
 - [ ] TEST_PLAN stage 7 (skidpad); put the measured grip back into `lapsim.py`.
 - [ ] Upgrades, one request each: new tyres → Kaz rack → rear wing + DRS → data logging.
 

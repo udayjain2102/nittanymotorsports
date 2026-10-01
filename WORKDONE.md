@@ -5,7 +5,7 @@ every method, result and error, is [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJEC
 
 **Starting point:** the concept CAD (`NM26_FSAE_Concept.step`) and the 2026 FSAE rules PDF.
 **Result:** a complete, rules-checked design for a drivable test car (a "mule"), all generated from Python code:
-- 210 automated design checks and 91 automated tests, all passing, also run by GitHub on every push;
+- 210 automated design checks and 92 automated tests, all passing, also run by GitHub on every push;
 - CAD in two levels of detail;
 - shop data to build the frame;
 - a physical test plan, a build plan, a bill of materials and a phased budget;
@@ -182,17 +182,26 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
   `frame_opt.py` re-sized the frame under every gate: main hoop 1.5″, upper bulkhead supports 1.0″ × 0.095″, others
   smaller, so the frame is **46.4 kg** (+0.2 kg). This was a real safety gap in the model, not a rules gap: steel tube
   frames don't need AF4 FEA to be legal.
-- **Clean-sheet attempts so far:** a front box ahead of the leg template went to 51 kg (rejected, branch `clean-sheet-B`).
-  C1 "short" (seat 15°, front hoop 900 mm, rear end −200 mm) is on branch `clean-sheet-short`; it was stalled on the
-  front-ring posts, which the roll-over fix should relieve.
-- **Next:** a clean-sheet frame (the user chose the most open option: wheelbase, seat angle, rear length and engine
-  position can all change). Three concepts will cover lowest weight, fewer parts and simplest build, after a deep
-  research pass on documented frame geometries.
+- **Where the weight comes from (measured, not guessed):**
+  - Dropping any single strength case saves at most ~2 kg.
+  - Relaxing every self-imposed criterion (tolerance check, 20 g harness, FoS 1.2) gets only to 42 kg, with zero margin. Not recommended.
+  - Deleting tubes and re-sizing saves ~1 kg, and that version fails the tolerance check.
+  - A shorter wheelbase barely changes tube length (the front of the frame follows the driver, not the axle), and it hurts brakes and steering.
+  - The weight is set by the ~43 m of tube this layout type needs. The 30–32 kg frames in research use lighter load cases or packaging (10″ wheels, narrow track).
+- **Clean-sheet designs, each on its own branch; `main` stays the verified 46.4 kg frame:**
+  - *B1 front box* (branch `clean-sheet-B`): front suspension station ahead of the leg template with a top cross. 51 kg, **rejected**.
+  - *C1 "short"* (branch `clean-sheet-short`): seat 15°, front hoop 900 mm, rear end −200 mm, front rocker re-tuned,
+    rear side-bay diagonal removed. Passed every gate at 45.5 kg. Making one straight tube a single size (needed for
+    fabrication) then moved load into the rear engine-mount cross. **Needs one more optimiser pass.**
+  - *C2 node-mounted rear* and *C3 direct-acting front shocks*: not started.
+- **Tooling:** the session scratchpad (Python environment, scratch optimiser) was wiped once. The optimiser now lives in
+  the repo as `frame_opt.py` so it can't be lost.
 
 ## 9. Still open (needs people, parts or suppliers)
 
 1. **Brake pressure ratings in writing** from Wilwood, Tilton and the hose supplier: 296 bar needed, 300 bar assumed.
 2. **Measure a CRF450R 2018+:** its mounts, output shaft and size go into `ENGINE` in `powertrain.py` **before ordering tube** (gear ratios and mass are already in, from the service manual).
 3. **Build the buck** and fit the drivers before cutting tube.
-4. **Weigh parts as they arrive**: the tilt margin is 0.9°.
+4. **Weigh parts as they arrive**: the tilt margin is only 0.4–0.9° (60.4° if mass estimates all err the same way).
+6. **Faculty / alumni review** of the roll-over criterion (welded 4130 at 340/410 MPa) and the weld procedure; it assumes 4130 with ER70S-2 filler, so revisit it if the shop quotes 1020 DOM.
 5. **Run TEST_PLAN stages 1–7** on the real car and put the measured numbers back into the code, especially the wing's aero coefficients.
