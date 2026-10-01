@@ -78,6 +78,7 @@ mule/                         the car: all design scripts (*.py) sit here becaus
   quote/                      frame quote package for the shop: frame STEP, material list, shop data, cover note
   views/                      drawings of the simple model and the colour key
   tests/                      automated tests (pytest)
+history/                      frozen copy of mule/ for every frame version (frame_v1_50.1kg, frame_v2_46.4kg, ...); never edited or deleted
 references/                   other teams' papers (local only, not in git)
 ```
 
@@ -130,6 +131,7 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 | `lapsim.py` | Point-mass acceleration, skidpad and autocross, with the wing; benchmark times |
 | `fab.py`, `views.py`, `frame_fea_export.py`, `cad_parts.py`, `quote_package.py` | Shop data, drawings, the frame-only STEP, the detailed per-part CAD, the shop quote package |
 | `report.py` | Writes `docs/REPORT.md` (all checks and tests) and the README colour key |
+| `snapshot.py` | `python snapshot.py <name> [commit]`: freezes `mule/` at a commit into the top-level `history/<name>/` before anything is regenerated (never overwrites) |
 | `tests/` | `pytest -q tests`: hand calculations, limiting cases, and a guard that `docs/TEST_PLAN.md` quotes current numbers |
 
 ### Repo files (top level)

@@ -8,3 +8,4 @@ mule/fab/*.csv          linguist-generated
 mule/quote/*.csv        linguist-generated
 mule/cad/*.csv          linguist-generated
 mule/cad/simple/*.csv linguist-generated
+history/**        linguist-generated -diff

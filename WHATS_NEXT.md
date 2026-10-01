@@ -54,6 +54,7 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 - After every test stage, run the real-to-sim loop in `mule/docs/SIM_TO_REAL.md`: record predicted vs measured, fix the model input that was wrong, re-run `report.py`.
 - Weigh every part as it arrives and enter it in `mule/mass.py`: the tilt margin is only 0.3–0.8°.
 - Every FSAE rule is a hard requirement. A design change must keep all automated checks passing, and `mule/docs/RULES_MATRIX.md` lists the build/inspection items to tick off.
+- **Nothing is ever deleted.** Before a change that regenerates CAD, shop data or the quote package, freeze the current version: `python snapshot.py frame_vN_<mass>kg` in `mule/` (it goes to the top-level `history/` folder), and add a git tag with the same name.
 - Every design change: edit the code, run `python report.py` in `mule/`, add a line to `mule/docs/PROJECT_LOG.md`, then commit and push (GitHub re-runs every check).
 - A day's work goes into `WORKDONE.md` as a short summary; the detail stays in `PROJECT_LOG.md`.
 - No MATLAB needed: everything runs in Python (see the README quick start for the setup).

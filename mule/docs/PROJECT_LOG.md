@@ -306,3 +306,11 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   quote package's part count and were removed (only files named in `NM26_Assembly_parts.csv` are kept).
 - Docs updated to 44.3 kg / 126 members / 73 pieces / 1946 N·m/deg: BUILD_PLAN, PDS, BUDGET_PLAN, FRAME_RESEARCH,
   TEST_PLAN, WHATS_NEXT, WORKDONE.
+
+## 2026-10-01: file history kept (user rule: nothing is ever deleted)
+- The 89 old-frame part files removed from `cad/parts/` after the C2 merge were restored from git (byte-identical) and
+  moved into `history/frame_v2_46.4kg/cad/parts/`, so `cad/parts/` holds only the current frame.
+- New top-level `history/` with a frozen copy of `mule/` for each frame version (`frame_v1_50.1kg`, `frame_v2_46.4kg`,
+  `frame_v3_44.3kg`), made by the new `snapshot.py`, which never overwrites. Git tags with the same names.
+- `quote_package.py` now builds the frame weldment STEP from the parts list (`cad/NM26_Assembly_parts.csv`) instead of
+  every `NM26-FRM-*.step` in the folder, so stray old files can't get into the shop package. Output unchanged.
