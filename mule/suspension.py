@@ -1,6 +1,7 @@
 """Front-view double-wishbone kinematics for the mule (per axle, right side, chassis frame).
 
-Inboard pivots = mean (z, y) of the two frame pickups (valid while pivot axes run ~fore/aft).
+Inboard pivots = where each wishbone's pivot axis (the line through its two frame pickups) crosses the wheel-centre
+plane, so pickups can slide along their own axes without changing the front-view kinematics.
 Solves the 4-bar (lower arm, upright, upper arm) through +/-50 mm wheel travel and reports
 roll centre, camber gain, KPI, scrub, and packaging inside a 13" wheel.
 Run: python suspension.py   (self-check: equal parallel arms -> zero camber gain, RC on ground)
@@ -8,14 +9,17 @@ Run: python suspension.py   (self-check: equal parallel arms -> zero camber gain
 import math
 import mule as m
 
-def inner(names):
-    ps = [m.N[n] for n in names]
-    return (sum(p[2] for p in ps) / len(ps), sum(p[1] for p in ps) / len(ps))
+def inner(names, x):
+    """(z, y) of the pivot axis through the two pickups, at station x (the wheel-centre plane)."""
+    a, b = (m.N[n] for n in names)
+    t = (x - a[0]) / (b[0] - a[0])
+    return (a[2] + t * (b[2] - a[2]), a[1] + t * (b[1] - a[1]))
 
 def geom(axle):
     s = m.SUSP[axle]; tr = m.TRACK_F if axle == "front" else m.TRACK_R
     wz, r = tr / 2, m.TIRE_OD / 2
-    return dict(Al=inner(s["inner_low"]), Au=inner(s["inner_up"]),
+    xw = m.WHEELBASE if axle == "front" else 0.0
+    return dict(Al=inner(s["inner_low"], xw), Au=inner(s["inner_up"], xw),
                 Bl=(wz - s["inset"], s["lbj_y"]), Bu=(wz - s["inset"] - s["ubj_lean"], s["ubj_y"]),
                 C=(wz, 0.0), W=(wz, r))
 

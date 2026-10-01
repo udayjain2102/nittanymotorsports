@@ -24,9 +24,9 @@ Z_COCKPIT   = 292      # half-width of side-impact structure (tube centerline); 
 X_MAIN      = 520      # main hoop station (leaves ~500 mm for engine + chain ahead of rear axle)
 H_MAIN      = 1280     # main hoop top (centerline)
 Z_MAIN_TOP  = 140
-H_FRONT     = 850      # front hoop top (centerline)
+H_FRONT     = 900       # front hoop top (centerline)
 Z_FRONT_TOP = 180
-X_REAR      = -300     # rear bulkhead station
+X_REAR      = -200     # rear bulkhead station (C1: was -300)
 Y_REAR_TOP  = 350
 Z_REAR      = 200
 X_RING      = WHEELBASE - 120  # front suspension ring (A-arm rear pickups)
@@ -36,7 +36,7 @@ Z_BH        = 180      # front bulkhead half-width (centerline)
 Y_BH_BOT    = 100
 Y_BH_TOP    = 410
 
-SEAT_BACK_DEG = 20     # from vertical; <=30 => "upright" (T.2.1.d)
+SEAT_BACK_DEG = 15     # from vertical; <=30 => "upright" (T.2.1.d)
 HIP_Y       = 205      # 95th template hip-circle centre height
 PEDAL_BOX_LEN = 165    # pedal face -> front of master cylinders (brakes.py checks the real stack-up)
 WHEEL_DIA   = 270      # steering wheel
@@ -121,7 +121,7 @@ SUSP = {
                   steer=((-85, 190, 30), RACK, "ring_lsus"), pushrod=((0, 165, 45), "ring_top")),
     "rear":  dict(inner_low=("rr_lsus", "r_lsus"),   inner_up=("rr_sus", "r_sus"),    lbj_y=146, ubj_y=370, inset=65, ubj_lean=15,
                   # toe link aimed at the arms' instant centre (rear bump steer ~0) and pushrod->rocker at the braced rear bulkhead
-                  steer=((-80, 323, 20), (X_REAR + 150, 300, 223), "r_sus"), pushrod=((0, 165, 45), "r_top")),
+                  steer=((-80, 323, 20), (-150.0, 300, 223), "r_sus"), pushrod=((0, 165, 45), "r_top")),
 }
 SUSP_TUBE = (15.875, 0.89)   # A-arms, tie rods: 5/8" x 0.035" 4130 (loads.py checks buckling)
 PUSHROD_TUBE = (19.05, 1.24)  # pushrods: 3/4" x 0.049" (5/8" rear buckled at FoS 1.9)
@@ -174,7 +174,7 @@ SIDE = [
     ("r_lsus", "sp_mid", "C", "Rear lower pickup rail (rocker + A-arm loads)"), ("sp_mid", "rr_lsus", "C", "Rear lower pickup rail (rocker + A-arm loads)"),
     ("sp_bot", "sp_mid", "C", "Spool carrier post"), ("sp_mid", "sp_c", "C", "Spool carrier post"), ("sp_c", "sp_top", "C", "Spool carrier post"),
     ("sp_c", "rr_top", "C", "Spool carrier brace (chain pull)"), ("sp_c", "rr_lsus", "C", "Spool carrier brace (chain pull)"),
-    ("r_sus", "sp_mid", "C", "Rear side bay diagonal (bulkhead pickups)"),
+    # (rear side bay diagonal r_sus -> sp_mid removed in C1: the shorter rear brings the chain within 7 mm of it)
     ("mh_bot", "em_fb", "A", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "A", "Rear-ring bottom cross + rear engine mounts"),
     ("mh_sis", "em_ft", "A", "Main hoop mid cross / firewall + top engine mounts"),
 ]
