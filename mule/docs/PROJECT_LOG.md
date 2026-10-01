@@ -327,3 +327,9 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   spring diameter).
 - So C3 needs a front outrigger tower on each side (≈ 0.6 m of 1.0″ tube per side, ≈ 1.2 kg) carrying the full spring
   load, which roughly cancels the two rockers it removes, and adds an upper-wishbone clash risk. Not pursued unless asked.
+
+## 2026-10-01: jugaad plan (funding will be smaller)
+- New `docs/JUGAAD_PLAN.md`: cheapest route to a driving mule with every rule kept: donor CRF450R bike, 1020 DOM
+  MIG-welded by the team, used parts from other FSAE teams, make-not-buy. Estimate about $4,000–8,300 (unverified prices).
+- 1020 frame study on branch `jugaad-1020` (45.3 kg, every check passing; details in that branch's log).
+- New `views/design_history.png`: side and top views of every frame design so far (v1, v2, B1, C1, C2, J1).
