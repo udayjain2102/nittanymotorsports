@@ -35,7 +35,7 @@ What's worth keeping from the concept: the 4-corner double-wishbone layout, the 
 - The driver sits upright at 20° (T.2.1.d), so a **5-point harness is allowed**. Hip-to-pedal distance is 915 mm.
 - Main hoop top is at 1280 mm and front hoop top at 850 mm. Helmet clearance to the hoop line is **65 mm** (the rule needs ≥50).
 - Lower side-impact tube bottom is 60 mm above the ground (V.1.4.2 requires ≤90 and prefers ≤75).
-- The frame is **143 members, about 46.4 kg** of 4130 (section 2l explains the latest changes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
+- The frame is **126 members, about 44.3 kg** of 4130 (section 2l explains the latest changes; the 2026-10-01 C2 rear puts the rear wishbone pickups on rail nodes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
 - These changes came out of the FEA (see section 2b).
 - Tube schedule after the 2026-10-01 optimisation (each tube at the smallest size its loads and its F.3.2.1 rule size allow; `frame_rules.py` checks the rule size per job):
   - 1.5″×0.095″: main hoop (AF4 roll-over), front suspension-ring posts (no top cross, T.1.2).
@@ -57,7 +57,7 @@ Modelling limits to know before cutting tube:
 
 | Case | Original | Final |
 |---|---|---|
-| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (2004 after the 2026-10-01 weight optimisation, robustness fix and AF4 roll-over correction; robustness fix) |
+| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (2004 after the 2026-10-01 weight optimisation, robustness fix and AF4 roll-over correction; 1946 with the C2 node-mounted rear) |
 | Main hoop top load 6/5/9 kN: peak stress | 1009 MPa | **140 MPa (safety factor 1.28, worst of the 4 load directions)** |
 | Front hoop top load 6/5/9 kN: peak stress | 867 MPa | **133 MPa (safety factor 1.36)** |
 
@@ -307,14 +307,14 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
   - voltage drop to the pump and ignition is 0.23 V;
   - battery, master switch and brake light positions are legal.
 
-**Frame totals now** (after the 2026-10-01 optimisation, robustness fix and AF4 roll-over correction, see PROJECT_LOG): 143 members, **46.4 kg**, 78 pieces (2 bent). Torsion is **2004 N·m/deg** FEA (target ≥ 1500 FEA, ≥ 1000 measured). Safety factors, nominal and worst of 16 tube-tolerance samples (`robustness.py`):
+**Frame totals now** (after the 2026-10-01 optimisation, robustness fix, AF4 roll-over correction and C2 node-mounted rear, see PROJECT_LOG): 126 members, **44.3 kg**, 73 pieces (2 bent). Torsion is **1946 N·m/deg** FEA (target ≥ 1500 FEA, ≥ 1000 measured). Safety factors, nominal and worst of 16 tube-tolerance samples (`robustness.py`):
 
 | Case | Criterion | FoS nominal | FoS worst with tolerances |
 |---|---|---|---|
-| Main hoop roll-over (AF4 support) | welded 4130: yield 340 / ultimate 410 MPa | 1.08 | 1.11 (vs ultimate) |
+| Main hoop roll-over (AF4 support) | welded 4130: yield 340 / ultimate 410 MPa | 1.09 | 1.14 (vs ultimate) |
 | Front hoop roll-over (AF4 support) | as above | 1.02 | 1.00 (vs ultimate) |
 | Wheel loads | FSAE welded yield 180 MPa, FoS 1.2 | 1.23 | 1.02 |
-| Launch | as above | 1.21 | 1.06 |
+| Launch | as above | 1.26 | 1.10 |
 | 2000 N pedal | as above | 1.32 | 1.18 |
 | Harness crash | FSAE welded ultimate 300 MPa | 1.19 | 1.07 |
 

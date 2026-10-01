@@ -37,41 +37,36 @@ P37,FBH support diagonal,1.000 x 0.049,421.2,397.5,ring_bot_R,P39,48.9,fh_sis_R,
 P38,FBH support diagonal,1.000 x 0.049,421.2,397.5,ring_bot_L,P40,48.9,fh_sis_L,P02,50.7,8,
 P39,Front susp ring,1.500 x 0.095,305.0,305.0,ring_bot_R,"square cut at node, cap end (F.5.3.3)",90.0,ring_top_R,"square cut at node, cap end (F.5.3.3)",90.0,0,ring_lsus_R@50 ring_sus_R@250
 P40,Front susp ring,1.500 x 0.095,305.0,305.0,ring_bot_L,"square cut at node, cap end (F.5.3.3)",90.0,ring_top_L,"square cut at node, cap end (F.5.3.3)",90.0,0,ring_lsus_L@50 ring_sus_L@250
-P41,Main hoop brace,1.000 x 0.065,1241.3,1217.6,mh_top_R,P01,59.7,r_top_R,P51,41.5,65,
-P42,Main hoop brace,1.000 x 0.065,1241.3,1217.6,mh_top_L,P01,59.7,r_top_L,P52,41.5,65,
-P43,MH brace support upper,1.000 x 0.049,825.3,801.6,mh_sis_R,P01,88.8,r_top_R,P51,88.8,0,rr_top_R@308 sp_top_R@509
-P44,MH brace support upper,1.000 x 0.049,825.3,801.6,mh_sis_L,P01,88.8,r_top_L,P52,88.8,0,rr_top_L@308 sp_top_L@509
-P45,MH brace support lower,1.000 x 0.095,322.3,308.1,mh_bot_R,P01,87.4,rr_bot_R,P68,83.6,90,
-P46,MH brace support lower,1.000 x 0.095,322.3,308.1,mh_bot_L,P01,87.4,rr_bot_L,P68,83.6,90,
-P47,MH brace support lower,1.000 x 0.049,503.6,494.1,rr_bot_R,P68,83.6,r_bot_R,P51,87.4,90,sp_bot_R@201
-P48,MH brace support lower,1.000 x 0.049,503.6,494.1,rr_bot_L,P68,83.6,r_bot_L,P52,87.4,90,sp_bot_L@201
-P49,Rear susp ring,1.000 x 0.095,272.9,272.9,rr_bot_R,P68,90.0,rr_top_R,P43,88.8,84,rr_lsus_R@63 rr_sus_R@253
-P50,Rear susp ring,1.000 x 0.095,272.9,272.9,rr_bot_L,P68,90.0,rr_top_L,P44,88.8,84,rr_lsus_L@63 rr_sus_L@253
-P51,Rear bulkhead,1.250 x 0.095,240.0,240.0,r_bot_R,"square cut at node, cap end (F.5.3.3)",90.0,r_top_R,"square cut at node, cap end (F.5.3.3)",90.0,11,r_lsus_R@40 r_sus_R@230
-P52,Rear bulkhead,1.250 x 0.095,240.0,240.0,r_bot_L,"square cut at node, cap end (F.5.3.3)",90.0,r_top_L,"square cut at node, cap end (F.5.3.3)",90.0,27,r_lsus_L@40 r_sus_L@230
-P53,Rear side diagonal,1.000 x 0.049,431.6,417.4,mh_bot_R,P01,48.3,rr_top_R,P43,42.9,0,
-P54,Rear side diagonal,1.000 x 0.049,431.6,417.4,mh_bot_L,P01,48.3,rr_top_L,P44,42.9,0,
-P55,Rear side diagonal,1.000 x 0.049,562.0,552.5,rr_top_R,P43,25.3,r_bot_R,P51,63.5,0,
-P56,Rear side diagonal,1.000 x 0.049,562.0,552.5,rr_top_L,P44,25.3,r_bot_L,P52,63.5,0,
-P57,Rear lower pickup rail (rocker + A-arm loads),1.000 x 0.049,503.1,493.6,r_lsus_R,P51,90.0,rr_lsus_R,P49,90.0,0,sp_mid_R@292
-P58,Rear lower pickup rail (rocker + A-arm loads),1.000 x 0.049,503.1,493.6,r_lsus_L,P52,90.0,rr_lsus_L,P50,90.0,0,sp_mid_L@292
-P59,Spool carrier post,1.000 x 0.049,259.8,259.8,sp_bot_R,P47,87.4,sp_top_R,P43,88.8,0,sp_mid_R@54 sp_c_R@164
-P60,Spool carrier post,1.000 x 0.049,259.8,259.8,sp_bot_L,P48,87.4,sp_top_L,P44,88.8,0,sp_mid_L@54 sp_c_L@164
-P61,Spool carrier brace (chain pull),1.000 x 0.049,224.7,224.6,sp_c_R,P59,63.6,rr_top_R,P43,25.2,0,
-P62,Spool carrier brace (chain pull),1.000 x 0.049,224.7,224.6,sp_c_L,P60,63.6,rr_top_L,P44,25.2,0,
-P63,Spool carrier brace (chain pull),1.000 x 0.049,229.6,229.1,sp_c_R,P59,61.2,rr_lsus_R,P49,61.2,0,
-P64,Spool carrier brace (chain pull),1.000 x 0.049,229.6,229.1,sp_c_L,P60,61.2,rr_lsus_L,P50,61.2,0,
-P65,Rear side bay diagonal (bulkhead pickups),1.000 x 0.049,356.7,347.0,r_sus_R,P51,57.8,sp_mid_R,P57,32.2,0,
-P66,Rear side bay diagonal (bulkhead pickups),1.000 x 0.049,356.7,347.0,r_sus_L,P52,57.8,sp_mid_L,P58,32.2,0,
-P67,Main hoop base cross + front engine mounts,1.000 x 0.095,584.0,555.6,mh_bot_R,P01,90.0,mh_bot_L,P01,90.0,0,em_fb_R@148 em_fb_L@408
-P68,Rear-ring bottom cross + rear engine mounts,1.000 x 0.095,512.2,512.2,rr_bot_R,P45,83.6,rr_bot_L,P46,83.6,0,em_rb_R@126 em_rb_L@386
-P69,Main hoop mid cross / firewall + top engine mounts,1.000 x 0.095,584.0,555.6,mh_sis_R,P01,90.0,mh_sis_L,P01,90.0,0,em_ft_R@148 em_ft_L@408
-P70,Front susp ring,1.000 x 0.049,440.0,411.6,ring_bot_R,P39,90.0,ring_bot_L,P40,90.0,0,
-P71,Rear bulkhead,1.000 x 0.049,400.0,381.0,r_bot_R,P51,90.0,r_bot_L,P52,90.0,0,
-P72,Rear bulkhead,1.000 x 0.049,400.0,381.0,r_top_R,P51,90.0,r_top_L,P52,90.0,0,
-P73,Rear pickup cross (rocker/shock loads),1.000 x 0.049,400.0,381.0,r_lsus_R,P51,90.0,r_lsus_L,P52,90.0,0,
-P74,"Front pickup cross (rocker/shock loads, rack)",1.000 x 0.065,440.0,411.6,ring_lsus_R,P39,90.0,ring_lsus_L,P40,90.0,0,
-P75,Engine bay floor diagonal,1.000 x 0.049,957.0,933.3,mh_bot_R,P01,87.8,r_bot_L,P52,87.8,0,
-P76,Rear bulkhead diagonal,1.000 x 0.049,466.5,447.4,r_bot_R,P51,59.0,r_top_L,P52,59.0,0,
-P77,MH brace-plane diagonal (lateral),1.000 x 0.049,1285.7,1261.9,mh_top_R,P01,75.9,r_top_L,P52,43.7,48,
-P78,FH brace-plane diagonal (lateral),1.000 x 0.049,680.1,656.4,fh_top_R,P02,87.5,ring_top_L,P40,48.0,29,
+P41,Main hoop brace,1.000 x 0.065,1257.9,1243.7,mh_top_R,P01,59.4,r_top_R,P43,47.4,51,
+P42,Main hoop brace,1.000 x 0.065,1257.9,1243.7,mh_top_L,P01,59.4,r_top_L,P44,47.4,51,
+P43,MH brace support upper,1.000 x 0.065,826.1,811.9,mh_sis_R,P01,87.3,r_top_R,P41,47.4,9,rr_top_R@308 sp_top_R@510
+P44,MH brace support upper,1.000 x 0.065,826.1,811.7,mh_sis_L,P01,87.3,r_top_L,P42,47.4,9,rr_top_L@308 sp_top_L@510
+P45,MH brace support lower,1.000 x 0.095,331.1,307.4,mh_bot_R,P01,76.6,rr_bot_R,P66,83.8,89,
+P46,MH brace support lower,1.000 x 0.095,331.1,307.4,mh_bot_L,P01,76.6,rr_bot_L,P66,83.8,89,
+P47,MH brace support lower,1.000 x 0.049,503.1,493.2,rr_bot_R,P66,83.6,r_bot_R,P71,84.2,24,sp_mid_R@192
+P48,MH brace support lower,1.000 x 0.049,503.1,493.5,rr_bot_L,P66,83.6,r_bot_L,P70,37.6,8,sp_mid_L@192
+P49,Rear susp ring,1.000 x 0.095,201.8,191.8,rr_bot_R,P66,90.0,rr_top_R,P43,87.3,84,
+P50,Rear susp ring,1.000 x 0.095,201.8,192.3,rr_bot_L,P66,90.0,rr_top_L,P44,87.3,84,
+P51,Rear bulkhead,1.000 x 0.049,178.0,177.6,r_bot_R,P47,90.0,r_top_R,P41,40.8,11,
+P52,Rear bulkhead,1.000 x 0.049,178.0,177.6,r_bot_L,P70,85.4,r_top_L,P42,40.8,27,
+P53,Rear bulkhead,1.000 x 0.049,400.0,399.4,r_bot_R,P47,83.6,r_bot_L,P70,59.1,5,
+P54,Rear bulkhead,1.000 x 0.049,400.0,399.2,r_top_R,P41,87.3,r_top_L,P42,87.3,0,
+P55,Rear side diagonal,1.000 x 0.049,425.9,411.5,mh_bot_R,P01,49.1,rr_top_R,P43,43.6,0,
+P56,Rear side diagonal,1.000 x 0.049,425.9,411.5,mh_bot_L,P01,49.1,rr_top_L,P44,43.6,0,
+P57,Spool carrier post,1.000 x 0.049,192.3,191.4,sp_mid_R,P47,90.0,sp_top_R,P43,87.3,0,sp_c_R@110
+P58,Spool carrier post,1.000 x 0.049,192.3,191.8,sp_mid_L,P48,90.0,sp_top_L,P44,87.3,0,sp_c_L@110
+P59,Spool carrier brace (chain pull),1.000 x 0.049,221.0,220.9,sp_c_R,P57,65.6,rr_top_R,P43,21.7,0,
+P60,Spool carrier brace (chain pull),1.000 x 0.049,221.0,221.0,sp_c_L,P58,65.6,rr_top_L,P44,21.7,0,
+P61,Spool carrier brace (chain pull),1.000 x 0.049,229.6,219.8,sp_c_R,P57,61.2,rr_bot_R,P66,84.4,87,
+P62,Spool carrier brace (chain pull),1.000 x 0.049,229.6,219.8,sp_c_L,P58,61.2,rr_bot_L,P66,84.4,87,
+P63,Rear side bay diagonal (bulkhead pickups),1.000 x 0.049,350.5,350.0,r_top_R,P41,80.3,sp_mid_R,P47,30.5,7,
+P64,Rear side bay diagonal (bulkhead pickups),1.000 x 0.049,350.5,350.0,r_top_L,P42,80.3,sp_mid_L,P48,30.5,7,
+P65,Main hoop base cross + front engine mounts,1.000 x 0.095,584.0,555.6,mh_bot_R,P01,90.0,mh_bot_L,P01,90.0,0,em_fb_R@148 em_fb_L@408
+P66,Rear-ring bottom cross + rear engine mounts,1.250 x 0.095,512.2,512.2,rr_bot_R,"square cut at node, cap end (F.5.3.3)",90.0,rr_bot_L,"square cut at node, cap end (F.5.3.3)",90.0,0,em_rb_R@126 em_rb_L@386
+P67,Main hoop mid cross / firewall + top engine mounts,1.000 x 0.095,584.0,555.6,mh_sis_R,P01,90.0,mh_sis_L,P01,90.0,0,em_ft_R@148 em_ft_L@408
+P68,Front susp ring,1.000 x 0.049,440.0,411.6,ring_bot_R,P39,90.0,ring_bot_L,P40,90.0,0,
+P69,"Front pickup cross (rocker/shock loads, rack)",1.000 x 0.065,440.0,411.6,ring_lsus_R,P39,90.0,ring_lsus_L,P40,90.0,0,
+P70,Engine bay floor diagonal,1.000 x 0.049,959.4,945.0,mh_bot_R,P01,85.4,r_bot_L,P48,37.6,84,
+P71,Rear bulkhead diagonal,1.000 x 0.049,437.8,437.4,r_bot_R,P47,84.2,r_top_L,P42,74.7,45,
+P72,MH brace-plane diagonal (lateral),1.000 x 0.049,1301.7,1287.5,mh_top_R,P01,75.5,r_top_L,P44,50.9,87,
+P73,FH brace-plane diagonal (lateral),1.000 x 0.049,680.1,656.4,fh_top_R,P02,87.5,ring_top_L,P40,48.0,29,

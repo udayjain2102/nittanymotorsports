@@ -38,7 +38,7 @@ fabricated steel uprights instead of machined aluminium, a cheaper rack first, a
 | TIG filler, notcher hole saws, jig lumber/steel | 200–300 |
 | Bend service for the two hoops (if the school has no bender) | 0–150 |
 
-Deliverable: the frame on its wheels-off stand, T1 twist test (predicted 2004 N·m/deg FEA, ≥ 1000 measured). This is the strongest thing
+Deliverable: the frame on its wheels-off stand, T1 twist test (predicted 1946 N·m/deg FEA, ≥ 1000 measured). This is the strongest thing
 to show the next approver.
 
 ## Phase 2: rolling chassis ($1,800–2,500)
