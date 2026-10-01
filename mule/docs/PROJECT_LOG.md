@@ -333,3 +333,10 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   MIG-welded by the team, used parts from other FSAE teams, make-not-buy. Estimate about $4,000–8,300 (unverified prices).
 - 1020 frame study on branch `jugaad-1020` (45.3 kg, every check passing; details in that branch's log).
 - New `views/design_history.png`: side and top views of every frame design so far (v1, v2, B1, C1, C2, J1).
+
+## 2026-10-01: jugaad plan re-priced with real prices
+- Engine: used CRF450R engines $2,550–3,060 on eBay; running 2019–20 bikes $4–7k; CRF450X no cheaper. A donor bike only
+  saves money if crashed/salvage. Frame tube: 9 × 20 ft sticks ≈ $1,000–1,700 + freight; **1020 DOM is not cheaper than
+  4130 per foot**, so the earlier "1020 saves $250–400" was wrong: 1020 is only a welding choice.
+- JUGAAD_PLAN totals now ≈ $6,200–10,700 paying for everything, ≈ $4,000–6,000 with a donated engine and sponsored tube.
+  BUDGET_PLAN's tube line corrected (was $700–1,000).
