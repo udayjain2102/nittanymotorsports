@@ -27,6 +27,17 @@ Realistic target with the current safety standards: **~44–45 kg** for the fram
 - [x] Winner so far: C2, merged into `main`; CAD, shop data and the quote package regenerated. If C3 or a C1+C2 combination beats it, merge that the same way.
 - [ ] Give `frame_opt.py` a rule that a straight run of one tube keeps one size (it can currently size two collinear parts differently, which can't be coped).
 
+## Frame audit, 1 Oct 2026: fix before ordering tube
+A read-only audit found problems the passing checks hide. Hold the tube order until these are fixed or consciously accepted. Detail in `mule/docs/PROJECT_LOG.md`.
+- [ ] **Roll-hoop strength criterion.** `fea.py` uses a self-chosen 340/410 MPa welded allowable and legacy AF4 loads; the 2026 rules have no AF section, and F.3.4.2 sets welded steel at 180/300 MPa "for ANY steel" in SES calculations. Hoop FoS 1.02–1.09 drops to about 0.55 at 180 MPa and below 1.0 under other reasonable supports. Decide the criterion with the advisor, then re-size.
+- [ ] **F.5.2.3 bent tubes.** The check accepts any stiffer tube at a kink; the rule needs a support of the same diameter and thickness. The upper bulkhead support kinks about 8.5° at `ring_top` with only an out-of-plane post; the lower one kinks at `ring_bot` with a smaller cross. Straighten them or add compliant supports, and fix the check.
+- [ ] **F.5.6.3 main-hoop bend at `mh_bar`.** It passes only because the lateral shoulder bar is counted; the rule needs side-view triangulation (or < 25 mm from an attachment point). Move the bend or add a side-view tube.
+- [ ] **Fab data.** Hoop legs and ring posts end at node centrelines, so tubes coped onto them overhang air; several nodes take 6–7 tubes. Hoop corner nodes sit 28–35 mm outside the real bent tube. Re-issue cut lengths and jig points from the real bend radius.
+- [ ] **Missing analyses.** No frontal-impact load path (F.8.7.2, 95 kN through the bulkhead) and no member buckling check (main-hoop brace at about 0.63 of its Euler load).
+- [ ] **Robustness gate is overfit.** The optimiser sized tubes against the same 16 seeded samples; fresh seeds give front-hoop FoS 0.974 and harness 0.975. Use fresh samples or a margin.
+- [ ] **Harness case.** Driver mass is 80 kg but the cockpit is sized to the 95th-percentile male (about 100 kg); at 100 kg the 20 g case falls below 1.0.
+- [ ] **RULES_MATRIX** marks F.5.2.1, F.5.3.3 and F.6.2.2 as automated with no real check; T.1.3.2 (legs below structure ahead of the front hoop) is missing.
+
 ## Before ordering frame tube: pin down the engine
 The frame's engine mounts are welded in step 1, so the engine has to be known first.
 - [x] Choose the engine: **Honda CRF450R 2018+** (electric start is standard from 2018; a 2017 only if it already has Honda's electric-start kit). The kit engine (Predator 420 + CVT) was ruled out: it does not fit the 450 bay (`python powertrain.py`, Option A).
