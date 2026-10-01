@@ -20,7 +20,7 @@ Every system is a Python script in `mule/` that computes the design and checks i
 | System | Script | What was done | Key result |
 |---|---|---|---|
 | Concept review | — | Critiqued the concept STEP against the rules | 7 problems found (wheelbase too short, missing parts, etc.) |
-| Frame layout and rules | `mule.py` | Parametric frame (126 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 44.3 kg frame, 73 pieces (50.1 kg / 81 before the 1 Oct optimisation, 46.4 kg before the C2 rear) |
+| Frame layout and rules | `mule.py` | Parametric frame (126 members, 73 cut pieces) built around the 95th-percentile driver template; 28 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 44.3 kg frame, 73 pieces (50.1 kg / 81 before the 1 Oct optimisation, 46.4 kg before the C2 rear) |
 | Frame rules | `frame_rules.py` | 34 checks for every geometric FSAE frame rule (triangulation, tube size per job, hoops, braces, supports, side impact, shoulder bar, mounts, open wheel) | All pass; each key check proven to fail when its rule is broken |
 | Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Roll-over (AF4 support, welded 4130): main 1.09, front 1.02; torsion 1946 N·m/deg FEA |
 | Suspension kinematics | `suspension.py`, `sideview.py`, `roll.py` | Double wishbones front and rear; roll centres, camber, caster, anti-dive/squat, roll gradient, static camber, jacking, handling balance | RC 37/52 mm, caster 4.6°, scrub 38 mm, camber −2.5/−2.0°, LLTD 49.6 % front (mild understeer) |
@@ -33,7 +33,7 @@ Every system is a Python script in `mule/` that computes the design and checks i
 | Cockpit | `cockpit.py` | T.1.1 and T.1.2 templates swept through the whole model | Both pass (after moving the steering rack low and the front shocks) |
 | Harness | `harness.py` | Belt angles, mounting tabs, 20 g crash load | Lap belt fixed from 15° to 55°; frame FoS 1.17 vs welded ultimate |
 | Electrical | `shutdown.py` | 12 V shutdown circuit simulated as a netlist; wire and fuse sizing | Every shutdown device cuts ignition and fuel pump; 0.23 V drop |
-| Mass and CG | `mass.py` | Item-by-item mass budget; tilt test | 296 kg with driver, CG 340 mm, tilt 60.9° (limit 60°) |
+| Mass and CG | `mass.py` | Item-by-item mass budget; tilt test | 288 kg with driver, CG 341 mm, tilt 60.8° (limit 60°; 60.3° if the estimates err together) |
 | Rear wing with DRS | `aero.py` | Two-element wing with a moving flap, inside rule T.7; mounts, oscillation, servo, fail-safe logic | 126 N at 60 km/h (assumed coefficients); mounts 159 Hz; flap closes on brake or power loss |
 | Lap simulation | `lapsim.py` | Point-mass acceleration, skidpad, autocross; benchmark against FSAE Michigan 2025 results | 4.48 s / 5.12 s / 58.6 s (Michigan medians 4.62 / 5.52 / 55.7 s) |
 
@@ -75,7 +75,7 @@ These would have been expensive to discover after welding:
     - renamed the parts lists to match their STEP files.
 - **Fusion 360:**
   - opened and checked each new model;
-  - saved the current one to `adi laptop files > Nittany Motorsports > NM26_Assembly_v4`;
+  - saved the then-current one to `adi laptop files > Nittany Motorsports > NM26_Assembly_v4` (superseded by `NM26_Assembly_v5`, the 44.3 kg frame, on 1 Oct);
   - renamed every older version (v1, v2, simple v1–v3, concept) so the names say what they are.
 
 ## 5. Documents
@@ -84,7 +84,7 @@ In `mule/docs/`:
 - `PDS.md`: 15 requirements (goal: the full FSAE 2026 rules, none traded) with targets, results and how each is verified; design decisions; Pugh matrices; benchmark.
 - `BUILD_PLAN.md`: design narrative per system, FSAE rules checklist, bill of materials, build order, buck plan.
 - `TEST_PLAN.md`: 7 stages of physical tests with predicted values and pass criteria, based on the Trinity test-manual format.
-- `BUDGET_PLAN.md`: five funding steps of about $2,500 or less, about $7.4–10.9k to a driving car with a used 450, with an upgrade path and price sources.
+- `BUDGET_PLAN.md`: five funding steps of about $2,500 or less, about $7.7–11.6k to a driving car with a used 450 at list prices, with an upgrade path and price sources.
 - `PARTS_LIST.md`: the parts the design uses, engine options with prices, and which script sizes each part.
 - `SIM_TO_REAL.md`: how far to trust each simulation (valid range, error type, margin, the test that measures it) and the real-to-sim loop.
 - `RULES_MATRIX.md`: every frame-relevant FSAE 2026 rule with its status (automated check, build/inspection item, or N/A and why).
@@ -123,7 +123,7 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
 **Engine chosen: Honda CRF450R.** The user picked a 2017 or later model. Checking online showed that the 2017 has kick start as standard, with electric start only as an option kit; electric start became standard in 2018. The target is therefore a 2018 or later engine, or a 2017 that already has the kit.
 - `powertrain.py` now uses the published torque, 48 N·m at 7000 rpm, instead of the 50 N·m placeholder. The acceleration prediction moves from 4.47 s to 4.49 s.
 - Gear ratios and engine mass then came from the 2017–18 CRF450R service manual (page 1-5, read on ManualsLib): primary 2.357 (66/28); gears 2.133, 1.706, 1.421, 1.211, 1.043; stock final drive 13/49; engine dry weight 30.9 kg for 2018 on. With our 13/50 sprockets, top speed is 117 km/h, and 1st gear still reaches the traction limit (928 against 859 N·m). The acceleration prediction is now 4.48 s. Still generic: rev limit, engine size and position, and output-shaft position, until an engine is measured.
-- The budget to a driving car is now about $7,400–10,900 with a used 450.
+- The budget to a driving car is now about $7,700–11,600 with a used 450 at list prices (re-priced tube, 1 Oct); the jugaad route is $6,200–10,700, or $4,000–6,000 with a donated engine and sponsored tube.
 
 **Parts list.** New `mule/docs/PARTS_LIST.md` covers:
 - engine options: CRF450R old and new, CRF450X, YZ450F, KTM 450 and the Predator, with prices and whether each fits;
@@ -212,6 +212,6 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
 1. **Brake pressure ratings in writing** from Wilwood, Tilton and the hose supplier: 296 bar needed, 300 bar assumed.
 2. **Measure a CRF450R 2018+:** its mounts, output shaft and size go into `ENGINE` in `powertrain.py` **before ordering tube** (gear ratios and mass are already in, from the service manual).
 3. **Build the buck** and fit the drivers before cutting tube.
-4. **Weigh parts as they arrive**: the tilt margin is only 0.4–0.9° (60.4° if mass estimates all err the same way).
-6. **Faculty / alumni review** of the roll-over criterion (welded 4130 at 340/410 MPa) and the weld procedure; it assumes 4130 with ER70S-2 filler, so revisit it if the shop quotes 1020 DOM.
-5. **Run TEST_PLAN stages 1–7** on the real car and put the measured numbers back into the code, especially the wing's aero coefficients.
+4. **Weigh parts as they arrive**: the tilt margin is only 0.3–0.8° (60.8° nominal, 60.3° if mass estimates all err the same way).
+5. **Faculty / alumni review** of the roll-over criterion (welded 4130 at 340/410 MPa) and the weld procedure; it assumes 4130 with ER70S-2 filler, so revisit it if the shop quotes 1020 DOM.
+6. **Run TEST_PLAN stages 1–7** on the real car and put the measured numbers back into the code, especially the wing's aero coefficients.

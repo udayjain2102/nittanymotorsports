@@ -1,7 +1,7 @@
 # NM26 mule: jugaad plan (smallest budget that still passes every rule)
 
 *Jugaad* (जुगाड़): get it done with what you can find, borrow, scrounge or make. Funding will be smaller than
-[`BUDGET_PLAN.md`](BUDGET_PLAN.md) assumes ($7.4–10.9k), so this is the cheapest route to a driving mule. The car's
+[`BUDGET_PLAN.md`](BUDGET_PLAN.md) assumes ($7.7–11.6k at list prices), so this is the cheapest route to a driving mule. The car's
 design does not change except where a line says so, and **every FSAE 2026 rule stays a hard requirement**: jugaad is
 for *where parts come from*, never for safety.
 
@@ -27,7 +27,7 @@ or sponsored**. Donations and sponsorship are the real jugaad lever, not cheaper
 | 2. Rolling chassis | A-arms + rod ends, shocks, uprights, wheels, tyres, steering | Arms in-house; used MTB shocks; steel uprights; used FSAE wheels and slicks from teams; used rack from a team or junkyard | 800–2,200 |
 | 3. Engine and drive | Engine, cooling, exhaust, wiring, chain, spool, CV shafts, fuel | Used CRF450R 2018+ engine ($2,500–3,100) or a donated/salvage one; used ATV CV shafts; spool carriers made in-house | 2,900–3,900 (≈ 400–1,400 if the engine is donated) |
 | 4. Brakes, safety, electrics | Calipers, master cylinders, lines, harness, seat, impact attenuator, shutdown parts, extinguishers | Used calipers rebuilt; **rated** master cylinders; new harness; DIY seat | 1,350–2,400 |
-| **Total to a driving car** | | | **about $6,200–10,700** paying for everything; **about $4,000–6,000** with a donated engine and sponsored tube (plan: $7.4–10.9k) |
+| **Total to a driving car** | | | **about $6,200–10,700** paying for everything; **about $4,000–6,000** with a donated engine and sponsored tube (list-price plan: $7.7–11.6k) |
 
 The wide range is mostly the engine, the tube and how much other teams give. Each step is still its own small request.
 

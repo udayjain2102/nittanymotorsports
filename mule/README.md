@@ -117,7 +117,7 @@ These match `NM26_FSAE_Concept.step`. STEP exports are rotated to Z-up, so they 
 | `robustness.py` | Reality-gap check (`docs/SIM_TO_REAL.md`): 16 seeded tolerance samples of every frame case (walls ±10 %, joints ±2 mm, stiffness 60–100 %), mass/tilt with ±10 % errors (independent and correlated), brake and lap-time bands. | Every frame case FoS ≥ 1.0 in every sample; worst torsion ≥ 2× roll stiffness; tilt ≥ 60° |
 | `frame_rules.py` | FSAE frame-structure rules: tube size per job, side-view triangulation (pin-jointed truss), hoops, braces, bent-member supports, no mounts on the main hoop or braces, bulkhead and brace supports, side impact, shoulder bar, steering protection, hips in the Major Structure, open-wheel zones. | 34 checks; `tests/test_frame_rules.py` breaks each rule and confirms the check fails |
 | `quote_package.py` | Shop quote package in `quote/`: frame weldment STEP, material list, cut sheet, bend programs, jig data. | Every frame part and every tube piece listed exactly once |
-| `mule.py` | **Single source of geometry.** Holds the parameters, the frame nodes and members (tube size per rule role), the suspension hardpoints (`SUSP`, `susp_links`), the belly pan, and the CAD assembly export. | 27 FSAE rule checks (V, F, T), e.g. hoop geometry, helmet clearance, side-impact height, IA, harness angles, tube sizes |
+| `mule.py` | **Single source of geometry.** Holds the parameters, the frame nodes and members (tube size per rule role), the suspension hardpoints (`SUSP`, `susp_links`), the belly pan, and the CAD assembly export. | 28 FSAE rule checks (V, F, T), e.g. hoop geometry, helmet clearance, side-impact height, IA, harness angles, tube sizes |
 | `fea.py` | 3D beam FEA of the frame, rigid welded joints. | Torsional stiffness; main and front hoop top loads (6/5/9 kN) at a safety factor above 1 against welded yield |
 | `suspension.py` | Front-view double-wishbone kinematics over ±50 mm travel (design travel +50 / −25 mm). | Roll centre, camber gain, ball joints inside the 13″ wheel, KPI/scrub (front ≤ 40 mm), no lock-up |
 | `roll.py` | Roll gradient, front/rear lateral load transfer distribution (handling balance), static camber and camber to the ground in a corner, roll-centre position in roll, jacking. | LLTD 0–12 points above the front weight share; roll 0.5–2 °/g; outside tyre −2.0 to −0.3° at 1.5 g; RC stays above ground; jacking lift ≤ 5 mm |
@@ -148,7 +148,7 @@ These match `NM26_FSAE_Concept.step`. STEP exports are rotated to Z-up, so they 
 |---|---|---|
 | Hoop load case | 6 kN lateral, 5 kN rearward, 9 kN down. **Not verified against the current SES.** | `fea.py` `run()` |
 | Welded steel yield | 180 MPa (F.3.4.2) | `fea.py` `SY_WELD` |
-| Car + driver mass, CG height, front split | 300 kg, 345 mm, 45 %. These must cover the `mass.py` budget with the rear wing: 296 kg, 340 mm, 46 %. | `loads.py`, `mass.py` |
+| Car + driver mass, CG height, front split | 300 kg, 345 mm, 45 %. These must cover the `mass.py` budget with the rear wing: 288 kg, 341 mm, 47 %. | `loads.py`, `mass.py` |
 | Tyre grip for design cases | 1.5 | `loads.py` `MU` |
 | Ride frequency front/rear, unsprung mass, tyre rate | 3.0/2.6 Hz (front stiffer for balance), 15 kg, 120 N/mm | `springs.py` |
 | Motion ratios front/rear (the rocker ratios follow) | 0.72 / 0.75; travel 50 mm bump, 25 mm droop | `springs.py` `MR`, `TRAVEL`, `DROOP` |

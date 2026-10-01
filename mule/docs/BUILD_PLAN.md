@@ -98,7 +98,7 @@ Notes:
 
 Each upright is solved as a rigid body held by six two-force links: four A-arm legs, the tie rod or toe link, and the pushrod.
 
-Assumptions: 300 kg with driver, CG 345 mm high, 45/55 front/rear weight, tyre grip μ = 1.5. These are set to cover the `mass.py` budget with the rear wing: 296 kg, CG 340 mm, 46 % front. Design cases: 3g bump, 1.5g cornering (outer wheel), 1.5g braking, combined cornering + braking at μ, and a kerb strike (2× load) while cornering at 1 g.
+Assumptions: 300 kg with driver, CG 345 mm high, 45/55 front/rear weight, tyre grip μ = 1.5. These are set to cover the `mass.py` budget with the rear wing: 288 kg, CG 341 mm, 47 % front. Design cases: 3g bump, 1.5g cornering (outer wheel), 1.5g braking, combined cornering + braking at μ, and a kerb strike (2× load) while cornering at 1 g.
 
 | Check | Result |
 |---|---|
@@ -290,7 +290,7 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
   - rear master cylinder → **0.75″**;
   - rear lower rail → 1.0×0.095;
   - main-hoop mid cross → 1.25×0.095.
-- **Tilt test (IN.11):** the car rolls at **60.9°** against the required 60° (with the rear wing and the 1220 mm rear track; it was 61.3° before the wing). **That is the thinnest margin on the car**, so measure the CG early (TEST_PLAN T4.1).
+- **Tilt test (IN.11):** the car rolls at **60.8°** against the required 60° (60.3° if every mass estimate errs the same way) (with the rear wing and the 1220 mm rear track; it was 61.3° before the wing). **That is the thinnest margin on the car**, so measure the CG early (TEST_PLAN T4.1).
 
 **Harness (`harness.py`):**
 - **Lap belt:** the old plan put the lap belts on the main-hoop base, which gave a **15° lap-belt angle** (T.2.5.4 needs 45–65°). The lap tabs moved onto the lower side-impact tubes under the hips, giving **55°**. Each tab has a brace up to the side-impact diagonal, and a floor cross ties the two tabs together.
@@ -402,7 +402,7 @@ The wing sits behind the rear axle, so at top speed it adds 587 N to the rear ax
 
 **What it cost elsewhere.**
 - The wing, servo and struts add 7.4 kg high up. The CG rises from 323 to 340 mm.
-- To keep the tilt test above 60°, the **rear track widened from 1180 to 1220 mm**. Every check was re-run. The tilt angle is now 60.9°.
+- To keep the tilt test above 60°, the **rear track widened from 1180 to 1220 mm**. Every check was re-run. The tilt angle was 60.9° then; with the 44.3 kg frame it is 60.8°.
 - Load cases now assume a 345 mm CG. Frame and uprights still pass.
 - Brake pressure at the 2000 N pedal test rose to **296 bar**, against the unverified 300 bar limit, so the supplier ratings are now urgent.
 

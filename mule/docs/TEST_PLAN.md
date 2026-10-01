@@ -48,7 +48,7 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
   1. Weigh the frame.
   2. Measure the 12 hardpoint nodes (suspension pickups, rocker and shock mounts) from the jig table. Use a height gauge and a tape from the jig datum.
 - **Pass:**
-  - mass 46–54 kg (tube plus about 4 kg of tabs and weld, ±8 %);
+  - mass 44–52 kg (tube plus about 4 kg of tabs and weld, ±8 %);
   - every suspension and rocker pickup within ±2 mm of `fab/jig_node_coordinates.csv`;
   - hoops within ±3 mm.
 
@@ -102,7 +102,7 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 - **Pass:**
   - smooth, with no bind or contact;
   - every rod end short of its misalignment limit;
-  - the CV does not bottom (predicted plunge 4.8 mm).
+  - the CV does not bottom (predicted plunge 4.5 mm).
 
 ### T2.2 Camber gain
 - **Predicted:** −0.72° front and −0.75° rear per 25 mm of bump (`suspension.py`). Set static camber to −2.5° front and −2.0° rear first (`roll.py`).
@@ -255,7 +255,7 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 ### T4.1 Corner weights and CG height
 - **Objective:** measure the three numbers every load case depends on.
-- **Predicted by `mass.py`:** 296 kg with the driver and the rear wing, 46.1 % front, CG 340 mm.
+- **Predicted by `mass.py`:** 288 kg with the driver and the rear wing, 47.0 % front, CG 341 mm.
 - **Assumed by the load cases (`loads.py`):** 300 kg, 45 % front, CG 345 mm. They are set to cover the budget.
 - **Procedure:**
   1. Weigh all four corners.
@@ -270,7 +270,7 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 ### T4.2 Tilt test (IN.11)
 - **Predicted:**
   - the car rolls at 60.5° (both tracks are now 1220 mm), from atan(half-track / CG height) with the assumed 345 mm CG;
-  - it rolls at 60.9° with the 340 mm budget CG, rear wing included (`mass.py`);
+  - it rolls at 60.8° with the 341 mm budget CG, rear wing included (`mass.py`), 60.3° if every mass estimate errs the same way;
   - at 60° the CG must be ≤ 352 mm.
 - **This is the thinnest margin in the whole design:** about 1°, before tyre and spring compliance, which reduce it further.
 - **Procedure:** use a tilt table or a strapped ramp, with a safety strap on the high side.
@@ -461,7 +461,7 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 | T3.2 pressure @ 500 N F/R | | 74.0 / 36.3 bar | | | |
 | T3.3 2000 N | | 296 / 145 bar, 19 mm | | | |
 | T3.4 BOTS | | trips at 45 mm | | | |
-| T4.1 mass / front % / CG | | 296 kg / 46 % / 340 mm | | | |
+| T4.1 mass / front % / CG | | 288 kg / 47 % / 341 mm | | | |
 | T4.2 tilt 45° / 60° | | no leak / no roll | | | |
 | T4.3 egress | | ≤ 5 s | | | |
 | T5.1 speed @ 5000 rpm, 2nd | | 30.0 km/h | | | |

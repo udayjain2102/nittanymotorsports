@@ -10,11 +10,11 @@ Where a price was looked up, the source is listed at the bottom.
 | Phase | What you get | Request | Test it passes (TEST_PLAN) |
 |---|---|---|---|
 | 0. Plan and mock-up | Full-size plywood/conduit buck; drivers fitted; parts donations lined up | **$100–200** | T4.3 templates and egress on the buck |
-| 1. Frame | Welded 4130 frame on the jig | **$1,100–1,600** | T1: weight, twist stiffness, weld check |
+| 1. Frame | Welded 4130 frame on the jig | **$1,350–2,300** (tube re-priced 1 Oct 2026) | T1: weight, twist stiffness, weld check |
 | 2. Rolling chassis | Suspension, steering, uprights, wheels and tyres: it rolls and steers | **$1,800–2,500** | T2: travel, camber, bump steer, steering |
 | 3. Engine and drive | Engine, chain drive, spool, CV shafts, fuel | **$1,300–1,900** (cheap engine) or $2,600–4,000 (used 450) | T5.1 gearing |
 | 4. Brakes, safety, electrics | Brakes, harness, seat, crash foam, shutdown circuit: **it drives** | **$1,800–2,600** | T3, T4, T5, T6 |
-| **Total to a driving car** | | **about $6,100–8,800** with the cheap engine; **about $7,400–10,900** with a used 450 (now recommended: the kit engine does not fit the bay, see Phase 3) | |
+| **Total to a driving car** | | **about $7,700–11,600** with a used 450 at list prices (the kit engine was ruled out: it does not fit the bay, see Phase 3). `JUGAAD_PLAN.md` gets this to $6,200–10,700, or $4,000–6,000 with a donated engine and sponsored tube | |
 | 5. Upgrades (any order, later) | 450 engine, Kaz rack, rear wing + DRS, new tyres, data logging | $300–3,000 each | T5.5, T7 |
 
 The old one-shot estimate was $9–15k. The savings come from: used wheels, tyres and shocks,
@@ -30,7 +30,7 @@ fabricated steel uprights instead of machined aluminium, a cheaper rack first, a
   - Hoosier reportedly discounts FSAE tyres; ask before buying.
 - Get the brake pressure ratings in writing (296 bar needed at 2000 N) before Phase 4 parts are chosen.
 
-## Phase 1: frame ($1,100–1,600)
+## Phase 1: frame ($1,350–2,300)
 | Item | Est. $ |
 |---|---|
 | 4130 tube: 1.5/1.25/1.0 in sizes per `fab/tube_order_list.csv` + 25 % (9 × 20 ft sticks, `quote/material_list.csv`) | 1,000–1,700 + freight (re-priced 1 Oct 2026, see `JUGAAD_PLAN.md`; was 700–1,000) |
