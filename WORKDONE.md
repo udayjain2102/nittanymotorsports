@@ -5,7 +5,7 @@ every method, result and error, is [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJEC
 
 **Starting point:** the concept CAD (`NM26_FSAE_Concept.step`) and the 2026 FSAE rules PDF.
 **Result:** a complete, rules-checked design for a drivable test car (a "mule"), all generated from Python code:
-- 200 automated design checks and 88 automated tests, all passing, also run by GitHub on every push;
+- 210 automated design checks and 91 automated tests, all passing, also run by GitHub on every push;
 - CAD in two levels of detail;
 - shop data to build the frame;
 - a physical test plan, a build plan, a bill of materials and a phased budget;
@@ -20,9 +20,9 @@ Every system is a Python script in `mule/` that computes the design and checks i
 | System | Script | What was done | Key result |
 |---|---|---|---|
 | Concept review | — | Critiqued the concept STEP against the rules | 7 problems found (wheelbase too short, missing parts, etc.) |
-| Frame layout and rules | `mule.py` | Parametric frame (143 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 45.3 kg frame, 78 pieces (50.1 kg / 81 before the 1 Oct optimisation) |
+| Frame layout and rules | `mule.py` | Parametric frame (143 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 46.2 kg frame, 78 pieces (50.1 kg / 81 before the 1 Oct optimisation) |
 | Frame rules | `frame_rules.py` | 34 checks for every geometric FSAE frame rule (triangulation, tube size per job, hoops, braces, supports, side impact, shoulder bar, mounts, open wheel) | All pass; each key check proven to fail when its rule is broken |
-| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Main hoop FoS 1.22, front 1.27; torsion 1886 N·m/deg |
+| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Main hoop FoS 1.24, front 1.27 (≥ 1.07 under tube tolerances); torsion 1969 N·m/deg FEA |
 | Suspension kinematics | `suspension.py`, `sideview.py`, `roll.py` | Double wishbones front and rear; roll centres, camber, caster, anti-dive/squat, roll gradient, static camber, jacking, handling balance | RC 37/52 mm, caster 4.6°, scrub 38 mm, camber −2.5/−2.0°, LLTD 49.6 % front (mild understeer) |
 | Loads into the frame | `loads.py`, `compliance.py` | Six-link upright statics for 10 load cases; link buckling; compliance steer | Worst frame FoS 1.26; toe change 0.10°/0.18° at 1.5 g |
 | Springs, rockers, shocks | `springs.py`, `rocker.py` | Pushrod + bell-crank layout, 230×65 MTB coil shocks | Motion ratio 0.72/0.75, 3.0/2.6 Hz ride, ~243/215 lb/in springs |
@@ -86,6 +86,7 @@ In `mule/docs/`:
 - `TEST_PLAN.md`: 7 stages of physical tests with predicted values and pass criteria, based on the Trinity test-manual format.
 - `BUDGET_PLAN.md`: five funding steps of about $2,500 or less, about $7.4–10.9k to a driving car with a used 450, with an upgrade path and price sources.
 - `PARTS_LIST.md`: the parts the design uses, engine options with prices, and which script sizes each part.
+- `SIM_TO_REAL.md`: how far to trust each simulation (valid range, error type, margin, the test that measures it) and the real-to-sim loop.
 - `RULES_MATRIX.md`: every frame-relevant FSAE 2026 rule with its status (automated check, build/inspection item, or N/A and why).
 - `FRAME_RESEARCH.md`: how lighter FSAE steel frames are built, with sources, applied to NM26.
 - `PROJECT_LOG.md`: full chronological log.
@@ -166,6 +167,13 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
   `mule/docs/RULES_MATRIX.md` lists every rule with its status (83 automated, 94 build/inspection items, 45 not
   applicable, 15 definitions). The build plan's "FSAE-lite" skips are gone: SES/IAD paperwork, the 20 mm restrictor and
   the noise limit are now required items.
+- **Reality gap (sim to real), after NVIDIA's Isaac Lab course:** `robustness.py` re-runs every frame load case in 16
+  seeded samples with tube walls ±10 %, joints ±2 mm and 60–100 % tube stiffness (joint flex), and checks tilt with mass
+  errors and brake/lap-time bands. It found that the optimised frame had no real-world slack in the 20 g harness case
+  (FoS 0.96). Fix: shoulder bar back to 1.5″ and the side-impact diagonal to 1.0″ × 0.095″, so the frame is **46.2 kg**
+  (+0.9 kg) and every case stays ≥ 1.03 under tolerances. The twist test now passes at ≥ 1000 N·m/deg *measured*
+  (real frames measure ~⅔ of FEA). New tests: frame 3D scan, shock check, and a real-to-sim column in the results log.
+  `docs/SIM_TO_REAL.md` explains it all.
 - **Next:** a clean-sheet frame (the user chose the most open option: wheelbase, seat angle, rear length and engine
   position can all change). Three concepts will cover lowest weight, fewer parts and simplest build, after a deep
   research pass on documented frame geometries.

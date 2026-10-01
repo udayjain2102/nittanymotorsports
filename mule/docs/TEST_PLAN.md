@@ -43,27 +43,28 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 
 ### T1.1 Frame mass and node positions
 - **Objective:** check that the frame was built as modelled.
-- **Predicted:** 45.3 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
+- **Predicted:** 46.2 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
 - **Procedure:**
   1. Weigh the frame.
   2. Measure the 12 hardpoint nodes (suspension pickups, rocker and shock mounts) from the jig table. Use a height gauge and a tape from the jig datum.
 - **Pass:**
-  - mass 50–58 kg;
+  - mass 46–54 kg (tube plus about 4 kg of tabs and weld, ±8 %);
   - every suspension and rocker pickup within ±2 mm of `fab/jig_node_coordinates.csv`;
   - hoops within ±3 mm.
 
 ### T1.2 Torsional stiffness
 - **Objective:** confirm the beam FEA, and find weak welds or joints.
-- **Predicted:** 1886 N·m/deg (`fea.py`). The model has rigid joints, so the real frame will be somewhat softer.
+- **Predicted:** 1969 N·m/deg (`fea.py`). The model has rigid joints, so the real frame will be softer: FSAE frames typically measure about ⅔ of rigid-joint FEA (≈1310), and `robustness.py`'s worst tolerance sample gives 1489. **Expect 1300–1500 measured.**
 - **Procedure:**
   1. Bolt the rear pickups to a rigid fixture.
   2. Put a beam across the front lower pickups and hang weights at a measured arm, so torque T = W × arm. Use 200, 400 and 600 N·m.
   3. Measure the vertical movement of both beam ends with dial indicators. Twist angle = atan((d_left + d_right) / beam span).
   4. Unload and check the angle returns to zero.
 - **Pass:**
-  - ≥ 1500 N·m/deg (70 % of predicted);
+  - ≥ 1000 N·m/deg measured (2 × the suspension roll stiffness of ~476 N·m/deg, so ~90 % of the load transfer reaches the tyres; `SIM_TO_REAL.md`);
   - linear within 10 % across the three loads;
   - returns to within 0.05°.
+- **Then (real-to-sim):** record the measured/FEA ratio in the results log and use it for all later stiffness predictions.
 - **If lower:** look for a missing or poor weld first; the rear bay diagonals and the engine-mount crosses matter most. Then check the model in `fea.py`.
 
 ### T1.3 Weld inspection
@@ -79,6 +80,13 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 - **Pass:**
   - no cracks, undercut or porosity;
   - weld length ≥ 25 mm on the AIP (F.8.2).
+
+### T1.4 Frame 3D scan (digital twin)
+- **Objective:** catch weld distortion before any suspension part is fitted.
+- **Procedure:** scan the bare frame on the jig and off it (phone LiDAR app or the school's scanner). Align the scan to
+  `cad/simple/NM26_Frame_FEA.step` and measure every pickup node.
+- **Pass:** pickups within ±2 mm, hoops within ±3 mm (same as T1.1). If a pickup is out, enter the measured position in
+  `mule.py` and re-run `report.py` before deciding to correct it with shims or a re-made tab.
 
 ---
 
@@ -159,6 +167,13 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
   - gap ≥ 10 mm everywhere;
   - free play mean + 2 standard deviations < 7°;
   - the steering wheel stays below the front hoop top at every angle (T.1.4.4).
+
+### T2.8 Shock check before fitting (measure the black box)
+- **Objective:** the used MTB shocks' damping and spring rate are unknown; measure them instead of assuming.
+- **Procedure:** check each spring rate on a press with a scale (load at 3 deflections). For damping, use a shock dyno if
+  one can be borrowed; otherwise a drop test: drop a known mass on the shock from a fixed height and film the rebound.
+- **Pass:** spring rates within ±10 % of `springs.py` (≈243 / 215 lb/in); all four shocks of a pair match within 10 %.
+  Enter the measured rates in `springs.py` and re-run `report.py`.
 
 ---
 
@@ -433,10 +448,10 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 ## Results log (fill in; one row per run)
 
-| Test | Date | Predicted | Measured (runs) | Pass? | Action / script updated |
+| Test | Date | Predicted | Measured (runs) | Pass? | Model input updated (real-to-sim loop, `SIM_TO_REAL.md`) |
 |---|---|---|---|---|---|
-| T1.1 mass | | 45.3 kg + 4 kg tabs | | | |
-| T1.2 torsion | | 1886 N·m/deg | | | |
+| T1.1 mass | | 46.2 kg + 4 kg tabs | | | |
+| T1.2 torsion | | 1969 N·m/deg FEA; expect 1300–1500 measured | | | |
 | T2.2 camber gain F/R | | −0.72 / −0.75 °/25 mm | | | |
 | T2.3 bump steer F/R | | ≤ 0.11° / 0.00° |
 | T2.7 compliance toe at 1.5 g-equivalent side load F/R | | 0.10° in / 0.18° out | | | | | | |

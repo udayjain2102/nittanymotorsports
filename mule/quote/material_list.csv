@@ -1,8 +1,8 @@
 material,size,pieces,total cut length m,longest piece mm,20 ft sticks,order
-4130 round tube (normalized),"1.500"" OD x 0.095"" wall",2,0.61,305,1,20 ft
-4130 round tube (normalized),"1.250"" OD x 0.095"" wall",6,6.42,2778,2,40 ft
-4130 round tube (normalized),"1.000"" OD x 0.065"" wall",22,12.94,1267,3,60 ft
+4130 round tube (normalized),"1.500"" OD x 0.095"" wall",3,1.19,584,1,20 ft
+4130 round tube (normalized),"1.250"" OD x 0.095"" wall",5,5.83,2778,1,20 ft
+4130 round tube (normalized),"1.000"" OD x 0.065"" wall",20,11.27,1267,2,40 ft
 4130 round tube (normalized),"1.000"" OD x 0.049"" wall",39,17.35,938,3,60 ft
-4130 round tube (normalized),"1.000"" OD x 0.095"" wall",9,5.06,1222,1,20 ft
+4130 round tube (normalized),"1.000"" OD x 0.095"" wall",11,6.73,1222,2,40 ft
 4130 sheet,"0.125"" (3.2 mm)",44,0.039 m2 net,34 x 26 mm blanks,-,"12"" x 12"" sheet"
 Steel bar/tube for rocker pivot bushings,"5/8"" OD, bore to suit the rocker bolt",4,0.19,48,-,1 ft

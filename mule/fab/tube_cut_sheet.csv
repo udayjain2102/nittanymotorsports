@@ -8,9 +8,9 @@ P08,Cockpit floor V (anti-sub),1.000 x 0.049,672.7,663.2,as_c_L,P07,64.3,mh_bot_
 P09,Cockpit floor V (anti-sub),1.000 x 0.049,672.7,663.2,as_c_L,P07,64.3,mh_bot_L,P01,90.0,90,
 P10,Cockpit floor V (anti-sub),1.000 x 0.049,351.1,341.6,as_c_L,P07,33.7,fh_bot_R,P02,90.0,90,
 P11,Cockpit floor V (anti-sub),1.000 x 0.049,351.1,341.6,as_c_L,P07,33.7,fh_bot_L,P02,90.0,90,
-P12,Shoulder harness bar,1.250 x 0.095,584.0,584.0,mh_bar_R,P01,83.5,mh_bar_L,P01,83.5,0,sb_R@192 sb_L@392
-P13,Diagonal side impact,1.000 x 0.065,853.3,834.2,fh_bot_R,P02,69.8,mh_sis_R,P01,69.8,0,lap_up_R@424
-P14,Diagonal side impact,1.000 x 0.065,853.3,834.2,fh_bot_L,P02,69.8,mh_sis_L,P01,69.8,0,lap_up_L@424
+P12,Shoulder harness bar,1.500 x 0.095,584.0,584.0,mh_bar_R,"square cut at node, cap end (F.5.3.3)",90.0,mh_bar_L,"square cut at node, cap end (F.5.3.3)",90.0,0,sb_R@192 sb_L@392
+P13,Diagonal side impact,1.000 x 0.095,853.3,834.2,fh_bot_R,P02,69.8,mh_sis_R,P01,69.8,0,lap_up_R@424
+P14,Diagonal side impact,1.000 x 0.095,853.3,834.2,fh_bot_L,P02,69.8,mh_sis_L,P01,69.8,0,lap_up_L@424
 P15,Lap belt tab brace,1.000 x 0.065,149.5,149.5,lap_R,P05,90.0,lap_up_R,P13,69.8,0,
 P16,Lap belt tab brace,1.000 x 0.065,149.5,149.5,lap_L,P06,90.0,lap_up_L,P14,69.8,0,
 P17,Front hoop brace,1.000 x 0.065,920.9,910.9,fh_top_R,P02,72.7,bh_top_R,P22,90.0,35,
