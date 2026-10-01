@@ -62,7 +62,7 @@ def frame_cases():
     """Nominal-API calls of every frame strength case, returning {case: FoS}, plus torsion."""
     import loads, powertrain, brakes, harness, aero
     r = fea.run(verbose=False)
-    out = {f"{k} hoop load": v for k, v in r["fos"].items()}
+    out = {f"{k} roll-over (vs welded 4130 ultimate)": v * fea.SU_ROLL / fea.SY_ROLL for k, v in r["fos"].items()}
     out["wheel loads"] = loads.run(verbose=False)[2]
     out["launch"] = powertrain.launch_frame()[0]
     out["2000 N pedal"] = brakes.frame_2000N()[0]

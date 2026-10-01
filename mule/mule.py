@@ -144,28 +144,28 @@ SIDE = [
     # front hoop (size A) - modelled as straight segments between bend nodes (real part: bent, R>=76)
     ("fh_bot", "fh_sis", "H", "Front hoop"), ("fh_sis", "fh_sh", "H", "Front hoop"), ("fh_sh", "fh_top", "H", "Front hoop"),
     # main hoop (size A, single piece)
-    ("mh_bot", "mh_sis", "H", "Main hoop"), ("mh_sis", "mh_bar", "H", "Main hoop"),
-    ("mh_bar", "mh_sh", "H", "Main hoop"), ("mh_sh", "mh_top", "H", "Main hoop"),
+    ("mh_bot", "mh_sis", "J", "Main hoop"), ("mh_sis", "mh_bar", "J", "Main hoop"),
+    ("mh_bar", "mh_sh", "J", "Main hoop"), ("mh_sh", "mh_top", "J", "Main hoop"),
     # side impact (B)
     ("fh_sis", "mh_sis", "B", "Upper side impact"),
     ("fh_bot", "as", "B", "Lower side impact"), ("as", "lap", "B", "Lower side impact"), ("lap", "mh_bot", "B", "Lower side impact"),
     ("as", "as_c", "B", "Anti-sub floor cross"), ("as_c", "mh_bot", "C", "Cockpit floor V (anti-sub)"), ("as_c", "fh_bot", "C", "Cockpit floor V (anti-sub)"),
-    ("mh_bar", "sb", "J", "Shoulder harness bar"),
+    ("mh_bar", "sb", "H", "Shoulder harness bar"),
     ("fh_bot", "lap_up", "A", "Diagonal side impact"), ("lap_up", "mh_sis", "A", "Diagonal side impact"),   # A, not B: the 20 g harness case under tube tolerances (robustness.py)
     ("lap", "lap_up", "B", "Lap belt tab brace"),
     # front hoop brace (B) to bulkhead
     ("fh_top", "bh_top", "B", "Front hoop brace"),
     # front bulkhead (B) + supports (C)
     ("bh_bot", "bh_lsus", "B", "Front bulkhead"), ("bh_lsus", "bh_sus", "B", "Front bulkhead"), ("bh_sus", "bh_top", "B", "Front bulkhead"),
-    ("bh_top", "ring_top", "C", "FBH support upper"), ("ring_top", "fh_sis", "C", "FBH support upper"),
-    ("fh_top", "ring_top", "B", "Front hoop lower brace"),
+    ("bh_top", "ring_top", "A", "FBH support upper"), ("ring_top", "fh_sis", "A", "FBH support upper"),
+    ("fh_top", "ring_top", "C", "Front hoop lower brace"),
     ("bh_bot", "pb1", "B", "FBH support lower (pedal box)"), ("pb1", "pb0", "B", "FBH support lower (pedal box)"), ("pb0", "ring_bot", "B", "FBH support lower (pedal box)"),
-    ("ring_bot", "fh_bot", "C", "FBH support lower"),
+    ("ring_bot", "fh_bot", "B", "FBH support lower"),
     ("pb0", "pb0m", "B", "Pedal box cross (rear)"), ("pb1", "pb1m", "A", "Pedal box cross (front)"),
     ("bh_bot", "ring_top", "C", "FBH support diagonal"), ("ring_bot", "fh_sis", "C", "FBH support diagonal"),
     ("ring_bot", "ring_lsus", "J", "Front susp ring"), ("ring_lsus", "ring_sus", "J", "Front susp ring"), ("ring_sus", "ring_top", "J", "Front susp ring"),   # J: no ring top cross (T.1.2), posts bend
     # main hoop braces (B) rearward + supports (C)
-    ("mh_top", "r_top", "A", "Main hoop brace"),
+    ("mh_top", "r_top", "B", "Main hoop brace"),
     ("mh_sis", "rr_top", "C", "MH brace support upper"), ("rr_top", "sp_top", "C", "MH brace support upper"), ("sp_top", "r_top", "C", "MH brace support upper"),
     ("mh_bot", "rr_bot", "A", "MH brace support lower"), ("rr_bot", "sp_bot", "C", "MH brace support lower"), ("sp_bot", "r_bot", "C", "MH brace support lower"),
     ("rr_bot", "rr_lsus", "A", "Rear susp ring"), ("rr_lsus", "rr_sus", "A", "Rear susp ring"), ("rr_sus", "rr_top", "A", "Rear susp ring"),
@@ -176,14 +176,14 @@ SIDE = [
     ("sp_c", "rr_top", "C", "Spool carrier brace (chain pull)"), ("sp_c", "rr_lsus", "C", "Spool carrier brace (chain pull)"),
     ("r_sus", "sp_mid", "C", "Rear side bay diagonal (bulkhead pickups)"),
     ("mh_bot", "em_fb", "A", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "A", "Rear-ring bottom cross + rear engine mounts"),
-    ("mh_sis", "em_ft", "H", "Main hoop mid cross / firewall + top engine mounts"),
+    ("mh_sis", "em_ft", "A", "Main hoop mid cross / firewall + top engine mounts"),
 ]
 CROSS = [
     ("bh_bot", "B", "Front bulkhead"), ("bh_top", "B", "Front bulkhead"),
     ("ring_bot", "C", "Front susp ring"),   # no ring_top cross: T.1.2 template passes there
     ("fh_top", "H", "Front hoop"),   # no front hoop base cross: removed in the 2026-10-01 optimisation (not rule-required, lightly loaded)
-    ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "H", "Main hoop"),
-    ("sb", "J", "Shoulder harness bar"),   # J: 20 g harness load on a 584 mm span; 1.25" fails the tolerance check (robustness.py)
+    ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
+    ("sb", "H", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
     ("em_rb", "A", "Rear-ring bottom cross + rear engine mounts"),  # no top cross here: it would pass through the engine
     ("r_bot", "C", "Rear bulkhead"), ("r_top", "C", "Rear bulkhead"),
     ("r_lsus", "C", "Rear pickup cross (rocker/shock loads)"), ("ring_lsus", "B", "Front pickup cross (rocker/shock loads, rack)"),
@@ -192,9 +192,9 @@ CROSS = [
 DIAG = [  # single diagonals (right node -> left node)
     ("mh_bot", "r_bot'", "C", "Engine bay floor diagonal"),
     ("r_bot", "r_top'", "C", "Rear bulkhead diagonal"),
-    ("mh_top", "r_top'", "B", "MH brace-plane diagonal (lateral)"),
+    ("mh_top", "r_top'", "C", "MH brace-plane diagonal (lateral)"),
     ("fh_top", "ring_top'", "C", "FH brace-plane diagonal (lateral)"),
-    ("em_ft", "em_ft'", "H", "Main hoop mid cross / firewall + top engine mounts"),
+    ("em_ft", "em_ft'", "A", "Main hoop mid cross / firewall + top engine mounts"),
 ]
 MEMBERS = []
 for a, b, s, r in SIDE:

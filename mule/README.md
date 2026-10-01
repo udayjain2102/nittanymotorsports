@@ -113,6 +113,7 @@ These match `NM26_FSAE_Concept.step`. STEP exports are rotated to Z-up, so they 
 
 | File | What it does | Checks |
 |---|---|---|
+| `frame_opt.py` | Tube-size optimiser: moves each tube group along 1.5″ → 1.0″×0.049″ (never below its F.3.2.1 size), keeps only sizings that pass every frame strength case, `frame_rules.py`, `compliance.py` and the `robustness.py` gates, and writes the result into `mule.py`. | `tests/test_frame_opt.py`: current sizing passes; the writer changes only the named group |
 | `robustness.py` | Reality-gap check (`docs/SIM_TO_REAL.md`): 16 seeded tolerance samples of every frame case (walls ±10 %, joints ±2 mm, stiffness 60–100 %), mass/tilt with ±10 % errors (independent and correlated), brake and lap-time bands. | Every frame case FoS ≥ 1.0 in every sample; worst torsion ≥ 2× roll stiffness; tilt ≥ 60° |
 | `frame_rules.py` | FSAE frame-structure rules: tube size per job, side-view triangulation (pin-jointed truss), hoops, braces, bent-member supports, no mounts on the main hoop or braces, bulkhead and brace supports, side impact, shoulder bar, steering protection, hips in the Major Structure, open-wheel zones. | 34 checks; `tests/test_frame_rules.py` breaks each rule and confirms the check fails |
 | `quote_package.py` | Shop quote package in `quote/`: frame weldment STEP, material list, cut sheet, bend programs, jig data. | Every frame part and every tube piece listed exactly once |

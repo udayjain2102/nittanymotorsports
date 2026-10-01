@@ -20,9 +20,9 @@ Every system is a Python script in `mule/` that computes the design and checks i
 | System | Script | What was done | Key result |
 |---|---|---|---|
 | Concept review | — | Critiqued the concept STEP against the rules | 7 problems found (wheelbase too short, missing parts, etc.) |
-| Frame layout and rules | `mule.py` | Parametric frame (143 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 46.2 kg frame, 78 pieces (50.1 kg / 81 before the 1 Oct optimisation) |
+| Frame layout and rules | `mule.py` | Parametric frame (143 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 46.4 kg frame, 78 pieces (50.1 kg / 81 before the 1 Oct optimisation) |
 | Frame rules | `frame_rules.py` | 34 checks for every geometric FSAE frame rule (triangulation, tube size per job, hoops, braces, supports, side impact, shoulder bar, mounts, open wheel) | All pass; each key check proven to fail when its rule is broken |
-| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Main hoop FoS 1.24, front 1.27 (≥ 1.07 under tube tolerances); torsion 1969 N·m/deg FEA |
+| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Roll-over (AF4 support, welded 4130): main 1.08, front 1.02; torsion 2004 N·m/deg FEA |
 | Suspension kinematics | `suspension.py`, `sideview.py`, `roll.py` | Double wishbones front and rear; roll centres, camber, caster, anti-dive/squat, roll gradient, static camber, jacking, handling balance | RC 37/52 mm, caster 4.6°, scrub 38 mm, camber −2.5/−2.0°, LLTD 49.6 % front (mild understeer) |
 | Loads into the frame | `loads.py`, `compliance.py` | Six-link upright statics for 10 load cases; link buckling; compliance steer | Worst frame FoS 1.26; toe change 0.10°/0.18° at 1.5 g |
 | Springs, rockers, shocks | `springs.py`, `rocker.py` | Pushrod + bell-crank layout, 230×65 MTB coil shocks | Motion ratio 0.72/0.75, 3.0/2.6 Hz ride, ~243/215 lb/in springs |
@@ -174,6 +174,17 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
   (+0.9 kg) and every case stays ≥ 1.03 under tolerances. The twist test now passes at ≥ 1000 N·m/deg *measured*
   (real frames measure ~⅔ of FEA). New tests: frame 3D scan, shock check, and a real-to-sim column in the results log.
   `docs/SIM_TO_REAL.md` explains it all.
+- **Roll-over model error found and fixed:** the 6/5/9 kN roll-over cases (from FSAE's Alternative Frame rules AF4)
+  held the car at its suspension mounts, which let the load leak into the suspension posts. With AF4's own support (hoop
+  bottoms fixed; inertia relief, which AF5.6 allows, agrees within 2 %), the old frame reached only FoS 0.48 / 0.43 against
+  the FSAE welded yield. The user chose criterion A: real 4130, weld-limited (85 % of ER70S-2 filler minimums = 340 MPa
+  yield / 410 MPa ultimate, per MIL-HDBK-5 practice), FoS ≥ 1.0 nominal and ≥ 1.0 vs ultimate under tolerances. The new
+  `frame_opt.py` re-sized the frame under every gate: main hoop 1.5″, upper bulkhead supports 1.0″ × 0.095″, others
+  smaller, so the frame is **46.4 kg** (+0.2 kg). This was a real safety gap in the model, not a rules gap: steel tube
+  frames don't need AF4 FEA to be legal.
+- **Clean-sheet attempts so far:** a front box ahead of the leg template went to 51 kg (rejected, branch `clean-sheet-B`).
+  C1 "short" (seat 15°, front hoop 900 mm, rear end −200 mm) is on branch `clean-sheet-short`; it was stalled on the
+  front-ring posts, which the roll-over fix should relieve.
 - **Next:** a clean-sheet frame (the user chose the most open option: wheelbase, seat angle, rear length and engine
   position can all change). Three concepts will cover lowest weight, fewer parts and simplest build, after a deep
   research pass on documented frame geometries.

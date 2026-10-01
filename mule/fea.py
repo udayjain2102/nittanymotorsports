@@ -7,13 +7,19 @@ Load cases:
   1. Torsional stiffness: rear suspension pickups fixed, vertical couple on front pickups.
   2. Main hoop top load: 6 kN lateral + 5 kN rearward + 9 kN down (SES-style; verify vs current SES).
   3. Front hoop top load: same magnitudes.
-Cases 2-3 support the car at its suspension pickups (translations only).
+Cases 2-3 fix translations at the bottom nodes of both roll hoops (AF4.1/AF4.2 boundary condition).
 Run: python fea.py  (runs a cantilever self-check first)
 """
 import numpy as np
 import mule as m
 
 E, G, SY_WELD = 200e3, 77e3, 180.0  # MPa (N/mm^2)
+# Roll-over (AF4.1/AF4.2) criterion, chosen 2026-10-01 (docs/SIM_TO_REAL.md): real 4130, weld-limited. Base 4130 normalized
+# tube is Fty 75 / Ftu 95 ksi (MIL-HDBK-5J). No public welded-4130 table exists, so welds are taken at 85 % of the ER70S-2
+# filler minimums (AWS A5.18: 58 ksi yield, 70 ksi ultimate), the weld-allowable rule MIL-HDBK-5 uses. Nominal: FoS >= 1.0 on
+# SY_ROLL (no yield at a weld); with tube tolerances (robustness.py): FoS >= 1.0 on SU_ROLL (AF4 "no failure").
+# Valid for 4130 with ER70S-2. All other load cases keep the FSAE "any steel" welded values (SY_WELD 180, FoS >= 1.2).
+SY_ROLL, SU_ROLL = 0.85 * 58 * 6.895, 0.85 * 70 * 6.895   # 340, 410 MPa
 
 def props(s):
     od, t = m.SIZES[s]; idd = od - 2 * t
@@ -125,8 +131,8 @@ def report(fr, st, title):
     for j in np.argsort(st)[-4:-1][::-1]:
         print(f"      also {st[j]:.0f} MPa  {fr.el[j][3]} ({fr.el[j][2]})")
     k = int(np.argmax(st)); _, _, s, role = fr.el[k]
-    print(f"{title}: max stress {st[k]:.0f} MPa in '{role}' (size {s}), FoS vs welded Sy = {SY_WELD / st[k]:.2f}")
-    return SY_WELD / st[k]
+    print(f"{title}: max stress {st[k]:.0f} MPa in '{role}' (size {s}), FoS vs welded 4130 yield {SY_ROLL:.0f} = {SY_ROLL / st[k]:.2f}")
+    return SY_ROLL / st[k]
 
 def run(verbose=True):
     """Torsional stiffness + both hoop load cases. Returns {"torsion": N*m/deg, "fos": {case: FoS}, "defl": {case: mm}}."""
@@ -143,8 +149,10 @@ def run(verbose=True):
     dy = np.mean([u[6 * fr.find(p) + 1] for p in front if p[2] > 0]) - np.mean([u[6 * fr.find(p) + 1] for p in front if p[2] < 0])
     out = {"torsion": T / 1e3 / np.degrees(np.arctan(dy / zsep)), "fos": {}, "defl": {}}
     say(f"Torsional stiffness (chassis only, pickup-to-pickup): {out['torsion']:.0f} N*m/deg")
-    # 2/3. hoop top loads, car supported at all suspension pickups (translations)
-    sup = {fr.find(p): range(3) for p in pickups(["r_lsus", "r_sus", "rr_lsus", "rr_sus", "ring_lsus", "ring_sus", "bh_lsus", "bh_sus"])}
+    # 2/3. hoop top loads. Boundary condition per FSAE Alternative Frame rules AF4.1/AF4.2: translations fixed, rotations
+    # free, at the bottom nodes of both sides of the front and main roll hoops. (Until 2026-10-01 the car was held at its
+    # suspension pickups instead, which forced the roll-over load through the pickup posts and the bulkhead.)
+    sup = {fr.find(m.N[n] if s_ > 0 else m.mir(m.N[n])): range(3) for n in ("fh_bot", "mh_bot") for s_ in (1, -1)}
     # FSAE Alternative Frame rules AF4.1/AF4.2 (the SES basis): Fx 6.0, Fy 5.0, Fz -9.0 kN at the hoop top, no failure,
     # deflection <= 25 mm. Which horizontal axis gets 6 kN, and fore/aft sign, are enveloped: worst of four cases.
     for name, top in [("Main hoop", "mh_top"), ("Front hoop", "fh_top")]:
@@ -155,10 +163,10 @@ def run(verbose=True):
             if worst is None or st.max() > worst[1].max(): worst = (fx, st)
             out["defl"][name] = max(out["defl"].get(name, 0.0), d)
         fx, st = worst
-        out["fos"][name] = report(fr, st, f"{name} 6/5/9 kN envelope (worst: {fx / 1e3:+.0f} kN fore/aft)") if verbose else SY_WELD / st.max()
+        out["fos"][name] = report(fr, st, f"{name} 6/5/9 kN envelope (worst: {fx / 1e3:+.0f} kN fore/aft)") if verbose else SY_ROLL / st.max()
         say(f"   max deflection {out['defl'][name]:.1f} mm (limit 25)")
     return out
 
 if __name__ == "__main__":
     selfcheck()
-    assert min(run()["fos"].values()) > 1.0, "frame yields under hoop load case"
+    assert min(run()["fos"].values()) >= 1.0, "frame yields at a weld under the AF4 roll-over load"

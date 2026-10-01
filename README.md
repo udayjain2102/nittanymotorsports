@@ -117,6 +117,7 @@ references/                   other teams' papers (local only, not in git)
 Each design script checks itself when run (`python <file>`); `report.py` runs them all.
 | File | Designs and checks |
 |---|---|
+| `frame_opt.py` | Tube-size optimiser: smallest tubes that pass every gate (strength, rules, compliance, tolerances), written back into `mule.py` |
 | `robustness.py` | Reality-gap check: re-runs every frame load case with tube walls ±10 %, joints ±2 mm and joint flex; tilt with mass errors; brake and lap-time bands |
 | `frame_rules.py` | FSAE frame-structure rules not covered by `mule.py`: tube size per job, side-view triangulation, hoops, braces, bulkhead and brace supports, side impact, shoulder bar, mounts off the main hoop, steering protection, hips in the Major Structure, open-wheel zones |
 | `mule.py` | **The single source of geometry**: frame nodes and tubes, suspension points, CAD export, 27 FSAE rule checks |
