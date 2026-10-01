@@ -278,3 +278,22 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - The robustness test that expected the 1.25″ shoulder bar to fail was removed: the bar now passes because its neighbours
   are stronger.
 - New: `tests/test_frame_opt.py`. CAD, shop data, quote package and docs regenerated.
+
+## 2026-10-01: clean-sheet C2 "node-mounted rear" (branch `clean-sheet-C2`, from `main`)
+- Rear wishbone pickups moved from mid-post nodes (rr_lsus/rr_sus, r_lsus/r_sus) onto the main-hoop-brace support rail
+  nodes: lower on rr_bot/r_bot, upper on rr_top/r_top. The rear lower rail now runs at 150 mm (`Y_RLOW`, kinks up at
+  rr_bot) and the rear top at 328 mm (`Y_REAR_TOP`), so the pickup heights match `main`: rear RC 50 mm, camber gain
+  −0.70°/25 mm, bump steer 0.00° (toe link unchanged).
+- Deleted: rear lower pickup rail, rear pickup cross, mid-post nodes, the rr_top→r_bot half of the rear side diagonal
+  (19° cope; the bay is triangulated by the spool braces and the side-bay diagonal, which now runs r_top→sp_bot).
+- Rear rocker re-tuned for the lower pivot: pushrod arm 60 mm, shock bracket (−80, −30, +40) on r_bot, other tangent;
+  shock arm 135 mm, clearance 72 mm, +11 % progression.
+- `fab.py`: a tube end now copes onto a same-size tube it meets at ≥ 20° before a heavier one it meets shallower (the
+  main-hoop brace was being coped onto the lateral brace-plane diagonal at 12°). `fea.py`/`aero.py` take the rear
+  pickups from `mule.SUSP` instead of a hard-coded list.
+- `frame_opt.py`: rear posts fell to 1.0″ × 0.049″ (they no longer bend), rear-ring bottom cross up to 1.25″ (launch):
+  43.6 kg. Rear toe compliance was then 0.249° (limit 0.25), so Rear susp ring → 1.0″ × 0.095″ and MH brace support
+  upper → 1.0″ × 0.065″ (+0.6 kg) for 0.227°.
+- Result: **44.3 kg, 126 members, 73 pieces, torsion 1946 N·m/deg**; 210/210 checks, 92/92 tests. Against `main`
+  (46.4 kg, 78 pieces, 2004): −2.1 kg, −5 pieces, −3 % torsion. Thinner: robust tilt 60.3° (60.4), rear upright arm
+  FoS 1.6 (1.8); front hoop roll-over and wheel-load tolerance margins unchanged (1.00 / 1.02).

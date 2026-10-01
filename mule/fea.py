@@ -139,7 +139,7 @@ def run(verbose=True):
     say = print if verbose else (lambda *a, **k: None)
     fr = Frame(m.MEMBERS)
     say(f"{len(fr.P)} nodes, {len(fr.el)} elements")
-    rear = [fr.find(p) for p in pickups(["r_lsus", "r_sus", "rr_lsus", "rr_sus"])]
+    rear = [fr.find(p) for p in pickups(m.SUSP["rear"]["inner_low"] + m.SUSP["rear"]["inner_up"])]
     front = pickups(["ring_lsus", "ring_sus", "bh_lsus", "bh_sus"])
     # 1. torsion: 1000 N*m couple split over front pickups, rear pickups fixed
     T = 1.0e6; zsep = np.mean([abs(p[2]) for p in front]) * 2

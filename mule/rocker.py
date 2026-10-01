@@ -12,12 +12,12 @@ import mule as m
 import springs
 
 SHOCK_EYE, SHOCK_STROKE, SAG = 230.0, 65.0, 0.36   # mm; 230x65 MTB coil shock, static at 36 % of stroke (droop 25 / bump 50 mm)
-H_P = {"front": 90.0, "rear": 70.0}                 # pushrod lever arm about the pivot, mm (rear 70 keeps the 1.9x shock arm under 150)
+H_P = {"front": 90.0, "rear": 60.0}                 # pushrod lever arm about the pivot, mm (rear 60 keeps the shock arm under 150 with the C2 pivot at r_top 328)
 A_SHIFT = {"front": 20.0, "rear": 0.0}            # pushrod pickup moved along the pushrod line: front +10 % progressive (0 gives a linear front)
-SHOCK_MOUNT = {"front": "fh_sis", "rear": "r_lsus"}  # shock chassis end. Front: front hoop at SIS height, clear of the T.1.2 template
-BRACKET = {"front": (80.0, 40.0, 0.0), "rear": (-60.0, 0.0, 40.0)}  # shock eye offset from its node (bracket), mm; grid-searched for clearance
+SHOCK_MOUNT = {"front": "fh_sis", "rear": "r_bot"}  # shock chassis end. Front: front hoop at SIS height, clear of the T.1.2 template
+BRACKET = {"front": (80.0, 40.0, 0.0), "rear": (-80.0, -30.0, 40.0)}  # shock eye offset from its node (bracket), mm; grid-searched for clearance
 SHOCK_R = 25.0                                      # shock body/spring radius for clearance
-TANGENT_SIDE = {"front": -1, "rear": 1}            # which of the two mirror-image shock tangents (equal rocker size) to use
+TANGENT_SIDE = {"front": -1, "rear": -1}            # which of the two mirror-image shock tangents (equal rocker size) to use
 
 def unit(v): v = np.asarray(v, float); return v / np.linalg.norm(v)
 
