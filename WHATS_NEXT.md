@@ -18,7 +18,7 @@ Realistic target with the current safety standards: **~44–45 kg** for the fram
 - [x] B1 front box ahead of the leg template: 51 kg, rejected (branch `clean-sheet-B`).
 - [x] C1 "short" (branch `clean-sheet-short`): 46.5 kg, 74 pieces, torsion 2305 (main: 46.4 kg, 78, 2004). Same mass, stiffer, more margin, fewer pieces; helmet clearance thinner (54 vs 65 mm). **No weight win**; keep as the candidate if stiffness/fewer pieces matter more than 0.1 kg.
 - [x] **C2 node-mounted rear** (branch `clean-sheet-C2`): **44.3 kg**, 73 pieces, torsion 1946, every check passing. −2.1 kg against `main`, the best concept so far. Thinner: robust tilt 60.3°, rear upright arm FoS 1.6. Combining it with C1's seat/front hoop is untested.
-- [ ] C3 direct-acting front shocks: no front rockers (needs a new shock model in `rocker.py`/`springs.py`).
+- [x] C3 direct-acting front shocks: **checked, not built.** No frame node is within a shock's length of the upright (nearest usable 384 mm; shocks are 207–223 mm at ride). It would need a front outrigger tower each side (≈1.2 kg), about cancelling the rockers it removes, with a wishbone clash risk. Details in PROJECT_LOG.
 - [x] Winner so far: C2, merged into `main`; CAD, shop data and the quote package regenerated. If C3 or a C1+C2 combination beats it, merge that the same way.
 - [ ] Give `frame_opt.py` a rule that a straight run of one tube keeps one size (it can currently size two collinear parts differently, which can't be coped).
 

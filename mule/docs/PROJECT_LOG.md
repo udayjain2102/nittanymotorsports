@@ -314,3 +314,16 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   `frame_v3_44.3kg`), made by the new `snapshot.py`, which never overwrites. Git tags with the same names.
 - `quote_package.py` now builds the frame weldment STEP from the parts list (`cad/NM26_Assembly_parts.csv`) instead of
   every `NM26-FRM-*.step` in the folder, so stray old files can't get into the shop package. Output unchanged.
+
+## 2026-10-01: clean-sheet C3 "direct-acting front shocks": feasibility check, not built (branch `clean-sheet-C3`, empty)
+- Model: drop the front rocker and let the shock itself be the sixth upright link (upright point (1750, 165, 503) to a
+  frame mount), so `loads.py`'s two-force-link model still holds.
+- No existing frame node works. The nearest with a usable motion ratio is ring_top: 384 mm away (MR 0.58); the 230 × 65
+  shock is 207 mm at ride and the longest common MTB shock (250 × 75) is 223 mm. Every other front node is further or
+  gives a negative/near-zero ratio.
+- Grid search of mount points (x = 1750) for 210/230/250 mm shocks with MR 0.65–1.0 and stroke margin: the most inboard
+  mount is z ≈ 340, y ≈ 315 with a 250 × 75 shock, MR 0.66. That is 120 mm outboard of the frame side (z = 220) and
+  120 mm ahead of the front ring, in the gap under the upper wishbone (≈ 40 mm below its legs, less than the 50 mm
+  spring diameter).
+- So C3 needs a front outrigger tower on each side (≈ 0.6 m of 1.0″ tube per side, ≈ 1.2 kg) carrying the full spring
+  load, which roughly cancels the two rockers it removes, and adds an upper-wishbone clash risk. Not pursued unless asked.
