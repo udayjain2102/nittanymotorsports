@@ -137,7 +137,29 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
 
 **Tooling.** The Python environment with CadQuery had to be rebuilt in the session scratchpad; the old one was gone. The temporary debug branch on GitHub was deleted.
 
-## 8. Still open (needs people, parts or suppliers)
+## 8. 1 October: frame weight
+
+- **Frame optimised on the current layout: 50.1 → 45.3 kg, 81 → 78 pieces.** A new optimiser loads every frame
+  strength case (roll-hoop loads, ten wheel-load cases, launch, 2000 N pedal, 20 g harness crash, wing mounts). It
+  shrinks each tube group to the smallest size its own stresses and the rules allow. It also removed three tubes no rule
+  needs: the front bulkhead X-brace, the front hoop floor cross and the lap-belt floor cross. Twist stiffness is now
+  1886 N·m/deg (target ≥ 1500). All checks pass. The old frame is kept as git tag `frame-v1-50kg`.
+- **Limits found:**
+  - Shortening the rear overhang saves only ~0.2 kg, so it isn't worth it.
+  - Thinner 0.75″ tubes for the rear box save 1 kg but hurt durability, so they weren't applied.
+  - Even the best case of a front-ring redesign reaches only ~44.9 kg.
+  - This layout's floor is 38 kg (every tube at the rule minimum, which fails strength).
+  - Getting to ~33 kg needs a clean-sheet layout.
+- **Shop quote package** in `mule/quote/`: frame STEP (169 parts), material list, cut sheet, bend programs, jig data and
+  a cover note asking for quotes in 4130 and 1020 DOM. Rebuilt by `python quote_package.py`.
+- **Research:** `mule/docs/FRAME_RESEARCH.md` sums up how lighter FSAE frames are built, with sources. Light frames
+  (~32 kg) use about as much tube as ours but nearly all 1″ × 0.049″, because their suspension pickups sit on nodes.
+  The three reference reports (Trinity, JCU, NAU) were re-read for frame lessons.
+- **Next:** a clean-sheet frame (the user chose the most open option: wheelbase, seat angle, rear length and engine
+  position can all change). Three concepts will cover lowest weight, fewer parts and simplest build, after a deep
+  research pass on documented frame geometries.
+
+## 9. Still open (needs people, parts or suppliers)
 
 1. **Brake pressure ratings in writing** from Wilwood, Tilton and the hose supplier: 296 bar needed, 300 bar assumed.
 2. **Measure a CRF450R 2018+:** its mounts, output shaft and size go into `ENGINE` in `powertrain.py` **before ordering tube** (gear ratios and mass are already in, from the service manual).

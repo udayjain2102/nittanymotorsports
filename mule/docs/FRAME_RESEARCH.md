@@ -51,6 +51,18 @@ maximum deviation of the same size (F.5.2.3), so bends rarely save mass outside 
   ([FSAE forum](http://www.fsae.com/forums/archive/index.php/t-12192.html)).
 - FEA torsion numbers are optimistic; measure hub to hub.
 
+## From the three reference reports (re-read 2026-10-01)
+- **Trinity University 2020 final design report** (built and drove its car): the welds of *component mounts* on the
+  frame (suspension mounts) looked fatigue-prone, not the frame joints themselves. The steering rack mounts had to be
+  moved after the build because the steering wheel ended up above the front hoop (F.5.7.4). *For the redesign: put tabs
+  at nodes, and check the wheel height against the front hoop in the layout, not after welding.*
+- **JCU 2020 rear suspension paper:** mild steel is easier to weld; 4130 gets no smaller tubes under the rules and
+  weakens when welded; small quantities may need shipping. Same conclusion as the steel note above.
+- **NAU 2025 suspension report:** pickup points are a joint decision of the frame and suspension teams; its roll
+  stiffness method (K = 2·k·MR²·t²/2 per axle) applied to NM26 gives ~476 N·m/deg total (242 front, 234 rear,
+  `roll.py`). The frame (1886 N·m/deg now) is ~4× that; a lighter frame should stay well above ~3×, so **≥ 1500 N·m/deg
+  stays the target**.
+
 ## Checked and rejected
 - "The 20 g harness case is self-imposed and too harsh": ours is 80 kg × 20 g = 15.7 kN total, below the 30 kN the rules
   require across the two shoulder belts for monocoques (F.7.9.1). It stays.
