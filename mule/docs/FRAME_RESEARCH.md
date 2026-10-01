@@ -6,7 +6,7 @@ against the 2026 FSAE rulebook. Forum figures are self-reported; treat them as i
 ## The gap
 | Frame | Mass | Tube length | kg per m | Source |
 |---|---|---|---|---|
-| NM26 now | 45.3 kg | ~44 m | ~1.0 | `mule.py` |
+| NM26 now | 46.2 kg | ~44 m | ~1.05 | `mule.py` |
 | NM26 before 1 Oct | 50.1 kg | 44.8 m | 1.12 | tag `frame-v1-50kg` |
 | Univ. of Delaware 2017 (4130) | ~31.8 kg | ~41 m | ~0.78 | [UDel report](https://udel.edu/~pgeneva/downloads/fsae/2017_FSAE_chassis.pdf) |
 | Wollongong (4130) | 28–34 kg | — | — | [FSAE forum](http://www.fsae.com/forums/archive/index.php/t-11777.html) |
@@ -60,8 +60,8 @@ maximum deviation of the same size (F.5.2.3), so bends rarely save mass outside 
   weakens when welded; small quantities may need shipping. Same conclusion as the steel note above.
 - **NAU 2025 suspension report:** pickup points are a joint decision of the frame and suspension teams; its roll
   stiffness method (K = 2·k·MR²·t²/2 per axle) applied to NM26 gives ~476 N·m/deg total (242 front, 234 rear,
-  `roll.py`). The frame (1886 N·m/deg now) is ~4× that; a lighter frame should stay well above ~3×, so **≥ 1500 N·m/deg
-  stays the target**.
+  `roll.py`). The frame (1969 N·m/deg FEA now) is ~4× that. Real frames measure ~⅔ of FEA, so the target is **≥ 1500 FEA and
+  ≥ 1000 measured** (2× roll stiffness), see `SIM_TO_REAL.md`.
 
 ## Checked and rejected
 - "The 20 g harness case is self-imposed and too harsh": ours is 80 kg × 20 g = 15.7 kN total, below the 30 kN the rules

@@ -229,3 +229,29 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - Current results updated everywhere: PDS R1/R3/R4/R5/R6, BUILD_PLAN tube schedule and engine data, budget wording (the
   kit engine is ruled out), and the module and file tables (`frame_rules.py`, `quote_package.py`, RULES_MATRIX,
   FRAME_RESEARCH, `quote/`).
+
+## 2026-10-01 - reality gap: robustness.py, SIM_TO_REAL.md, frame margin restored (45.3 -> 46.2 kg)
+- **Ask:** apply sim-to-real thinking (NVIDIA Isaac Lab course: approximation / model / unmodelled errors; domain
+  randomisation, real-to-sim, regularisation) to every simulation.
+- **`robustness.py` (domain randomisation, kept to measured ranges):**
+  - frame: 16 samples with tube walls ±10 %, joints ±2 mm and per-tube stiffness 60–100 % (joint flex);
+  - each tube's random draw is fixed by a hash of its position, so adding a tube elsewhere doesn't reshuffle the others;
+  - joints are moved after the FEA merges them, so the wing struts stay attached. An earlier version broke this and gave a fake wing FoS of 0.03;
+  - gates: every case FoS ≥ 1.0 in every sample, and worst torsion ≥ 2 × roll stiffness (953);
+  - joint flex is counted once: the earlier version also applied ⅔ on top, which double-counted it;
+  - tilt checked with ±10 % mass errors, independent (5th percentile 60.7°) and correlated (60.3°);
+  - bands reported for brakes (504–648 N lock force at pad friction 0.45–0.35) and lap times (grip ±0.1).
+- **Finding:** the optimised frame failed the 20 g harness case under tolerances (worst 0.96).
+  - The lower side impact at the lap tab, then the shoulder bar, then the diagonal side impact limited it.
+  - Restoring the lap-belt floor cross alone didn't fix it.
+  - The lightest passing fix is shoulder bar 1.5″ and diagonal side impact 1.0″ × 0.095″, with no lap cross. That gives 46.2 kg and a worst harness FoS of 1.08.
+  - `tests/test_robustness.py` confirms the old 1.25″ bar fails.
+- **Docs:**
+  - `docs/SIM_TO_REAL.md`: per-model validity, gap type, margin, measurement, and the real-to-sim loop.
+  - TEST_PLAN:
+    - twist pass is now ≥ 1000 measured (expect 1300–1500), instead of ≥ 1500;
+    - mass pass is now 46–54 kg;
+    - new T1.4 frame 3D scan and T2.8 shock check;
+    - the results log has a "model input updated" column.
+  - PDS, BUILD_PLAN, budget, READMEs and WORKDONE carry the new numbers.
+- 210 checks, 91 tests.

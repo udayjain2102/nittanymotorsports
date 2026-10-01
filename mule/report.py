@@ -6,14 +6,14 @@ import datetime
 import pathlib
 import pytest
 import mule, fea, loads, suspension, rocker, springs, steering, uprights, powertrain, brakes, fab
-import cockpit, sideview, mass, harness, shutdown, roll, compliance, lapsim, aero, frame_rules
+import cockpit, sideview, mass, harness, shutdown, roll, compliance, lapsim, aero, frame_rules, robustness
 
 HERE = pathlib.Path(__file__).parent
 MODULES = [(mule, "FSAE rules (V, F, T)"), (frame_rules, "FSAE frame structure rules (F.1.17, F.3.2.1, F.5, F.6, T.1.3.1, V.1.1)"), (suspension, "Suspension kinematics"), (rocker, "Rockers and shocks"),
            (steering, "Steering"), (sideview, "Side view, caster, pitch, steering ratio"), (roll, "Roll, static camber, jacking"),
            (compliance, "Compliance steer and camber (pickup stiffness)"), (uprights, "Uprights and hubs"),
            (powertrain, "Powertrain"), (brakes, "Brakes and pedal box"), (cockpit, "Cockpit templates (T.1.1, T.1.2)"),
-           (harness, "Harness (T.2)"), (shutdown, "Shutdown circuit and wiring (IC.9, T.9)"), (aero, "Rear wing and DRS (T.7, IN.6.2)"), (mass, "Mass and CG budget"), (lapsim, "Event simulation (acceleration, skidpad)")]
+           (harness, "Harness (T.2)"), (shutdown, "Shutdown circuit and wiring (IC.9, T.9)"), (aero, "Rear wing and DRS (T.7, IN.6.2)"), (mass, "Mass and CG budget"), (lapsim, "Event simulation (acceleration, skidpad)"), (robustness, "Reality-gap robustness (tube tolerances, joint flex, mass error; docs/SIM_TO_REAL.md)")]
 
 class Collect:
     def __init__(self): self.rows = []
