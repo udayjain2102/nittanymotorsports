@@ -27,8 +27,8 @@ TARGETS = {"accel": 5.0, "skidpad": 5.5}      # s (ours: mule targets)
 
 def wing(state, on=True):
     """(downforce area CL*S, drag area CD*S) in m^2 of the rear wing, from aero.py; zero with on=False."""
-    if not on: return 0.0, 0.0
     import aero
+    if not (on and aero.FITTED): return 0.0, 0.0
     c = aero.COEF[state]; return c["cl"] * aero.area(), c["cd"] * aero.area()
 
 def torque(rpm):

@@ -71,6 +71,42 @@ def degree_primary():
             for p in (a, b): deg[key(p)] = deg.get(key(p), 0) + 1
     return deg
 
+def side_view_triangulated(node, hoop_cat, min_len=50.0):
+    """F.5.6.3a: a structural non-hoop tube ends at the node and shows in side view (its X-Y projection is a real tube,
+    not a cross member seen end-on)."""
+    for a, b, s, r in m.MEMBERS:
+        if cat(r) == hoop_cat or cat(r) not in STRUCTURAL: continue
+        for p, q in ((a, b), (b, a)):
+            if key(p) == key(node) and math.hypot(q[0] - p[0], q[1] - p[1]) >= min_len:
+                return True
+    return False
+
+def bend_supports():
+    """[(role, node, problem or "")] for the farthest-deviation point of every bent primary member (roll hoops excluded)."""
+    out = []
+    for c in sorted(PRIMARY - {"front_hoop", "main_hoop"}):
+        ms = [mb for mb in members(c) if mb[0][2] * mb[1][2] > 0]   # one side only: cross tubes are separate members
+        for path in chain(ms):
+            if len(path) < 3: continue
+            e0, e1 = path[0], path[-1]; line = (e1 - e0) / np.linalg.norm(e1 - e0)
+            dev = [np.linalg.norm(np.cross(p - e0, line)) for p in path]
+            i = int(np.argmax(dev))
+            if dev[i] < 2.0: continue                                   # in a line (within 2 mm)
+            node = path[i]; u, v = node - path[i - 1], path[i + 1] - node
+            n = np.cross(u, v); n /= np.linalg.norm(n)
+            own = {s for a, b, s, r in ms if key(node) in (key(a), key(b))}
+            exempt = c in ("side_upper", "shoulder_bar")
+            best = "no support tube"
+            for a, b, s, r in m.MEMBERS:
+                if cat(r) == c or cat(r) not in STRUCTURAL or key(node) not in (key(a), key(b)): continue
+                d = np.subtract(b, a); d = d / np.linalg.norm(d)
+                ang = math.degrees(math.asin(min(1.0, abs(float(np.dot(d, n))))))
+                same = s in own
+                if exempt or (same and ang <= 30): best = ""; break
+                best = f"nearest support {r} ({s}) at {ang:.0f} deg from the plane" + ("" if same else f", size {s} not {'/'.join(sorted(own))}")
+            out.append((ms[0][3], tuple(node), best))
+    return out
+
 # ---------- triangulation (F.1.17): each side, in side view, must be a truss that cannot fold ----------
 STRUCTURAL = PRIMARY | {"structural", "harness"}   # F.1.17: triangles may use any Structural (Size C or larger) tube
 
@@ -183,31 +219,22 @@ def checks():
     for c, top in (("main_hoop", "mh_brace"), ("front_hoop", "fh_brace")):
         ys = [max(a[1], b[1]) for a, b, *_ in members(top)]
         y_brace[c] = min(ys) if ys else 1e9
-        bends_ok = True
+        bends_ok = True; bad_bends = []
         for path in chain(members(c)):
             for i in range(1, len(path) - 1):
                 u, v = path[i] - path[i - 1], path[i + 1] - path[i]
                 kink = math.degrees(math.acos(np.clip(np.dot(u, v) / np.linalg.norm(u) / np.linalg.norm(v), -1, 1)))
-                if kink > 1 and path[i][1] < y_brace[c] - TOL and deg.get(key(path[i]), 0) < 3:
-                    bends_ok = False
-        ok(f"F.5.6.3 {c.replace('_', ' ')} bends below its braces are at triangulated nodes", bends_ok)
+                if kink > 1 and path[i][1] < y_brace[c] - TOL and not side_view_triangulated(path[i], c):
+                    bends_ok = False; bad_bends.append(f"y {path[i][1]:.0f}")
+        ok(f"F.5.6.3 {c.replace('_', ' ')} bends below its braces are at nodes triangulated in side view", bends_ok,
+           ", ".join(bad_bends) or "all triangulated")
 
-    # F.5.2.3 a primary member made of tubes not in a line (other than the roll hoops) needs, at each kink, another
-    # structural tube at least as large ending at that node
-    size_rank = lambda sz: m.tube_props(sz)[0]
-    unsupported = []
-    for c in PRIMARY - {"front_hoop", "main_hoop"}:
-        ms = [mb for mb in members(c) if mb[0][2] * mb[1][2] > 0]   # one side only: cross tubes are separate members
-        for path in chain(ms):
-            for i in range(1, len(path) - 1):
-                u, v = path[i] - path[i - 1], path[i + 1] - path[i]
-                if np.linalg.norm(np.cross(u, v)) / (np.linalg.norm(u) * np.linalg.norm(v)) < 0.02: continue
-                own = max(size_rank(s) for a, b, s, r in ms if key(path[i]) in (key(a), key(b)))
-                if not any(cat(r) != c and cat(r) in STRUCTURAL and key(path[i]) in (key(a), key(b)) and size_rank(s) >= own
-                           for a, b, s, r in m.MEMBERS):
-                    unsupported.append(c)
-    ok("F.5.2.3 kinked multi-tube primary members supported at each kink by a tube at least as large", not unsupported,
-       ", ".join(sorted(set(unsupported))) or "all supported")
+    # F.5.2.3 a primary member made of tubes not in a line (other than the roll hoops) needs a support tube at the point
+    # of greatest deviation from the line joining its ends (a), ending at a chassis node (b), and (c, except the upper side
+    # impact member and the shoulder bar) of the same diameter and thickness, within 30 deg of the bent member's plane.
+    unsupported = [f"{r} at ({x:.0f}, {y:.0f}, {z:.0f}): {why}" for r, (x, y, z), why in bend_supports() if why]
+    ok("F.5.2.3 every bent primary member has a same-size support tube within 30 deg of its plane at its farthest point",
+       not unsupported, "; ".join(unsupported) or "all supported")
 
     low = min(min(a[1], b[1]) for a, b, *_ in members("side_lower"))
     y_sis_top = max(max(a[1], b[1]) for a, b, *_ in members("side_upper")) + 12.7

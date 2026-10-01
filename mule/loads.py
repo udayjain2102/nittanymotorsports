@@ -10,7 +10,7 @@ import numpy as np
 import mule as m
 import fea
 
-MASS, CG_H, FRONT_SPLIT, G = 300.0, 345.0, 0.45, 9.81   # kg (car+driver), mm, -, m/s^2; mass.py budget with the rear wing: 288 kg, 341 mm, 47 %
+MASS, CG_H, FRONT_SPLIT, G = 300.0, 345.0, 0.48, 9.81   # kg (car+driver), mm, -, m/s^2; mass.py budget (no wing, missing items added 1 Oct): 294 kg, 324 mm, 48.5 %
 MU = 1.5                                                  # tyre grip for design cases
 A_ARM = m.SUSP_TUBE
 

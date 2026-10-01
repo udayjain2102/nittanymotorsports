@@ -83,6 +83,9 @@ N = {
 }
 def _on(a, b, x):  # point on straight member a-b at station x (keeps rails straight)
     t = (x - N[a][0]) / (N[b][0] - N[a][0]); return tuple(p + t * (q - p) for p, q in zip(N[a], N[b]))
+# F.5.2.3 (audit 1 Oct 2026): the upper FBH support bh_top -> ring_top -> fh_sis is one straight tube line, so ring_top
+# sits ON it (was (X_RING, 395, 220): an 8.5 deg kink with no same-size in-plane support, the ring-top cross is barred by T.1.2)
+N["ring_top"] = tuple(round(c, 1) for c in _on("bh_top", "fh_sis", X_RING))
 N["rr_bot"], N["rr_top"] = _on("mh_bot", "r_bot", X_RR), _on("mh_sis", "r_top", X_RR)
 Y_RLOW = 150.0   # rear lower rail height = rear lower pickup height (C2: pickups on rail nodes); rail kinks up at rr_bot
 N["rr_bot"] = (X_RR, Y_RLOW, N["rr_bot"][2]); N["r_bot"] = (X_REAR, Y_RLOW, Z_REAR)
@@ -173,7 +176,8 @@ SIDE = [
     ("mh_bot", "rr_bot", "A", "MH brace support lower"), ("rr_bot", "sp_bot", "C", "MH brace support lower"), ("sp_bot", "r_bot", "C", "MH brace support lower"),
     ("rr_bot", "rr_top", "A", "Rear susp ring"),
     ("r_bot", "r_top", "C", "Rear bulkhead"),
-    ("mh_bot", "rr_top", "C", "Rear side diagonal"),   # C2: rr_top-r_bot half removed (19 deg cope; spool braces + side bay diagonal triangulate the rear)
+    ("mh_bot", "rr_top", "C", "Rear side diagonal"),
+    ("mh_bar", "rr_top", "C", "Main hoop bend support (F.5.6.3)"),   # side-view tube at the hoop bend below the braces   # C2: rr_top-r_bot half removed (19 deg cope; spool braces + side bay diagonal triangulate the rear)
     ("sp_bot", "sp_c", "C", "Spool carrier post"), ("sp_c", "sp_top", "C", "Spool carrier post"),
     ("sp_c", "rr_top", "C", "Spool carrier brace (chain pull)"), ("sp_c", "rr_bot", "C", "Spool carrier brace (chain pull)"),
     ("r_top", "sp_bot", "C", "Rear side bay diagonal (bulkhead pickups)"),
@@ -182,7 +186,7 @@ SIDE = [
 ]
 CROSS = [
     ("bh_bot", "B", "Front bulkhead"), ("bh_top", "B", "Front bulkhead"),
-    ("ring_bot", "C", "Front susp ring"),   # no ring_top cross: T.1.2 template passes there
+    ("ring_bot", "B", "Front susp ring"),   # B = lower FBH support size: its F.5.2.3 support at the ring_bot kink. No ring_top cross: T.1.2
     ("fh_top", "H", "Front hoop"),   # no front hoop base cross: removed in the 2026-10-01 optimisation (not rule-required, lightly loaded)
     ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
     ("sb", "H", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
@@ -423,6 +427,8 @@ def build():
         x, y, z = SD.LOC[nm]
         add(box(x - w / 2, x + w / 2, y - h / 2, y + h / 2, z - d / 2, z + d / 2), name=nm.replace(" ", "_"), key=("electrical"))
     import aero as AE   # local: aero imports mule
+    if not AE.FITTED:   # wing not fitted on the base mule: the CAD shows the car as built
+        return asm
     for st, label in (("closed", "DRS_flap_closed"),):
         sec = AE.section(st)
         for el, (le, chord, ang) in (("main_plane", (sec["le"], AE.MAIN["chord"], AE.MAIN["angle"])),
