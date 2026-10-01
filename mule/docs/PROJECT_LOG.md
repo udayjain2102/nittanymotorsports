@@ -348,3 +348,19 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   code as the frame checks (torsion, front 3 g bump, rear corner+brake, AF4 main-hoop roll-over, 20 g harness),
   `setup_check.png`. The script asserts no preserve body overlaps an obstacle (GD refuses those).
 - GD grows a solid, not a tube frame: the result shows load paths only; it is not buildable or rules-legal.
+
+## 2026-10-01 (late): doc audit, stale numbers fixed
+- Four read-only audits (frame/FEA, vehicle dynamics/brakes/powertrain, docs/project management, tests/CI) found the
+  hand-copied numbers had drifted from the code. Fixed, with `mass.py`/`REPORT.md` as the source: car 288 kg, 47.0 %
+  front, CG 341 mm, tilt 60.8° (60.3° if estimates err together; margin 0.3–0.8°) replaced 296 kg / 340 mm / 60.9° /
+  "0.4–0.9°" in README, WORKDONE, WHATS_NEXT, mule/README, PDS, BUILD_PLAN, TEST_PLAN and the `loads.py` comment.
+  `mule.py` has 28 rule checks, not 27. Frame T1.1 mass window 44–52 kg (was 46–54, old frame). CV plunge 4.5 mm
+  (was 4.8). Fusion current model is `NM26_Assembly_v5`. CLEAN_SHEET and WHATS_NEXT now say C2 is merged.
+- Budget: Phase 1 recomputed with the 1 Oct tube price ($1,000–1,700 + freight): $1,350–2,300, not $1,100–1,600. The
+  list-price total is $7,700–11,600 (was $7,400–10,900); the stale kit-engine total was dropped. JUGAAD_PLAN's
+  $6,200–10,700 / $4,000–6,000 route is unchanged.
+- Audit findings that are NOT fixed here (need engineering work or people, see WHATS_NEXT): roll-over allowable
+  340/410 MPa is self-chosen (FoS 1.02–1.09 rests on it); brake HYD_LIMIT 300 bar set 4 bar above the result and the
+  hydraulic COMPLIANCE value looks 20× low; lapsim uses an unrestricted 48 N·m curve (no 20 mm restrictor); tilt
+  model ignores tyre/spring compliance and several mass items (extinguisher, IA, intake, scatter shield, fluids);
+  no fatigue check on hubs/uprights; only frame_rules has mutation tests, so most `checks()` could be weakened unnoticed.

@@ -1,6 +1,6 @@
 # Clean-sheet frame: design spec
 
-Goal: a frame of roughly 34–39 kg (today 46.2 kg) that keeps every FSAE 2026 rule and every margin. The user chose
+Goal: a frame of roughly 34–39 kg (46.2 kg when this was written; `main` is now the C2 frame at 44.3 kg) that keeps every FSAE 2026 rule and every margin. The user chose
 the most open option (2026-10-01): wheelbase, seat angle, rear length and engine position may all change.
 
 ## Hard gates (never traded)
@@ -29,5 +29,5 @@ A concept counts only if `python report.py` passes **everything**:
 4. **Re-size** with the optimiser (all gates), then piece-count reduction (merge straight runs, bend where a node exists).
 5. Compare with today's frame on mass, pieces, margins; the winner replaces `main` and the quote package.
 
-Work happens on git branch `clean-sheet-B` (A and C branch from it). `main` and the shop quote stay at the 46.2 kg frame
-until a concept is chosen. Engine mounts stay on the placeholder envelope until a CRF450R is measured.
+Work happens on git branch `clean-sheet-B` (A and C branch from it). `main` and the shop quote stayed at the 46.2 kg frame
+until C2 was chosen and merged (1 Oct 2026, 44.3 kg). Engine mounts stay on the placeholder envelope until a CRF450R is measured.

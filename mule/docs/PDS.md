@@ -6,7 +6,7 @@ This page lists the car's requirements. Each one has a number and a way to verif
 
 **Constraints:**
 - the full 2026 FSAE rules (hard constraints, never traded);
-- funding in steps of about $2,500, about $7.4–10.9k to a driving car (`BUDGET_PLAN.md`);
+- funding in steps of about $2,500, about $7.7–11.6k to a driving car at list prices (`BUDGET_PLAN.md`);
 - a 4130 (or 1020 DOM) tube frame, built in-house or quoted by a shop (TIG);
 - a Honda CRF450R 2018+ engine (chosen 2026-09-30);
 - 13″ wheels.
@@ -17,8 +17,8 @@ This page lists the car's requirements. Each one has a number and a way to verif
 | R2 | Chassis torsional stiffness | FEA ≥ 1500 N·m/deg; **measured ≥ 1000** (2 × roll stiffness; real frames measure ~⅔ of FEA, `SIM_TO_REAL.md`) | 1946 FEA; 1439 worst tolerance sample (`fea.py`, `robustness.py`) | T1.2 twist test |
 | R3 | Frame under wheel, launch and pedal loads | FoS ≥ 1.2 | 1.23 / 1.21 / 1.32 nominal; ≥ 1.02 under tube tolerances (`loads.py`, `powertrain.py`, `brakes.py`, `robustness.py`) | T5.2, T7.2 |
 | R4 | Harness mounts survive a crash | 20 g, FoS ≥ 1 vs welded UTS; tabs ≥ 15 kN | 1.19 nominal, 1.07 under tube tolerances; 31.7 kN (`harness.py`, `robustness.py`) | T1.3, T4.3c |
-| R5 | Rules geometry (hoops, braces, triangulation, tube size per job, bulkhead and brace supports, side impact, shoulder bar, helmet, IA, belts, templates, open wheel) | every frame-relevant rule passes; none traded (`RULES_MATRIX.md`) | 27 + 34 + 2 + 8 checks (`mule.py`, `frame_rules.py`, `cockpit.py`, `harness.py`) | T4.3, T4.3b |
-| R6 | Mass and CG | ≤ 300 kg with driver; CG ≤ 345 mm; tilt ≥ 60° | 290 kg, 339 mm, 60.9° with the wing; tilt 60.4° if mass estimates err together (`mass.py`, `robustness.py`) | T4.1, T4.2 |
+| R5 | Rules geometry (hoops, braces, triangulation, tube size per job, bulkhead and brace supports, side impact, shoulder bar, helmet, IA, belts, templates, open wheel) | every frame-relevant rule passes; none traded (`RULES_MATRIX.md`) | 28 + 34 + 2 + 8 checks (`mule.py`, `frame_rules.py`, `cockpit.py`, `harness.py`) | T4.3, T4.3b |
+| R6 | Mass and CG | ≤ 300 kg with driver; CG ≤ 345 mm; tilt ≥ 60° | 288 kg, 341 mm, 60.8° with the wing; tilt 60.3° if mass estimates err together (`mass.py`, `robustness.py`) | T4.1, T4.2 |
 | R7 | Ride | 3.0 / 2.6 Hz; +50 / −25 mm travel (rule: 50 mm total); motion ratio 0.7–1.0; springs in the MTB coil range | 0.72 / 0.75; 243 / 215 lb/in (`springs.py`, `rocker.py`) | T2.4, T2.5, T5.3 |
 | R8 | Kinematics | RC 15–60 / 25–80 mm; camber gain −0.3 to −1.2 °/25 mm; bump steer ≤ 0.25° front and rear; front scrub ≤ 40 mm; front share of the lateral load transfer 0–12 points above the front weight share; outside tyre −2.0 to −0.3° to the ground at 1.5 g; compliance toe and camber ≤ 0.25° | 37/52 mm, −0.72/−0.75, 0.11° / 0.00°; 38 mm; 49.6 % vs 45 %; −0.9/−0.4°; 0.10 in / 0.18 out toe (`suspension.py`, `steering.py`, `roll.py`, `compliance.py`) | T2.2, T2.3, T2.7 |
 | R9 | Steering | 23° inner lock; Ackermann 0–120 %; ratio 4–7:1; lock-to-lock ≤ 180°; rim force ≤ 120 N at 1.5 g; caster 3–7° | 50 %, 4.1:1, 178°, 95 N, 4.6° (`steering.py`, `sideview.py`) | T2.6 |
@@ -99,8 +99,8 @@ A point mass has no driver, no tyre warm-up and no transients, so real times wil
 
 | Quantity | NM26 mule (code) | Team A | Team B | Team C |
 |---|---|---|---|---|
-| Mass with driver | 296 kg | | | |
-| CG height | 340 mm | | | |
+| Mass with driver | 288 kg | | | |
+| CG height | 341 mm | | | |
 | Wheelbase / track F/R | 1750 / 1220 / 1220 mm | | | |
 | Frame torsion | 1946 N·m/deg (FEA) | | | |
 | Ride frequency F/R | 3.0 / 2.6 Hz | | | |
