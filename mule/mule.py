@@ -167,8 +167,8 @@ SIDE = [
     # main hoop braces (B) rearward + supports (C)
     ("mh_top", "r_top", "B", "Main hoop brace"),
     ("mh_sis", "rr_top", "C", "MH brace support upper"), ("rr_top", "sp_top", "C", "MH brace support upper"), ("sp_top", "r_top", "C", "MH brace support upper"),
-    ("mh_bot", "rr_bot", "A", "MH brace support lower"), ("rr_bot", "sp_bot", "C", "MH brace support lower"), ("sp_bot", "r_bot", "C", "MH brace support lower"),
-    ("rr_bot", "rr_lsus", "A", "Rear susp ring"), ("rr_lsus", "rr_sus", "A", "Rear susp ring"), ("rr_sus", "rr_top", "A", "Rear susp ring"),
+    ("mh_bot", "rr_bot", "H", "MH brace support lower"), ("rr_bot", "sp_bot", "H", "MH brace support lower"), ("sp_bot", "r_bot", "H", "MH brace support lower"),
+    ("rr_bot", "rr_lsus", "H", "Rear susp ring"), ("rr_lsus", "rr_sus", "H", "Rear susp ring"), ("rr_sus", "rr_top", "H", "Rear susp ring"),
     ("r_bot", "r_lsus", "H", "Rear bulkhead"), ("r_lsus", "r_sus", "H", "Rear bulkhead"), ("r_sus", "r_top", "H", "Rear bulkhead"),
     ("mh_bot", "rr_top", "C", "Rear side diagonal"), ("rr_top", "r_bot", "C", "Rear side diagonal"),
     ("r_lsus", "sp_mid", "C", "Rear lower pickup rail (rocker + A-arm loads)"), ("sp_mid", "rr_lsus", "C", "Rear lower pickup rail (rocker + A-arm loads)"),
@@ -180,7 +180,7 @@ SIDE = [
 ]
 CROSS = [
     ("bh_bot", "B", "Front bulkhead"), ("bh_top", "B", "Front bulkhead"),
-    ("ring_bot", "C", "Front susp ring"),   # no ring_top cross: T.1.2 template passes there
+    ("ring_bot", "B", "Front susp ring"),   # no ring_top cross: T.1.2 template passes there
     ("fh_top", "H", "Front hoop"),   # no front hoop base cross: removed in the 2026-10-01 optimisation (not rule-required, lightly loaded)
     ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
     ("sb", "H", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
