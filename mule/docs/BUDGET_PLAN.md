@@ -17,7 +17,7 @@ Where a price was looked up, the source is listed at the bottom.
 | **Total to a driving car** | | **about $6,100–8,800** with the cheap engine; **about $7,400–10,900** with a used 450 (now recommended: the kit engine does not fit the bay, see Phase 3) | |
 | 5. Upgrades (any order, later) | 450 engine, Kaz rack, rear wing + DRS, new tyres, data logging | $300–3,000 each | T5.5, T7 |
 
-The old one-shot estimate was $9–15k. The savings come from: a kit engine first, used wheels, tyres and shocks,
+The old one-shot estimate was $9–15k. The savings come from: used wheels, tyres and shocks,
 fabricated steel uprights instead of machined aluminium, a cheaper rack first, and the wing deferred.
 
 ## Phase 0: plan and mock-up ($100–200)
@@ -55,7 +55,7 @@ to show the next approver.
 The fabricated uprights must be re-checked in `uprights.py` (swap the material and section) before cutting.
 
 ## Phase 3: engine and drive ($1,300–1,900 cheap / $2,600–4,000 used 450)
-**Option A, cheap engine first (recommended if the goal is to drive this season):** a 13 hp, 420 cc
+**Option A, cheap kit engine (ruled out 2026-09-30: it does not fit the engine bay, see below; kept for the record):** a 13 hp, 420 cc
 single-cylinder kit engine (about $380 new) with a go-kart CVT rated for 13 hp or more. The common Comet 30-series kits are rated for only 3–8 hp, so check the rating. Air-cooled,
 pull or electric start, no gearbox, no radiator, no ECU. Point-mass estimate in our car: **75 m in about 6.9 s
 (450 single: 4.5 s), autocross about 12 % slower**, because autocross is mostly grip-limited. Good for learning to drive

@@ -220,3 +220,12 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
 - The current frame passes all checks. `report.py` runs them: 200 checks, 88 tests.
 - `docs/RULES_MATRIX.md` lists every rule: 83 automated, 94 build/inspection, 45 N/A (with the reason), 15 definitions.
   The BUILD_PLAN §3 "FSAE-lite" skips are now required items: SES/IAD paperwork, the 20 mm restrictor and the noise limit.
+
+## 2026-10-01 - documentation sweep
+- Every doc now follows two decisions: the full FSAE 2026 rules are hard constraints, and the engine is the CRF450R.
+- "FSAE-lite" wording removed from all titles, plus the README, the module README and the PDS goal. The PDS constraints
+  now name the full rules, the phased budget and the CRF450R. Its old "accepted non-requirements" list is now open items:
+  the turning circle, noise, the restrictor and the competition paperwork (SES, IAD, cost report).
+- Current results updated everywhere: PDS R1/R3/R4/R5/R6, BUILD_PLAN tube schedule and engine data, budget wording (the
+  kit engine is ruled out), and the module and file tables (`frame_rules.py`, `quote_package.py`, RULES_MATRIX,
+  FRAME_RESEARCH, `quote/`).

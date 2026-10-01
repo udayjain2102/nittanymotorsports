@@ -1,6 +1,6 @@
-# Work done: NM26 FSAE-lite mule
+# Work done: NM26 mule
 
-A record of everything Claude did on this project, from 27 to 30 September 2026 (30 September's work is summarised in section 7). The step-by-step engineering log, with
+A record of everything Claude did on this project, from 27 September to 1 October 2026 (30 September is section 7, 1 October section 8). The step-by-step engineering log, with
 every method, result and error, is [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md). This page is the overview.
 
 **Starting point:** the concept CAD (`NM26_FSAE_Concept.step`) and the 2026 FSAE rules PDF.
@@ -21,6 +21,7 @@ Every system is a Python script in `mule/` that computes the design and checks i
 |---|---|---|---|
 | Concept review | — | Critiqued the concept STEP against the rules | 7 problems found (wheelbase too short, missing parts, etc.) |
 | Frame layout and rules | `mule.py` | Parametric frame (143 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 45.3 kg frame, 78 pieces (50.1 kg / 81 before the 1 Oct optimisation) |
+| Frame rules | `frame_rules.py` | 34 checks for every geometric FSAE frame rule (triangulation, tube size per job, hoops, braces, supports, side impact, shoulder bar, mounts, open wheel) | All pass; each key check proven to fail when its rule is broken |
 | Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Main hoop FoS 1.22, front 1.27; torsion 1886 N·m/deg |
 | Suspension kinematics | `suspension.py`, `sideview.py`, `roll.py` | Double wishbones front and rear; roll centres, camber, caster, anti-dive/squat, roll gradient, static camber, jacking, handling balance | RC 37/52 mm, caster 4.6°, scrub 38 mm, camber −2.5/−2.0°, LLTD 49.6 % front (mild understeer) |
 | Loads into the frame | `loads.py`, `compliance.py` | Six-link upright statics for 10 load cases; link buckling; compliance steer | Worst frame FoS 1.26; toe change 0.10°/0.18° at 1.5 g |
@@ -80,15 +81,17 @@ These would have been expensive to discover after welding:
 ## 5. Documents
 
 In `mule/docs/`:
-- `PDS.md`: 15 requirements with targets, results and how each is verified; design decisions; Pugh matrices; benchmark.
+- `PDS.md`: 15 requirements (goal: the full FSAE 2026 rules, none traded) with targets, results and how each is verified; design decisions; Pugh matrices; benchmark.
 - `BUILD_PLAN.md`: design narrative per system, FSAE rules checklist, bill of materials, build order, buck plan.
 - `TEST_PLAN.md`: 7 stages of physical tests with predicted values and pass criteria, based on the Trinity test-manual format.
 - `BUDGET_PLAN.md`: five funding steps of about $2,500 or less, about $7.4–10.9k to a driving car with a used 450, with an upgrade path and price sources.
 - `PARTS_LIST.md`: the parts the design uses, engine options with prices, and which script sizes each part.
+- `RULES_MATRIX.md`: every frame-relevant FSAE 2026 rule with its status (automated check, build/inspection item, or N/A and why).
+- `FRAME_RESEARCH.md`: how lighter FSAE steel frames are built, with sources, applied to NM26.
 - `PROJECT_LOG.md`: full chronological log.
 - `REPORT.md`: generated list of every check and test.
 
-Fabrication data in `mule/fab/`: cut sheet with cope angles, hoop bend programs, jig node coordinates, jig plan, cut list.
+Fabrication data in `mule/fab/`: tube order list, cut sheet with cope angles, hoop bend programs, jig node coordinates, jig plan. Shop quote package in `mule/quote/`.
 
 ## 6. GitHub and tooling
 

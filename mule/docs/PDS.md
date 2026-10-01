@@ -2,23 +2,23 @@
 
 This page lists the car's requirements. Each one has a number and a way to verify it: the code check that predicts it (see `REPORT.md`), and the physical test that confirms it (see `TEST_PLAN.md`). Change a target here first, then in the code.
 
-**Top-level goal:** a drivable FSAE-lite mule. It meets the 2026 FSAE *safety* rules (structure, harness, brakes, shutdown, cockpit), so the team can learn and test on it. It is not a competition car, but at the team's request it now carries a rear wing with DRS (R15). It has no restrictor, noise test, SES/IAD or cost report.
+**Top-level goal:** a drivable test car ("mule") that meets the **full 2026 FSAE rules**. No rule is traded for weight, cost or schedule; every frame-relevant rule and its status is in [RULES_MATRIX.md](RULES_MATRIX.md). At the team's request it carries a rear wing with DRS (R15). Competition paperwork (SES, IAD, cost report) is required and still to be written.
 
 **Constraints:**
-- the 2026 FSAE rules (safety sections);
-- a budget of roughly $9–15k;
-- a 4130 tube frame built in-house (TIG);
-- a used 450–510 cc single;
+- the full 2026 FSAE rules (hard constraints, never traded);
+- funding in steps of about $2,500, about $7.4–10.9k to a driving car (`BUDGET_PLAN.md`);
+- a 4130 (or 1020 DOM) tube frame, built in-house or quoted by a shop (TIG);
+- a Honda CRF450R 2018+ engine (chosen 2026-09-30);
 - 13″ wheels.
 
 | # | Requirement | Target | Predicted (code) | Verified by |
 |---|---|---|---|---|
-| R1 | Roll structure strength, 6/5/9 kN hoop loads | FoS ≥ 1.2 vs welded yield | 1.28 main / 1.36 front, worst of 4 load directions; deflection ≤ 3.9 mm vs 25 (`fea.py`) | T1.2, T1.3 |
+| R1 | Roll structure strength, 6/5/9 kN hoop loads | FoS ≥ 1.2 vs welded yield | 1.22 main / 1.27 front, worst of 4 load directions; deflection ≤ 4.6 mm vs 25 (`fea.py`) | T1.2, T1.3 |
 | R2 | Chassis torsional stiffness | ≥ 1500 N·m/deg (FSAE practice 1000–3000) | 1886 (`fea.py`) | T1.2 twist test |
-| R3 | Frame under wheel, launch and pedal loads | FoS ≥ 1.2 | 1.26 / 1.22 / 1.31 (`loads.py`, `powertrain.py`, `brakes.py`) | T5.2, T7.2 |
-| R4 | Harness mounts survive a crash | 20 g, FoS ≥ 1 vs welded UTS; tabs ≥ 15 kN | 1.17; 31.7 kN (`harness.py`) | T1.3, T4.3c |
-| R5 | Rules geometry (hoops, helmet, SIS, IA, belts, templates) | every listed rule passes | 27 + 2 + 8 checks (`mule.py`, `cockpit.py`, `harness.py`) | T4.3, T4.3b |
-| R6 | Mass and CG | ≤ 300 kg with driver; CG ≤ 345 mm; tilt ≥ 60° | 296 kg, 340 mm, 60.9° with the wing (`mass.py`) | T4.1, T4.2 |
+| R3 | Frame under wheel, launch and pedal loads | FoS ≥ 1.2 | 1.22 / 1.26 / 1.32 (`loads.py`, `powertrain.py`, `brakes.py`) | T5.2, T7.2 |
+| R4 | Harness mounts survive a crash | 20 g, FoS ≥ 1 vs welded UTS; tabs ≥ 15 kN | 1.08; 31.7 kN (`harness.py`) | T1.3, T4.3c |
+| R5 | Rules geometry (hoops, braces, triangulation, tube size per job, bulkhead and brace supports, side impact, shoulder bar, helmet, IA, belts, templates, open wheel) | every frame-relevant rule passes; none traded (`RULES_MATRIX.md`) | 27 + 34 + 2 + 8 checks (`mule.py`, `frame_rules.py`, `cockpit.py`, `harness.py`) | T4.3, T4.3b |
+| R6 | Mass and CG | ≤ 300 kg with driver; CG ≤ 345 mm; tilt ≥ 60° | 289 kg, 340 mm, 60.8° with the wing (`mass.py`) | T4.1, T4.2 |
 | R7 | Ride | 3.0 / 2.6 Hz; +50 / −25 mm travel (rule: 50 mm total); motion ratio 0.7–1.0; springs in the MTB coil range | 0.72 / 0.75; 243 / 215 lb/in (`springs.py`, `rocker.py`) | T2.4, T2.5, T5.3 |
 | R8 | Kinematics | RC 15–60 / 25–80 mm; camber gain −0.3 to −1.2 °/25 mm; bump steer ≤ 0.25° front and rear; front scrub ≤ 40 mm; front share of the lateral load transfer 0–12 points above the front weight share; outside tyre −2.0 to −0.3° to the ground at 1.5 g; compliance toe and camber ≤ 0.25° | 37/52 mm, −0.72/−0.75, 0.11° / 0.00°; 38 mm; 49.6 % vs 45 %; −0.9/−0.4°; 0.10 in / 0.18 out toe (`suspension.py`, `steering.py`, `roll.py`, `compliance.py`) | T2.2, T2.3, T2.7 |
 | R9 | Steering | 23° inner lock; Ackermann 0–120 %; ratio 4–7:1; lock-to-lock ≤ 180°; rim force ≤ 120 N at 1.5 g; caster 3–7° | 50 %, 4.1:1, 178°, 95 N, 4.6° (`steering.py`, `sideview.py`) | T2.6 |
@@ -29,10 +29,10 @@ This page lists the car's requirements. Each one has a number and a way to verif
 | R15 | Aero | Rear wing with DRS inside T.7; 200 N push ≤ 25 mm; mounts don't oscillate; DRS fails closed; no event slower than without the wing | all T.7 limits met in both flap positions; 0.1 mm; 159 Hz; spring return; autocross −0.67 s (`aero.py`, `lapsim.py`) | T4.5, T5.5 |
 | R14 | Events (point mass, grip 1.3) | acceleration ≤ 5.0 s; skidpad ≤ 5.5 s; autocross average ≥ 40 km/h | 4.48 s; 5.12 s; 51 km/h (`lapsim.py`) | T5.1, T7.1 |
 
-**Accepted non-requirements for the mule:**
-- the FSAE hairpin turning circle (ours is 5.7 m radius; a hairpin needs 4.5 m);
-- noise;
-- cost report.
+**Open items against the rules and events** (not traded, still to close):
+- turning circle: ours is 5.7 m radius and a competition hairpin needs 4.5 m. Not a vehicle rule, but the car must get round the course; the clean-sheet frame (shorter wheelbase) will revisit it;
+- noise limit (IC.7) and 20 mm restrictor (IC.2): required, to be verified on the running engine;
+- SES, IAD and cost report: required paperwork, to be written before any competition.
 
 **Decisions and the reason for each:**
 

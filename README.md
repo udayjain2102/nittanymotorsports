@@ -1,8 +1,8 @@
-# Nittany Motorsports: NM26 FSAE-lite mule
+# Nittany Motorsports: NM26 mule
 
 ![design checks and tests](https://github.com/udayjain2102/nittanymotorsports/actions/workflows/tests.yml/badge.svg)
 
-A drivable FSAE test car ("mule") built to the 2026 FSAE safety rules, with a rear wing and DRS. Every number in the
+A drivable FSAE test car ("mule") built to the full 2026 FSAE rules, with a rear wing and DRS. Every number in the
 design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 200 design checks (every frame-relevant FSAE 2026 rule is listed in [`mule/docs/RULES_MATRIX.md`](mule/docs/RULES_MATRIX.md))
 and every automated test, and writes `mule/docs/REPORT.md`. GitHub runs the same checks on every push; the badge above
 turns red if a change breaks one.

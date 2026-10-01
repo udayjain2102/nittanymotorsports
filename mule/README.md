@@ -1,6 +1,6 @@
-# NM26 FSAE-lite mule: design code
+# NM26 mule: design code
 
-This folder holds the parametric design for a drivable mule that follows the FSAE 2026 safety rules. Every number in the design comes from these scripts. Each script checks its own targets and exits with an error when one is missed. `tests/` runs all of those checks together.
+This folder holds the parametric design for a drivable mule that meets the full FSAE 2026 rules (every frame-relevant rule and its status: [RULES_MATRIX.md](docs/RULES_MATRIX.md)). Every number in the design comes from these scripts. Each script checks its own targets and exits with an error when one is missed. `tests/` runs all of those checks together.
 
 The requirements (numbers plus how each is verified) are in [PDS.md](docs/PDS.md). The design narrative (critique of the concept, rules checklist, BOM and build order) lives in [BUILD_PLAN.md](docs/BUILD_PLAN.md). The physical test plan, with pass criteria taken from these scripts, is [TEST_PLAN.md](docs/TEST_PLAN.md). The chronological log of what was done is [PROJECT_LOG.md](docs/PROJECT_LOG.md).
 
@@ -33,6 +33,8 @@ Every script can also be run on its own (`python fea.py` and so on). Each one pr
 | `views/*.png`, `views/simple_*.svg`, `fab/jig_plan.png` | 2D drawings | Any image viewer |
 | `cad/simple/NM26_Mule_parts.csv` | Part number (`NM26-<system>-<nnn>`), name and colour of every body in `NM26_Mule.step` (the simple model) | Excel / Sheets |
 | `docs/REPORT.md` | Every check and test, with results (generated) | Markdown |
+| `docs/RULES_MATRIX.md`, `docs/FRAME_RESEARCH.md`, `docs/PARTS_LIST.md` | Every frame-relevant FSAE rule and its status; frame research with sources; parts and engine options | Markdown |
+| `quote/` | Frame quote package for a shop (STEP, material list, shop data, cover note) | Send the folder |
 | `docs/PROJECT_LOG.md`, `docs/BUILD_PLAN.md`, `docs/TEST_PLAN.md` | History, design narrative plus BOM, physical test plan | Markdown |
 
 The `.py` files are the source. The STEP files are generated from `mule.py`, so edit the scripts, not the STEP.
@@ -111,6 +113,8 @@ These match `NM26_FSAE_Concept.step`. STEP exports are rotated to Z-up, so they 
 
 | File | What it does | Checks |
 |---|---|---|
+| `frame_rules.py` | FSAE frame-structure rules: tube size per job, side-view triangulation (pin-jointed truss), hoops, braces, bent-member supports, no mounts on the main hoop or braces, bulkhead and brace supports, side impact, shoulder bar, steering protection, hips in the Major Structure, open-wheel zones. | 34 checks; `tests/test_frame_rules.py` breaks each rule and confirms the check fails |
+| `quote_package.py` | Shop quote package in `quote/`: frame weldment STEP, material list, cut sheet, bend programs, jig data. | Every frame part and every tube piece listed exactly once |
 | `mule.py` | **Single source of geometry.** Holds the parameters, the frame nodes and members (tube size per rule role), the suspension hardpoints (`SUSP`, `susp_links`), the belly pan, and the CAD assembly export. | 27 FSAE rule checks (V, F, T), e.g. hoop geometry, helmet clearance, side-impact height, IA, harness angles, tube sizes |
 | `fea.py` | 3D beam FEA of the frame, rigid welded joints. | Torsional stiffness; main and front hoop top loads (6/5/9 kN) at a safety factor above 1 against welded yield |
 | `suspension.py` | Front-view double-wishbone kinematics over ±50 mm travel (design travel +50 / −25 mm). | Roll centre, camber gain, ball joints inside the 13″ wheel, KPI/scrub (front ≤ 40 mm), no lock-up |

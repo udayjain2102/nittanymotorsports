@@ -11,7 +11,7 @@ Whatever engine is chosen, measure it into `powertrain.py` and make `python repo
 
 | Option | Power | Start | Price seen | Fits the 450 bay? | Notes |
 |---|---|---|---|---|---|
-| **Honda CRF450R 2018+** (used engine), **chosen** | ~53 hp, 48 N·m @ 7000 | electric | ~$2,800 new crate; used varies | yes (it is the design basis) | Most common FSAE-lite engine; lots of parts and service info. 2017 has kick start standard (electric start was an option kit): only buy a 2017 with the kit fitted |
+| **Honda CRF450R 2018+** (used engine), **chosen** | ~53 hp, 48 N·m @ 7000 | electric | ~$2,800 new crate; used varies | yes (it is the design basis) | A common FSAE single-cylinder engine; lots of parts and service info. 2017 has kick start standard (electric start was an option kit): only buy a 2017 with the kit fitted |
 | Honda CRF450R 2002–2017 (used engine) | ~45 hp | **kick only** | $1,500–1,600 (eBay, 2005/2007 running) | yes | Cheapest real option, but needs an electric-start conversion: nobody can kick-start from a seat |
 | Honda CRF450X (used engine) | ~40 hp | electric | used bikes $3,500+ | yes | Wider-ratio enduro gearbox, softer tune: easy to drive |
 | Yamaha YZ450F 2018+ (used engine) | ~50 hp | electric | ~$4,300 (2022, eBay) | check: rearward-tilted cylinder | Measure the envelope; intake faces forward |
