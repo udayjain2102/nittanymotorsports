@@ -194,7 +194,12 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
     rear side-bay diagonal removed. After the last optimiser pass (rear engine-mount cross to 1.5″ for launch): **46.5 kg,
     74 pieces, torsion 2305 N·m/deg**, every check passing. Same mass as `main`, 15 % stiffer, more tolerance margin, 4
     fewer pieces; helmet clearance thinner (54 vs 65 mm, limit 50). The shorter layout does not save weight.
-  - *C2 node-mounted rear* and *C3 direct-acting front shocks*: not started.
+  - *C2 node-mounted rear* (branch `clean-sheet-C2`): rear wishbone pickups moved onto the main-hoop-brace support
+    rail joints (rear lower rail raised to 150 mm, rear top to 328 mm, so the suspension geometry is unchanged), the
+    pickup rail and cross deleted, rear rocker re-tuned. The rear posts no longer bend and drop to 1.0″ × 0.049″.
+    **44.3 kg, 73 pieces, torsion 1946 N·m/deg**, every check passing: 2.1 kg lighter than `main`. `fab.py` was also
+    fixed to cope a tube onto a neighbour it meets at 20° or more.
+  - *C3 direct-acting front shocks*: not started.
 - **Tooling:** the session scratchpad (Python environment, scratch optimiser) was wiped once. The optimiser now lives in
   the repo as `frame_opt.py` so it can't be lost.
 
