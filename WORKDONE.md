@@ -20,8 +20,8 @@ Every system is a Python script in `mule/` that computes the design and checks i
 | System | Script | What was done | Key result |
 |---|---|---|---|
 | Concept review | — | Critiqued the concept STEP against the rules | 7 problems found (wheelbase too short, missing parts, etc.) |
-| Frame layout and rules | `mule.py` | Parametric frame (146 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 50.1 kg frame, 81 pieces |
-| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Main hoop FoS 1.28, front 1.36; torsion 2138 N·m/deg |
+| Frame layout and rules | `mule.py` | Parametric frame (143 tubes) built around the 95th-percentile driver template; 27 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 45.3 kg frame, 78 pieces (50.1 kg / 81 before the 1 Oct optimisation) |
+| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads from FSAE AF4.1/AF4.2, worst of 4 directions | Main hoop FoS 1.22, front 1.27; torsion 1886 N·m/deg |
 | Suspension kinematics | `suspension.py`, `sideview.py`, `roll.py` | Double wishbones front and rear; roll centres, camber, caster, anti-dive/squat, roll gradient, static camber, jacking, handling balance | RC 37/52 mm, caster 4.6°, scrub 38 mm, camber −2.5/−2.0°, LLTD 49.6 % front (mild understeer) |
 | Loads into the frame | `loads.py`, `compliance.py` | Six-link upright statics for 10 load cases; link buckling; compliance steer | Worst frame FoS 1.26; toe change 0.10°/0.18° at 1.5 g |
 | Springs, rockers, shocks | `springs.py`, `rocker.py` | Pushrod + bell-crank layout, 230×65 MTB coil shocks | Motion ratio 0.72/0.75, 3.0/2.6 Hz ride, ~243/215 lb/in springs |

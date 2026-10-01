@@ -35,7 +35,7 @@ What's worth keeping from the concept: the 4-corner double-wishbone layout, the 
 - The driver sits upright at 20° (T.2.1.d), so a **5-point harness is allowed**. Hip-to-pedal distance is 915 mm.
 - Main hoop top is at 1280 mm and front hoop top at 850 mm. Helmet clearance to the hoop line is **65 mm** (the rule needs ≥50).
 - Lower side-impact tube bottom is 60 mm above the ground (V.1.4.2 requires ≤90 and prefers ≤75).
-- The frame is **146 members, about 50.1 kg** of 4130 (section 2l explains the latest changes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
+- The frame is **143 members, about 45.3 kg** of 4130 (section 2l explains the latest changes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
 - These changes came out of the FEA (see section 2b).
 - Roll hoops = **1.25″×0.095″**. This exceeds the Size A minimum and was chosen after the FEA. Size A = 1.0″×0.095″ (main hoop braces, shoulder bar). Size B = 1.0″×0.065″ (side impact, bulkhead, hoop braces, belt tube). Size C = 1.0″×0.049″ (supports, cross members, rings). The script checks each size against the F.3.4.1 inertia and area minimums.
 
@@ -51,7 +51,7 @@ Modelling limits to know before cutting tube:
 
 | Case | Original | Final |
 |---|---|---|
-| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** |
+| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (1886 after the 2026-10-01 weight optimisation) |
 | Main hoop top load 6/5/9 kN: peak stress | 1009 MPa | **140 MPa (safety factor 1.28, worst of the 4 load directions)** |
 | Front hoop top load 6/5/9 kN: peak stress | 867 MPa | **133 MPa (safety factor 1.36)** |
 
@@ -301,16 +301,16 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
   - voltage drop to the pump and ignition is 0.23 V;
   - battery, master switch and brake light positions are legal.
 
-**Frame totals now:** 146 members, **50.1 kg**, 81 pieces (2 bent). Torsion is **2138 N·m/deg**. Safety factors:
+**Frame totals now** (after the 2026-10-01 weight optimisation, see PROJECT_LOG): 143 members, **45.3 kg**, 78 pieces (2 bent). Torsion is **1886 N·m/deg** (target ≥ 1500). Safety factors:
 
 | Case | FoS |
 |---|---|
-| Main hoop | 1.28 |
-| Front hoop | 1.36 |
-| Wheel loads | 1.26 |
-| Launch | 1.23 |
-| 2000 N pedal | 1.31 |
-| Harness crash (vs welded ultimate) | 1.17 |
+| Main hoop | 1.22 |
+| Front hoop | 1.27 |
+| Wheel loads | 1.22 |
+| Launch | 1.26 |
+| 2000 N pedal | 1.32 |
+| Harness crash (vs welded ultimate) | 1.08 |
 
 ## 2m. Design-review gaps closed (Hayward, *Car Design Workshop*)
 

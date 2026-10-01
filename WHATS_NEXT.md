@@ -9,6 +9,10 @@ Last updated 2026-09-30. Engine chosen (CRF450R 2018+); total to a driving car i
 - [ ] Submit the funding request for **step 0 ($100–200)** and **step 1 ($1,100–1,600)**.
 - [ ] Borrow or find a CRF450R 2018+ to measure (a dealer, a team member's bike or another FSAE team). The frame can't be finalised without its mount points.
 
+## Frame quote
+- [ ] Send the shop the whole `mule/quote/` folder (frame STEP, material list, shop data, cover note) for a preliminary quote, in 4130 and 1020 DOM.
+- [ ] Frame topology redesign toward ~33 kg (now 45.3 kg): pickups on triangulated nodes, closed front ring that passes T.1.2, braced shoulder bar. Re-run `python quote_package.py` after.
+
 ## Before ordering frame tube: pin down the engine
 The frame's engine mounts are welded in step 1, so the engine has to be known first.
 - [x] Choose the engine: **Honda CRF450R 2018+** (electric start is standard from 2018; a 2017 only if it already has Honda's electric-start kit). The kit engine (Predator 420 + CVT) was ruled out: it does not fit the 450 bay (`python powertrain.py`, Option A).
@@ -23,7 +27,7 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 ## Step 1: frame ($1,100–1,600)
 - [ ] Order 4130 tube from `mule/fab/tube_order_list.csv` (+25 %), plus tabs, plate and filler.
 - [ ] Build the jig from `mule/fab/jig_node_coordinates.csv`; cut and cope from `mule/fab/tube_cut_sheet.csv`; bend hoops from `mule/fab/hoop_bend_program.csv`.
-- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 2138 N·m/deg).
+- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 1886 N·m/deg).
 - [ ] Take photos and results to the next funding request.
 
 ## Steps 2–4: to a driving car
