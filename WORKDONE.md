@@ -191,8 +191,9 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
 - **Clean-sheet designs, each on its own branch; `main` stays the verified 46.4 kg frame:**
   - *B1 front box* (branch `clean-sheet-B`): front suspension station ahead of the leg template with a top cross. 51 kg, **rejected**.
   - *C1 "short"* (branch `clean-sheet-short`): seat 15°, front hoop 900 mm, rear end −200 mm, front rocker re-tuned,
-    rear side-bay diagonal removed. Passed every gate at 45.5 kg. Making one straight tube a single size (needed for
-    fabrication) then moved load into the rear engine-mount cross. **Needs one more optimiser pass.**
+    rear side-bay diagonal removed. After the last optimiser pass (rear engine-mount cross to 1.5″ for launch): **46.5 kg,
+    74 pieces, torsion 2305 N·m/deg**, every check passing. Same mass as `main`, 15 % stiffer, more tolerance margin, 4
+    fewer pieces; helmet clearance thinner (54 vs 65 mm, limit 50). The shorter layout does not save weight.
   - *C2 node-mounted rear* and *C3 direct-acting front shocks*: not started.
 - **Tooling:** the session scratchpad (Python environment, scratch optimiser) was wiped once. The optimiser now lives in
   the repo as `frame_opt.py` so it can't be lost.
