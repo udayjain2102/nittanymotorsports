@@ -63,4 +63,4 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 - Every design change: edit the code, run `python report.py` in `mule/`, add a line to `mule/docs/PROJECT_LOG.md`, then commit and push (GitHub re-runs every check).
 - A day's work goes into `WORKDONE.md` as a short summary; the detail stays in `PROJECT_LOG.md`.
 - No MATLAB needed: everything runs in Python (see the README quick start for the setup).
-- New Fusion uploads go in `adi laptop files > Nittany Motorsports` as the next version (`NM26_Assembly_v5`, …); move the old one out.
+- New Fusion uploads go in `adi laptop files > Nittany Motorsports` as the next version. Current: `NM26_Assembly_v5` (C2 frame, 44.3 kg, uploaded 1 Oct 2026); next is `_v6`. v4 (46.4 kg frame) is still in the same folder; nothing is deleted.
