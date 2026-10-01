@@ -27,7 +27,7 @@ Z_MAIN_TOP  = 140
 H_FRONT     = 850      # front hoop top (centerline)
 Z_FRONT_TOP = 180
 X_REAR      = -300     # rear bulkhead station
-Y_REAR_TOP  = 350
+Y_REAR_TOP  = 328     # C2: upper rear pickups on rr_top/r_top, mean height 340 (suspension.py)
 Z_REAR      = 200
 X_RING      = WHEELBASE - 120  # front suspension ring (A-arm rear pickups)
 X_RR        = 200      # rear suspension ring (A-arm front pickups)
@@ -84,6 +84,8 @@ N = {
 def _on(a, b, x):  # point on straight member a-b at station x (keeps rails straight)
     t = (x - N[a][0]) / (N[b][0] - N[a][0]); return tuple(p + t * (q - p) for p, q in zip(N[a], N[b]))
 N["rr_bot"], N["rr_top"] = _on("mh_bot", "r_bot", X_RR), _on("mh_sis", "r_top", X_RR)
+Y_RLOW = 150.0   # rear lower rail height = rear lower pickup height (C2: pickups on rail nodes); rail kinks up at rr_bot
+N["rr_bot"] = (X_RR, Y_RLOW, N["rr_bot"][2]); N["r_bot"] = (X_REAR, Y_RLOW, Z_REAR)
 N["lap"], N["as"] = _on("mh_bot", "fh_bot", X_LAP), _on("mh_bot", "fh_bot", X_AS)   # harness nodes on the lower SIS
 N["as_c"] = (X_AS, Y_LOW, 0.0)                                            # anti-sub tab, centre of the floor cross
 N["lap_up"] = _on("fh_bot", "mh_sis", X_LAP)                             # lap-tab brace top, on the SIS diagonal
@@ -95,9 +97,10 @@ def _at_y(a, b, y):  # point on member a-b at height y
 N["mh_sh"] = _at_y("mh_bar", "mh_top", H_MAIN - 110)
 N["fh_sh"] = _at_y("fh_sis", "fh_top", H_FRONT - 95)   # just below the top bend (tangent ~86 mm)
 # upper A-arm inboard pickups: nodes part-way up the suspension-ring / bulkhead verticals
-PICKUP_Y = {"front": (140, 340), "rear": (150, 340)}  # (lower, upper) inboard pickup heights, from suspension.py grid search
+# rear pickups sit ON the main-hoop-brace support rail nodes (rr_bot/r_bot, rr_top/r_top): no rear posts in bending (C2)
+PICKUP_Y = {"front": (140, 340)}  # (lower, upper) inboard pickup heights, from suspension.py grid search
 for ax, (lo_, hi_) in PICKUP_Y.items():
-    for pre in (("ring", "bh") if ax == "front" else ("rr", "r")):
+    for pre in ("ring", "bh"):
         N[pre + "_lsus"], N[pre + "_sus"] = _at_y(pre + "_bot", pre + "_top", lo_), _at_y(pre + "_bot", pre + "_top", hi_)
 
 # engine mounts (inboard, on cross tubes split at these nodes) and spool-carrier posts at the rear axle station
@@ -106,7 +109,7 @@ N["em_fb"] = (X_MAIN, Y_LOW, EM_Z)                          # engine bottom-fron
 N["em_ft"] = (X_MAIN, Y_SIS, EM_Z)                          # engine top-front, on the main hoop mid cross
 N["em_rb"] = (X_RR, N["rr_bot"][1], EM_Z)                   # engine bottom-rear, on the rear-ring bottom cross
 N["sp_bot"], N["sp_top"] = _on("rr_bot", "r_bot", 0.0), _on("rr_top", "r_top", 0.0)
-N["sp_mid"] = _on("rr_lsus", "r_lsus", 0.0)                # where the rear lower pickup rail crosses the post
+N["sp_mid"] = N["sp_bot"]                                  # (C2) rear lower rail now crosses the post at its foot
 N["sp_c"] = (0.0, TIRE_OD / 2, N["sp_mid"][2])              # spool bearing carrier, at axle height
 # pedal box: base plate bolts to two floor cross tubes (rear under the pedal pivot, front under the master cylinders)
 PB_X, PB_Z = (X_PEDAL + 25, X_PEDAL + 160), 70.0            # cross stations; bolt points at +/-PB_Z (brakes.py)
@@ -119,9 +122,9 @@ SUSP = {
     "front": dict(inner_low=("ring_lsus", "bh_lsus"), inner_up=("ring_sus", "bh_sus"), lbj_y=143, ubj_y=380, inset=62, ubj_lean=40, caster_dx=19.0,
                   # steering arm behind the axle -> rack low under the shins (steering.py); pushrod -> rocker at ring top
                   steer=((-85, 190, 30), RACK, "ring_lsus"), pushrod=((0, 165, 45), "ring_top")),
-    "rear":  dict(inner_low=("rr_lsus", "r_lsus"),   inner_up=("rr_sus", "r_sus"),    lbj_y=146, ubj_y=370, inset=65, ubj_lean=15,
+    "rear":  dict(inner_low=("rr_bot", "r_bot"),     inner_up=("rr_top", "r_top"),    lbj_y=146, ubj_y=370, inset=65, ubj_lean=15,
                   # toe link aimed at the arms' instant centre (rear bump steer ~0) and pushrod->rocker at the braced rear bulkhead
-                  steer=((-80, 323, 20), (X_REAR + 150, 300, 223), "r_sus"), pushrod=((0, 165, 45), "r_top")),
+                  steer=((-80, 323, 20), (X_REAR + 150, 300, 223), "r_top"), pushrod=((0, 165, 45), "r_top")),
 }
 SUSP_TUBE = (15.875, 0.89)   # A-arms, tie rods: 5/8" x 0.035" 4130 (loads.py checks buckling)
 PUSHROD_TUBE = (19.05, 1.24)  # pushrods: 3/4" x 0.049" (5/8" rear buckled at FoS 1.9)
@@ -166,16 +169,15 @@ SIDE = [
     ("ring_bot", "ring_lsus", "J", "Front susp ring"), ("ring_lsus", "ring_sus", "J", "Front susp ring"), ("ring_sus", "ring_top", "J", "Front susp ring"),   # J: no ring top cross (T.1.2), posts bend
     # main hoop braces (B) rearward + supports (C)
     ("mh_top", "r_top", "B", "Main hoop brace"),
-    ("mh_sis", "rr_top", "C", "MH brace support upper"), ("rr_top", "sp_top", "C", "MH brace support upper"), ("sp_top", "r_top", "C", "MH brace support upper"),
+    ("mh_sis", "rr_top", "B", "MH brace support upper"), ("rr_top", "sp_top", "B", "MH brace support upper"), ("sp_top", "r_top", "B", "MH brace support upper"),
     ("mh_bot", "rr_bot", "A", "MH brace support lower"), ("rr_bot", "sp_bot", "C", "MH brace support lower"), ("sp_bot", "r_bot", "C", "MH brace support lower"),
-    ("rr_bot", "rr_lsus", "A", "Rear susp ring"), ("rr_lsus", "rr_sus", "A", "Rear susp ring"), ("rr_sus", "rr_top", "A", "Rear susp ring"),
-    ("r_bot", "r_lsus", "H", "Rear bulkhead"), ("r_lsus", "r_sus", "H", "Rear bulkhead"), ("r_sus", "r_top", "H", "Rear bulkhead"),
-    ("mh_bot", "rr_top", "C", "Rear side diagonal"), ("rr_top", "r_bot", "C", "Rear side diagonal"),
-    ("r_lsus", "sp_mid", "C", "Rear lower pickup rail (rocker + A-arm loads)"), ("sp_mid", "rr_lsus", "C", "Rear lower pickup rail (rocker + A-arm loads)"),
-    ("sp_bot", "sp_mid", "C", "Spool carrier post"), ("sp_mid", "sp_c", "C", "Spool carrier post"), ("sp_c", "sp_top", "C", "Spool carrier post"),
-    ("sp_c", "rr_top", "C", "Spool carrier brace (chain pull)"), ("sp_c", "rr_lsus", "C", "Spool carrier brace (chain pull)"),
-    ("r_sus", "sp_mid", "C", "Rear side bay diagonal (bulkhead pickups)"),
-    ("mh_bot", "em_fb", "A", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "A", "Rear-ring bottom cross + rear engine mounts"),
+    ("rr_bot", "rr_top", "A", "Rear susp ring"),
+    ("r_bot", "r_top", "C", "Rear bulkhead"),
+    ("mh_bot", "rr_top", "C", "Rear side diagonal"),   # C2: rr_top-r_bot half removed (19 deg cope; spool braces + side bay diagonal triangulate the rear)
+    ("sp_bot", "sp_c", "C", "Spool carrier post"), ("sp_c", "sp_top", "C", "Spool carrier post"),
+    ("sp_c", "rr_top", "C", "Spool carrier brace (chain pull)"), ("sp_c", "rr_bot", "C", "Spool carrier brace (chain pull)"),
+    ("r_top", "sp_bot", "C", "Rear side bay diagonal (bulkhead pickups)"),
+    ("mh_bot", "em_fb", "A", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),
     ("mh_sis", "em_ft", "A", "Main hoop mid cross / firewall + top engine mounts"),
 ]
 CROSS = [
@@ -184,9 +186,9 @@ CROSS = [
     ("fh_top", "H", "Front hoop"),   # no front hoop base cross: removed in the 2026-10-01 optimisation (not rule-required, lightly loaded)
     ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
     ("sb", "H", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
-    ("em_rb", "A", "Rear-ring bottom cross + rear engine mounts"),  # no top cross here: it would pass through the engine
+    ("em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),  # no top cross here: it would pass through the engine
     ("r_bot", "C", "Rear bulkhead"), ("r_top", "C", "Rear bulkhead"),
-    ("r_lsus", "C", "Rear pickup cross (rocker/shock loads)"), ("ring_lsus", "B", "Front pickup cross (rocker/shock loads, rack)"),
+    ("ring_lsus", "B", "Front pickup cross (rocker/shock loads, rack)"),
     ("pb0m", "B", "Pedal box cross (rear)"), ("pb1m", "A", "Pedal box cross (front)"),
 ]
 DIAG = [  # single diagonals (right node -> left node)
