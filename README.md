@@ -131,6 +131,7 @@ Each design script checks itself when run (`python <file>`); `report.py` runs th
 | `lapsim.py` | Point-mass acceleration, skidpad and autocross, with the wing; benchmark times |
 | `fab.py`, `views.py`, `frame_fea_export.py`, `cad_parts.py`, `quote_package.py` | Shop data, drawings, the frame-only STEP, the detailed per-part CAD, the shop quote package |
 | `report.py` | Writes `docs/REPORT.md` (all checks and tests) and the README colour key |
+| `fusion_gd.py` | Fusion Generative Design frame study (curiosity): keep/keep-out STEP files and the 5 load cases in `fusion_gd/` |
 | `snapshot.py` | `python snapshot.py <name> [commit]`: freezes `mule/` at a commit into the top-level `history/<name>/` before anything is regenerated (never overwrites) |
 | `tests/` | `pytest -q tests`: hand calculations, limiting cases, and a guard that `docs/TEST_PLAN.md` quotes current numbers |
 

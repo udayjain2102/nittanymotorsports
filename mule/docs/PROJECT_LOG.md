@@ -340,3 +340,11 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   4130 per foot**, so the earlier "1020 saves $250–400" was wrong: 1020 is only a welding choice.
 - JUGAAD_PLAN totals now ≈ $6,200–10,700 paying for everything, ≈ $4,000–6,000 with a donated engine and sponsored tube.
   BUDGET_PLAN's tube line corrected (was $700–1,000).
+
+## 2026-10-01: Fusion Generative Design frame study set up (curiosity)
+- New `fusion_gd.py` → `fusion_gd/`: preserve STEP (both roll hoops as tubes + 45 balls at every pickup, rocker pivot,
+  shock, engine, harness, pedal-box and spool-carrier point), obstacle STEP (wheels with steer sweep, engine, driver
+  torso/head, T.1.2 leg space, T.1.1 cockpit opening, spool and CV shafts), `LOADS.md` with 5 load cases from the same
+  code as the frame checks (torsion, front 3 g bump, rear corner+brake, AF4 main-hoop roll-over, 20 g harness),
+  `setup_check.png`. The script asserts no preserve body overlaps an obstacle (GD refuses those).
+- GD grows a solid, not a tube frame: the result shows load paths only; it is not buildable or rules-legal.
