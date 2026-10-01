@@ -29,6 +29,8 @@ FLAP_CP_ERR = 0.10                                    # flap CP may sit this fra
 WING_KG, SERVO_KG = 3.5, 0.3                          # carbon/foam main + flap + endplates; servo and linkage (ESTIMATES)
 STRUT = "C"                                           # 1.0 x 0.049 in 4130 struts and braces
 SERVO_NM = 15.0                                       # servo stall torque, N*m (~150 kg*cm class, 12 V): buy at least this
+FITTED = False      # base mule ships WITHOUT the wing (audit 1 Oct 2026: +7.4 kg high up costs ~1.3 deg of tilt margin,
+                    # coefficients unvalidated). Mount points, frame load case and these checks stay, so it can bolt on later.
 SPRING_MARGIN = 1.3                                   # return spring torque / worst aero moment trying to open the flap
 
 def section(state="closed"):
@@ -149,6 +151,8 @@ def strut_kg():
 
 def mass_items():
     """(name, kg, (x, y)) for mass.py."""
+    if not FITTED:
+        return [("rear wing mount tabs (wing not fitted)", 0.3, (-300.0, 400.0))]
     s = section("closed"); c = (s["le"] + s["fte"]) / 2
     return [("rear wing (main, flap, endplates)", WING_KG, (c[0], c[1])),
             ("DRS servo, spring, linkage", SERVO_KG, (s["pivot"][0], s["pivot"][1])),

@@ -21,18 +21,22 @@ CALIPER = {"front": dict(name="Wilwood GP200, 2 x 1.25in opposed", piston=1.25 *
            "rear":  dict(name="Wilwood PS-1, 2 x 1.00in opposed",  piston=1.00 * IN, disc=0.20 * IN)}
 PAD_MU, PAD_H = 0.40, 25.0           # pad friction (assumption: typical race pad cold-warm), pad radial height mm
 R_EFF = 200.0 / 2 - PAD_H / 2        # rotor OD 200 (uprights.ROTOR_OD); effective radius at pad centre
-MC_BORE = {"front": 0.625 * IN, "rear": 0.750 * IN}   # Tilton 78-625 / 78-750 (0.700 rear ran out of balance range at CG 330)
+MC_BORE = {"front": 0.625 * IN, "rear": 0.8125 * IN}  # Tilton 78-625 / 78-812 (rear up from 0.750 when the budget went 48 % front, 1 Oct)
 MC_STROKE, MC_ROD, MC_BODY = 1.1 * IN, 25.0, 115.0     # stroke; clevis -> mount flange; flange -> front incl. fittings
-RATIO = 5.0                          # pedal ratio (pad height / balance-bar height)
+RATIO = 4.5                          # pedal ratio (pad height / balance-bar height); 4.5 not 5 to cut the 2000 N pressure
 H_PAD, TILT = 170.0, 10.0            # pad centre above the pivot, mm; pedal lean back from vertical, deg
 H_MC = H_PAD / RATIO
 PIVOT_UP = 25.0                      # pivot above the base plate top
 SPLIT_RANGE = (0.40, 0.60)           # balance-bar adjuster range, fraction of pedal force to the front MC
-F_LOCK_MAX = 600.0                   # N: pedal force to lock all four at the design grip (a firm stop)
+F_LOCK_MAX = 700.0                   # N (ours): pedal force to lock all four at the design grip, a firm race stop.
+                                     # Front lock pressure is fixed by the GP200 piston area; a 4-piston GP320 needs a >= 229 mm
+                                     # rotor that does not fit the 13 in rim, so lower 2000 N pressure costs pedal force.
 F_TEST = 2000.0                      # T.3.2.2
-HYD_LIMIT = 300.0                    # bar at 2000 N: UNVERIFIED - get MC, caliper and hose max pressure in writing
-KNOCKBACK, COMPLIANCE = 0.25, 0.6    # mm pad clearance per piston; mm^3 per bar per circuit (hoses+calipers): measure
-BOTS_TRAVEL = 45.0                   # BOTS trips at this pedal-pad travel, mm
+HYD_LIMIT = 300.0                    # bar at 2000 N: ASSUMED proof rating, UNVERIFIED - get MC, caliper and hose ratings in writing
+OPERATING_MAX = 2000 / 14.504        # bar: Wilwood recommended maximum operating pressure, 2000 psi (wilwood.com ds793)
+KNOCKBACK, COMPLIANCE = 0.25, 5.0    # mm pad clearance per piston; mm^3 per bar per circuit. ESTIMATE (audit 1 Oct: 0.6 was
+                                     # far too stiff): pad compression ~0.1 mm/100 bar on 4 pistons + caliper flex + hoses. Measure (T3.3)
+BOTS_TRAVEL = 55.0                   # BOTS trips at this pedal-pad travel, mm (55: still >= 10 mm clear at compliance 8)
 PEDAL = dict(Sy=276.0, b=12.0, h=45.0, bore=19.05)   # 6061-T6 blade (Z-thick b, X-deep h), balance-bar sleeve bore
 PIVOT = dict(d=8.0, Sy=940.0)        # M8 10.9 shoulder bolt, double shear
 BAR = dict(d=5 / 8 * IN, Sy=655.0, e=25.0)   # 5/8in 4140 Q&T balance bar; MC clevises at +/-e from the pedal centre
@@ -141,8 +145,10 @@ def checks():
          f"{F_lock:.0f} N at split {s:.3f} (front {p_lock['front']:.0f} bar, rear {p_lock['rear']:.0f} bar)"),
         ("balance split for mu 1.0-1.5 inside the adjuster", SPLIT_RANGE[0] <= min(s_lo, s_hi) and max(s_lo, s_hi) + 0.02 <= SPLIT_RANGE[1],
          f"{s_lo:.3f}-{s_hi:.3f} (+0.02 front margin), adjuster {SPLIT_RANGE[0]:.2f}-{SPLIT_RANGE[1]:.2f}"),
-        (f"line pressure at {F_TEST:.0f} N <= {HYD_LIMIT:.0f} bar (T.3.2.2, limit UNVERIFIED)", max(p_test.values()) <= HYD_LIMIT,
-         f"front {p_test['front']:.0f}, rear {p_test['rear']:.0f} bar"),
+        (f"lock-up pressure <= Wilwood max operating {OPERATING_MAX:.0f} bar (2000 psi)", max(p_lock.values()) <= OPERATING_MAX,
+         f"front {p_lock['front']:.0f}, rear {p_lock['rear']:.0f} bar"),
+        (f"line pressure at {F_TEST:.0f} N <= {HYD_LIMIT:.0f} bar (T.3.2.2; ASSUMED proof rating, OPEN until written ratings)", max(p_test.values()) <= HYD_LIMIT,
+         f"front {p_test['front']:.0f}, rear {p_test['rear']:.0f} bar: above the 138 bar operating rating, so the parts' proof rating decides"),
         ("MC stroke at 2000 N <= 50 % of stroke", max(x_f, x_r) <= 0.5 * MC_STROKE, f"front {x_f:.1f}, rear {x_r:.1f} of {MC_STROKE:.1f} mm"),
         ("BOTS: >= 10 mm beyond pedal travel at 2000 N", BOTS_TRAVEL >= t_norm + 10, f"trip {BOTS_TRAVEL:.0f} vs {t_norm:.1f} mm"),
         ("BOTS: trips >= 10 mm before either circuit's MC bottoms", BOTS_TRAVEL <= min(t_front_fail, t_rear_fail) - 10,

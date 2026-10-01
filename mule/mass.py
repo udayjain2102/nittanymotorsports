@@ -15,7 +15,8 @@ import uprights as U
 import aero
 
 DRIVER = dict(kg=80.0, dx=150.0, dy=150.0)     # typical team driver; whole-body CG ahead of / above the hip point (seated, 20 deg)
-PER_CORNER = dict(wheel=4.5, tyre=5.0, upright=1.2, hub_bearings=1.8, caliper=0.6, studs=0.3)   # kg, estimates
+PER_CORNER = dict(wheel=4.5, tyre=5.0, upright=2.0, hub_bearings=1.8, caliper=0.6, studs=0.3, nuts=0.1)   # kg, estimates;
+# upright 2.0 kg = fabricated steel (PARTS_LIST: first build), not the 1.2 kg 7075 part
 
 def frame():
     kg = 0.0; mom = np.zeros(3)
@@ -53,12 +54,24 @@ def items():
            ("pedal box and master cylinders", 3.5, (m.X_PEDAL + 80, 200.0), True),
            ("rockers, shocks (4)", 4 * 1.2, (m.WHEELBASE / 2, 380.0), True),
            ("belly pan 1.6 mm 5052", belly_pan_kg(), (m.WHEELBASE / 2, m.Y_LOW - 13.5), True),
-           ("firewall 1 mm aluminium", 1.5, (m.X_MAIN - 27, 380.0), True)] + [(n, kg, c, True) for n, kg, c in aero.mass_items()]
+           ("firewall 1 mm aluminium", 1.5, (m.X_MAIN - 27, 380.0), True),
+           # added 1 Oct 2026 (audit): items the budget was missing. No extinguisher: VE.2.3.2 forbids mounting one on the car.
+           ("anti-intrusion plate 1.5 mm steel", aip_kg(), (m.IA[0], (m.Y_BH_BOT + m.Y_BH_TOP) / 2), True),
+           ("impact attenuator (standard foam)", 0.5, ((m.IA[0] + m.IA[1]) / 2, (m.IA[2] + m.IA[3]) / 2), True),
+           ("intake, airbox, 20 mm restrictor, throttle body", 2.0, ((bx[0] + bx[1]) / 2, bx[3] + 80), True),
+           ("engine oil and coolant top-up (engine mass is dry)", 1.2, ((bx[0] + bx[1]) / 2, (bx[2] + bx[3]) / 2), True),
+           ("chain guard / scatter shield (T.5.2.7)", 1.0, (150.0, m.TIRE_OD / 2), True),
+           ("brake lines and fluid", 0.6, (m.WHEELBASE / 2, 200.0), True),
+           ("bodywork: nose and side panels (fibreglass)", 3.0, (m.WHEELBASE * 0.6, 400.0), True)] + [(n, kg, c, True) for n, kg, c in aero.mass_items()]
     for axle, x in (("front", m.WHEELBASE), ("rear", 0.0)):
         corner = sum(PER_CORNER.values()) + rotor_kg(axle) + links_kg(axle) / 2
         out.append((f"{axle} corners x2 (wheel, tyre, upright, hub, rotor, caliper, half links)", 2 * corner, (x, m.TIRE_OD / 2), False))
         out.append((f"{axle} links inboard halves x2", links_kg(axle), (x - (120 if axle == "front" else -100), 250.0), True))
     return out
+
+def aip_kg():
+    """F.8.4 anti-intrusion plate over the front bulkhead, 1.5 mm steel."""
+    return (m.Y_BH_TOP - m.Y_BH_BOT + 25.4) * (2 * m.Z_BH + 25.4) * 1.5 * m.STEEL_DENSITY
 
 def belly_pan_kg():
     outline = [m.N[k] for k in ("r_bot", "rr_bot", "mh_bot", "fh_bot", "ring_bot", "bh_bot")]
