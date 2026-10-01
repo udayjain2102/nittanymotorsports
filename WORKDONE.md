@@ -201,7 +201,9 @@ The CVT rating (8–18 hp) and the chain were fine. The listed size includes the
     fixed to cope a tube onto a neighbour it meets at 20° or more.
   - **C2 merged into `main`** (1 October): CAD (simple and detailed), shop data, drawings, frame STEP and the shop
     quote package regenerated; 89 leftover part files of the old frame removed from `cad/parts/`.
-  - *C3 direct-acting front shocks*: not started.
+  - *C3 direct-acting front shocks*: feasibility check only. The front frame is too narrow: the nearest frame point is
+    384 mm from the upright, against a 207–223 mm shock. It would need an outrigger tower on each side (~1.2 kg), roughly
+    cancelling the rockers it removes, so it wasn't built.
 - **Tooling:** the session scratchpad (Python environment, scratch optimiser) was wiped once. The optimiser now lives in
   the repo as `frame_opt.py` so it can't be lost.
 
