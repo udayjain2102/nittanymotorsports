@@ -66,3 +66,36 @@ maximum deviation of the same size (F.5.2.3), so bends rarely save mass outside 
 ## Checked and rejected
 - "The 20 g harness case is self-imposed and too harsh": ours is 80 kg × 20 g = 15.7 kN total, below the 30 kN the rules
   require across the two shoulder belts for monocoques (F.7.9.1). It stays.
+
+## Deep pass: documented geometry for a clean-sheet frame (2026-10-01)
+No public source gives a fully dimensioned single-cylinder steel frame (main-hoop-to-axle distance, rear overhang,
+node count). The numbers below are what exists; anything marked *derived* comes from rules and these benchmarks.
+
+| Car | Engine | Frame | Wheelbase / track | Stiffness | Source |
+|---|---|---|---|---|---|
+| Berkeley B16 | KTM 350 single | 31.8 kg | 1549 / 1143 mm | — | [fsae.studentorg.berkeley.edu/b16](https://fsae.studentorg.berkeley.edu/b16/) |
+| Berkeley B14/B15 | 250 single | 33.6 kg | 1524 mm | — | [b14](https://fsae.studentorg.berkeley.edu/b14/) |
+| Berkeley B22/B23 | KTM 450 | — | 1575 mm | — | front shocks **direct-acting, no rockers** ([b22](https://fsae.studentorg.berkeley.edu/b22/)) |
+| Univ. of Delaware 2017 | — | 31.3 kg **measured**, ~38.7 m tube, $723 steel | 1550–1600 target | FEA 2390–2607, measured 2958 N·m/deg | [UDel report](https://udel.edu/~pgeneva/downloads/fsae/2017_FSAE_chassis.pdf) |
+| UTAS | BMW 450 single | ~30 kg (mostly mild steel) | — | — | [FSAE forum](https://www.fsae.com/forums/archive/index.php/t-11669.html) |
+| Rouelle, rule of thumb | — | "25–30 kg" | — | "about 1500 N·m/deg" | same thread |
+
+**Ideas worth carrying into concepts:**
+- **Spool carrier bolted to the engine case** (two plates with eccentric bearing carriers, ~1.4 kg), so the rear frame
+  carries suspension loads only ([Oregon State / GFR report](https://ir.library.oregonstate.edu/downloads/dv13zw278);
+  swingarm-pivot differential mounts in [FSAE forum t-8141](https://www.fsae.com/forums/archive/index.php/t-8141.html)).
+  *Unverified:* that the CRF450R swingarm pivot passes through the engine case; check when an engine is measured.
+- **Main hoop brace foot = upper rear pickup node** (rear box and brace support share nodes).
+- **Direct-acting front shocks** (Berkeley B22/B23) remove the front rockers and their mid-tube loads.
+- **Bulkhead ≤ 400 × 350 mm** with the standard foam attenuator needs no bulkhead diagonal (F.8.4.3).
+- **Unregulated tubes** at 0.625 × 0.049" and 1.0 × 0.035" (UDel); 2026 also lets main hoop braces cope onto a bent
+  shoulder bar.
+- **Stiffness:** Deakin (SAE 2000-01-3554): frame = 1× roll stiffness passes ~80 % of the load transfer, 2× ~90 %.
+  NM26 roll stiffness ~476 N·m/deg, so ≥ ~1000 N·m/deg real (≈1500 FEA) is enough. **Spend stiffness to save mass,
+  don't add it.**
+- **Cockpit length** (*derived, checked against `mule.py`*): main hoop to bulkhead is 1610 mm; a 13° seat back instead
+  of 20° moves the hip ~85 mm rearward and the hip-to-pedal rule is a straight-line distance (~10 mm), so ~100 mm can come out.
+- **Fabrication:** a jigged, laser-notched frame took one team ~16 h to weld (forum, self-reported); jigs under $100.
+
+**2027 previews to design for now:** crossed-X braces banned, lateral tubes through regulated tubes banned, welded
+inserts welded at both ends, harness mounts on floor tubes.
