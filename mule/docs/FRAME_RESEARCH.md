@@ -1,0 +1,56 @@
+# Frame redesign research: how lighter FSAE steel frames are built
+
+Compiled 2026-10-01 from web sources (FSAE.com forum archives, team design reports and theses, DesignJudges) and checked
+against the 2026 FSAE rulebook. Forum figures are self-reported; treat them as indications, not data.
+
+## The gap
+| Frame | Mass | Tube length | kg per m | Source |
+|---|---|---|---|---|
+| NM26 now | 45.3 kg | ~44 m | ~1.0 | `mule.py` |
+| NM26 before 1 Oct | 50.1 kg | 44.8 m | 1.12 | tag `frame-v1-50kg` |
+| Univ. of Delaware 2017 (4130) | ~31.8 kg | ~41 m | ~0.78 | [UDel report](https://udel.edu/~pgeneva/downloads/fsae/2017_FSAE_chassis.pdf) |
+| Wollongong (4130) | 28–34 kg | — | — | [FSAE forum](http://www.fsae.com/forums/archive/index.php/t-11777.html) |
+| UTAS (4130, 450 single) | ~30 kg | — | — | same thread |
+
+Length is similar; **the difference is tube size**. Almost everything on light frames is 1.0" OD at 0.049" (0.74 kg/m).
+Our tubes are heavier because loads bend them: suspension pickups sit mid-span on posts.
+
+## Ideas, and how they apply to NM26
+1. **Suspension pickups on nodes.** Wishbone axes should pass through frame nodes so loads run along tubes
+   ([Rouelle, FSAE forum](http://www.fsae.com/forums/archive/index.php/t-11559.html)). A pickup can slide along its own
+   wishbone axis (no kinematic change) until it lands on a node, or get a short diagonal to one
+   ([DesignJudges](https://www.designjudges.com/articles/engineering-a-lighter-chassis-part-1)). *NM26: our front and
+   rear "suspension ring" posts carry pickups mid-span; this is the main redesign.*
+2. **Close the front ring.** T.1.2.2: the leg template only travels to 100 mm behind the rearmost pedal face (verified in
+   the 2026 rules). A top cross is legal ahead of that. UWA, with the same problem, surrounded the open node with members
+   instead ([Waterman 2011](https://robotics.ee.uwa.edu.au/theses/2011-REV-SAE-SpaceFrame-Waterman.pdf)). *NM26: pedal
+   face ≈ x 1921, so a cross is legal ahead of ~1821; the ring is at 1630.*
+3. **No separate rear box.** Hang the rear pickups and spool carriers on the main-hoop-brace-support triangles and a short
+   rear bulkhead ([FSAE forum](https://www.fsae.com/forums/archive/index.php/t-1646.html)). Brace supports must stay
+   triangulated tube (F.6.6).
+4. **Rule-minimum hoops and shoulder bar** (1.0" × 0.095", Size A) once the load paths are fixed. 2026 allows the main hoop
+   braces to cope to a bent shoulder bar, braced at the bends (F.6.5.2) ([DesignJudges 2026 changes](https://www.designjudges.com/articles/guide-to-2026-frame-rule-changes)).
+   Put harness tabs at nodes; harness loads exceed suspension loads.
+5. **Everything non-regulated at 1.0" × 0.049"** (or 0.035"), mass budget ~0.75 kg/m; target torsion ~2000 N·m/deg hub to hub.
+
+## Steel
+Rules credit any steel with the same strength (F.3.4.2), so 4130 earns no smaller tubes. Teams pick it for thin-wall
+availability and modest cost (~$350 of tube); 1020 DOM works for the regulated sizes. Weld 4130 with ER70S-2
+([FSAE forum](http://www.fsae.com/forums/archive/index.php/t-5164.html)).
+
+## Fabrication
+Laser-cut tube kits ran $1,000–3,000 per frame; still use a fixture plate, not tabs alone
+([FSAE forum](https://www.fsae.com/forums/archive/index.php/t-5646.html)). Bent tubes need a support at the point of
+maximum deviation of the same size (F.5.2.3), so bends rarely save mass outside the hoops and shoulder bar.
+
+## Don'ts (2026 rules and lessons)
+- No engine or suspension mounts on the main hoop or its braces above other nodes (F.5.11.4).
+- Welded inserts must be thicker and smaller in diameter than the tube (F.3.4.3).
+- A roll-hoop bend below the braces must be triangulated at a node (F.5.6.3).
+- Cracks start at the heat-affected zone of welded mounts on thin tube; one team fixed it by stress relieving
+  ([FSAE forum](http://www.fsae.com/forums/archive/index.php/t-12192.html)).
+- FEA torsion numbers are optimistic; measure hub to hub.
+
+## Checked and rejected
+- "The 20 g harness case is self-imposed and too harsh": ours is 80 kg × 20 g = 15.7 kN total, below the 30 kN the rules
+  require across the two shoulder belts for monocoques (F.7.9.1). It stays.
