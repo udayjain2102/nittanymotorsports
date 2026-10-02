@@ -14,19 +14,19 @@ This page lists the car's requirements. Each one has a number and a way to verif
 | # | Requirement | Target | Predicted (code) | Verified by |
 |---|---|---|---|---|
 | R1 | Roll-over strength, 6/5/9 kN hoop loads with the AF4 support (hoop bottoms fixed; inertia relief agrees) | FoS ≥ 1.0 vs welded 4130 yield 340 MPa; FoS ≥ 1.0 vs welded ultimate 410 MPa under tube tolerances (`fea.SY_ROLL`, `SIM_TO_REAL.md`) | 1.08 main / 1.02 front; 1.11 / 1.00 under tolerances (`fea.py`, `robustness.py`); deflection ≤ 25 mm | T1.2, T1.3 |
-| R2 | Chassis torsional stiffness | FEA ≥ 1500 N·m/deg; **measured ≥ 1000** (2 × roll stiffness; real frames measure ~⅔ of FEA, `SIM_TO_REAL.md`) | 1946 FEA; 1439 worst tolerance sample (`fea.py`, `robustness.py`) | T1.2 twist test |
+| R2 | Chassis torsional stiffness | FEA ≥ 1500 N·m/deg; **measured ≥ 1000** (2 × roll stiffness; real frames measure ~⅔ of FEA, `SIM_TO_REAL.md`) | 2422 FEA; 1795 worst tolerance sample (`fea.py`, `robustness.py`) | T1.2 twist test |
 | R3 | Frame under wheel, launch and pedal loads | FoS ≥ 1.2 | 1.23 / 1.21 / 1.32 nominal; ≥ 1.02 under tube tolerances (`loads.py`, `powertrain.py`, `brakes.py`, `robustness.py`) | T5.2, T7.2 |
 | R4 | Harness mounts survive a crash | 20 g, FoS ≥ 1 vs welded UTS; tabs ≥ 15 kN | 1.19 nominal, 1.07 under tube tolerances; 31.7 kN (`harness.py`, `robustness.py`) | T1.3, T4.3c |
 | R5 | Rules geometry (hoops, braces, triangulation, tube size per job, bulkhead and brace supports, side impact, shoulder bar, helmet, IA, belts, templates, open wheel) | every frame-relevant rule passes; none traded (`RULES_MATRIX.md`) | 28 + 34 + 2 + 8 checks (`mule.py`, `frame_rules.py`, `cockpit.py`, `harness.py`) | T4.3, T4.3b |
-| R6 | Mass and CG | ≤ 300 kg with driver; CG ≤ 345 mm; tilt ≥ 60° | 288 kg, 341 mm, 60.8° with the wing; tilt 60.3° if mass estimates err together (`mass.py`, `robustness.py`) | T4.1, T4.2 |
+| R6 | Mass and CG | ≤ 310 kg with driver; CG ≤ 345 mm; tilt ≥ 60° | 301 kg, 325 mm, 61.9° without the wing; tilt 61.5° if mass estimates err together (`mass.py`, `robustness.py`) | T4.1, T4.2 |
 | R7 | Ride | 3.0 / 2.6 Hz; +50 / −25 mm travel (rule: 50 mm total); motion ratio 0.7–1.0; springs in the MTB coil range | 0.72 / 0.75; 243 / 215 lb/in (`springs.py`, `rocker.py`) | T2.4, T2.5, T5.3 |
 | R8 | Kinematics | RC 15–60 / 25–80 mm; camber gain −0.3 to −1.2 °/25 mm; bump steer ≤ 0.25° front and rear; front scrub ≤ 40 mm; front share of the lateral load transfer 0–12 points above the front weight share; outside tyre −2.0 to −0.3° to the ground at 1.5 g; compliance toe and camber ≤ 0.25° | 37/52 mm, −0.72/−0.75, 0.11° / 0.00°; 38 mm; 49.6 % vs 45 %; −0.9/−0.4°; 0.10 in / 0.18 out toe (`suspension.py`, `steering.py`, `roll.py`, `compliance.py`) | T2.2, T2.3, T2.7 |
 | R9 | Steering | 23° inner lock; Ackermann 0–120 %; ratio 4–7:1; lock-to-lock ≤ 180°; rim force ≤ 120 N at 1.5 g; caster 3–7° | 50 %, 4.1:1, 178°, 95 N, 4.6° (`steering.py`, `sideview.py`) | T2.6 |
-| R10 | Braking | lock all four with ≤ 600 N; 2000 N without failure; front locks first | 567 N; 296 bar; 59 % front (`brakes.py`) | T3.2–T3.4, T6.1 |
+| R10 | Braking | lock all four with ≤ 700 N; lock-up ≤ 138 bar (Wilwood operating); 2000 N without failure; front locks first | 676 N; 80 bar; 267 bar at 2000 N (proof ratings needed); 59 % front (`brakes.py`) | T3.2–T3.4, T6.1 |
 | R11 | Performance | 100–130 km/h top speed; 1st gear reaches traction | 117 km/h (`powertrain.py`, CRF450R ratios) | T5.1 |
 | R12 | Durability | bearing L10 ≥ 3 × 2000 km; hub and upright FoS ≥ 1.5 | 271–512 Mrev; 5.1 / 1.7 (`uprights.py`) | T7.2 |
 | R13 | Shutdown | any device kills ignition and fuel pump; master switch cuts everything | netlist simulation (`shutdown.py`) | T4.4 |
-| R15 | Aero | Rear wing with DRS inside T.7; 200 N push ≤ 25 mm; mounts don't oscillate; DRS fails closed; no event slower than without the wing | all T.7 limits met in both flap positions; 0.1 mm; 159 Hz; spring return; autocross −0.67 s (`aero.py`, `lapsim.py`) | T4.5, T5.5 |
+| R15 | Aero | Rear wing with DRS inside T.7; 200 N push ≤ 25 mm; mounts don't oscillate; DRS fails closed; no event slower than without the wing | **not fitted on the base mule (audit 2 Oct: tilt margin, unvalidated coefficients)**; as a bolt-on: all T.7 limits met in both flap positions; 0.1 mm; spring return; autocross −0.62 s (`aero.py`, `lapsim.py`) | T4.5, T5.5 |
 | R14 | Events (point mass, grip 1.3) | acceleration ≤ 5.0 s; skidpad ≤ 5.5 s; autocross average ≥ 40 km/h | 4.48 s; 5.12 s; 51 km/h (`lapsim.py`) | T5.1, T7.1 |
 
 **Open items against the rules and events** (not traded, still to close):
@@ -99,10 +99,10 @@ A point mass has no driver, no tyre warm-up and no transients, so real times wil
 
 | Quantity | NM26 mule (code) | Team A | Team B | Team C |
 |---|---|---|---|---|
-| Mass with driver | 288 kg | | | |
-| CG height | 341 mm | | | |
+| Mass with driver | 301 kg | | | |
+| CG height | 325 mm | | | |
 | Wheelbase / track F/R | 1750 / 1220 / 1220 mm | | | |
-| Frame torsion | 1946 N·m/deg (FEA) | | | |
+| Frame torsion | 2422 N·m/deg (FEA) | | | |
 | Ride frequency F/R | 3.0 / 2.6 Hz | | | |
 | Motion ratio F/R | 0.72 / 0.75 | | | |
 | Scrub / KPI / caster | 38 mm / 9.6° / 4.6° | | | |

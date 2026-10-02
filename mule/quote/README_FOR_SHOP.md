@@ -34,4 +34,4 @@ This quote is preliminary. Before we order:
 - harness, seat, pedal-box and firewall tabs will be added;
 - the layout may change slightly after a full-size driver mock-up.
 
-The frame mass is about 44 kg of tube plus about 4 kg of tabs and weld.
+The frame mass is about 50 kg of tube plus about 4 kg of tabs and weld.

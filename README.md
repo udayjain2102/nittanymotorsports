@@ -2,14 +2,14 @@
 
 ![design checks and tests](https://github.com/udayjain2102/nittanymotorsports/actions/workflows/tests.yml/badge.svg)
 
-A drivable FSAE test car ("mule") built to the full 2026 FSAE rules, with a rear wing and DRS. Every number in the
-design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 210 design checks (every frame-relevant FSAE 2026 rule is listed in [`mule/docs/RULES_MATRIX.md`](mule/docs/RULES_MATRIX.md))
+A drivable FSAE test car ("mule") built to the full 2026 FSAE rules. The rear wing with DRS is designed but not fitted on the base car (bolt-on later). Every number in the
+design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 228 design checks (every frame-relevant FSAE 2026 rule is listed in [`mule/docs/RULES_MATRIX.md`](mule/docs/RULES_MATRIX.md))
 and every automated test, and writes `mule/docs/REPORT.md`. GitHub runs the same checks on every push; the badge above
 turns red if a change breaks one.
 
 ![NM26 mule in Fusion](mule/views/NM26_fusion_view.jpg)
 
-**Status (1 October 2026):** the design is complete and checked; nothing is built yet. Engine chosen: **Honda
+**Status (2 October 2026):** the design is checked and was re-worked after a full audit (frame now 50.4 kg, wing off, brakes re-sized); nothing is built yet. One open engineering decision: the roll-hoop strength criterion needs the faculty advisor. Engine chosen: **Honda
 CRF450R 2018+** (the 13 hp kit engine doesn't fit the engine bay). Next: measure a CRF450R (gear ratios are already in from the service manual),
 build the plywood mock-up, then order frame tube. The full to-do list is in [`WHATS_NEXT.md`](WHATS_NEXT.md).
 
@@ -17,7 +17,7 @@ build the plywood mock-up, then order frame tube. The full to-do list is in [`WH
 
 | …do this | Go here |
 |---|---|
-| **Look at the car in CAD** | Download [`mule/cad/NM26_Assembly.step`](mule/cad/NM26_Assembly.step) and open it in Fusion (File > Open > Open from my computer), SolidWorks, Onshape or FreeCAD. It arrives upright, one component per part. Team members with Fusion access: `adi laptop files > Nittany Motorsports > NM26_Assembly_v5` (current: the 44.3 kg C2 frame, uploaded 1 Oct 2026). `NM26_Assembly_v4` (+ `_v4_part2`, `_v4_part3`) in the same folder is the earlier 46.4 kg frame. Older versions sit in `adi laptop files`, named `..._v1_no_wing`, `..._v2_first_wing`, `NM26_Mule_simple_v1–v3`, `NM26_FSAE_Concept_original`. |
+| **Look at the car in CAD** | Download [`mule/cad/NM26_Assembly.step`](mule/cad/NM26_Assembly.step) and open it in Fusion (File > Open > Open from my computer), SolidWorks, Onshape or FreeCAD. It arrives upright, one component per part. Team members with Fusion access: `adi laptop files > Nittany Motorsports > NM26_Assembly_v5` (the 44.3 kg C2 frame, uploaded 1 Oct 2026; the 50.4 kg post-audit frame is not uploaded yet, it will be `_v6`). `NM26_Assembly_v4` (+ `_v4_part2`, `_v4_part3`) in the same folder is the earlier 46.4 kg frame. Older versions sit in `adi laptop files`, named `..._v1_no_wing`, `..._v2_first_wing`, `NM26_Mule_simple_v1–v3`, `NM26_FSAE_Concept_original`. |
 | **Find one part** | [`mule/cad/NM26_Assembly_parts.csv`](mule/cad/NM26_Assembly_parts.csv) lists every part number, what the part is and its file in `mule/cad/parts/` |
 | **Get it funded in small steps** | [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md): five phases of about $2,500 or less, about $7.7–11.6k to a driving car with a used 450 at list prices (less with donated engine/tube, see `JUGAAD_PLAN.md`), upgrades after |
 | **See which parts and engine we're using** | [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md): the chosen parts, engine options with prices, and which script sizes each part |
