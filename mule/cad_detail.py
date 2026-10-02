@@ -330,6 +330,9 @@ def routes():
         ("dash DRS button", "ignition/ECU"): [(m.X_FRONT - 20, 515, -70), (m.X_FRONT - 20, 480, -200), sis_r(m.X_FRONT)[:2] + (-(m.Z_COCKPIT - 14),), (m.X_MAIN + 10, m.Y_SIS + 14, -(m.Z_COCKPIT - 14)), (m.X_MAIN - 60, 420, -100), L["ignition/ECU"][:2] + (-L["ignition/ECU"][2],), L["ignition/ECU"]],
         ("battery", "chassis ground"): [L["battery"], (L["battery"][0], L["battery"][1] - 60, L["battery"][2]), (N["em_fb"][0], N["em_fb"][1] + 14, N["em_fb"][2])],
     }
+    import aero
+    if not aero.FITTED:   # no wing on the base mule: no DRS servo wire or button lead
+        H = {k: v for k, v in H.items() if "DRS" not in k[0] and "DRS" not in k[1]}
     gauge = {tuple(w[:2]): w[2] for w in SD.WIRES}
     for (a, b), pts in H.items():
         gauge_awg = gauge.get((a, b), 18); r = {4: 6.0, 12: 3.5, 14: 3.0, 16: 2.6}.get(gauge_awg, 2.2)
