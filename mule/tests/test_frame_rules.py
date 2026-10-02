@@ -69,10 +69,15 @@ def test_kinked_upper_bulkhead_support_without_same_size_support_fails(members):
 
 
 def test_lower_support_kink_with_smaller_ring_cross_fails(members):
-    members[:] = [(a, b, "C" if r == "Front susp ring" and abs(a[2] + b[2]) < 1 else s, r) for a, b, s, r in members]
+    members[:] = [(a, b, "C" if r == "Lower FBH support cross (F.5.2.3)" else s, r) for a, b, s, r in members]
     assert failing("F.5.2.3")
 
 
 def test_main_hoop_bend_without_side_view_tube_fails(members):
     members[:] = [mb for mb in members if mb[3] != "Main hoop bend support (F.5.6.3)"]
     assert failing("F.5.6.3 main hoop")
+
+
+def test_leg_above_the_structure_fails(monkeypatch):
+    monkeypatch.setattr(F, "LEG_R", 400.0)   # a leg this thick pokes above the front hoop brace
+    assert failing("T.1.3.2")
