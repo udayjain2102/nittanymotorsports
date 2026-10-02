@@ -16,7 +16,7 @@ import fea
 TAB = dict(t=3.2, e=20.0, hole=10.5, Su=560.0, weld_leg=3.0, weld_len=40.0, weld_Su=480.0)   # 1/8in 4130, 3/8in bolt
 BOLTS = {"lap": 10.0, "shoulder": 10.0, "anti-sub": 8.0}       # mm (T.2.5.8, T.2.6.4, T.2.7.5 minimums: 10 / 10 / 8)
 BUCKLE = (m.HIP[0] + 120, m.HIP[1] + 60)                       # 5-point buckle / anti-sub belt top, side view
-CRASH_G, DRIVER_KG = 20.0, 80.0
+CRASH_G, DRIVER_KG = 20.0, 100.0   # 100 kg: ~95th-percentile US male, the template the cockpit is sized to (V.2.1.1); was 80 (audit)
 UTS_WELD = 300.0                  # MPa, F.3.4.2 welded ultimate: a crash may yield the tubes but must not break them
 SPLIT = {"shoulder": 0.45, "lap": 0.45, "anti-sub": 0.10}
 
@@ -51,7 +51,7 @@ def crash():
         lap = m.N["lap"] if s > 0 else m.mir(m.N["lap"])
         pull(lap, (m.HIP[0], m.HIP[1], s * 180.0), SPLIT["lap"] / 2)
     pull(m.N["as_c"], (BUCKLE[0], BUCKLE[1], 0.0), SPLIT["anti-sub"])
-    _, st = fr.solve(*fea.inertia_relief(fr, loads)); j = int(np.argmax(st))
+    _, st = fr.solve(*fea.inertia_relief(fr, loads, without_driver=True)); j = int(np.argmax(st))   # driver's inertia is the load
     return UTS_WELD / st[j], fr.el[j][3], fea.SY_WELD / st[j]
 
 def checks():

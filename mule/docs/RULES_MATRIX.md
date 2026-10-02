@@ -1,6 +1,6 @@
 # NM26 rules matrix: every frame-relevant FSAE 2026 rule and how it is met
 
-Generated 2026-10-01 from the FSAE 2026 rulebook (v1.0), sections V.1, F (tube frame), T.1 and T.2. The rule text is
+Generated 2026-10-01 from the FSAE 2026 rulebook (v1.0), corrected after the 1 Oct audit (statuses now match real checks), sections V.1, F (tube frame), T.1 and T.2. The rule text is
 not reproduced (SAE copyright): look the number up in the rulebook. **Every rule is a hard requirement; none is
 traded for weight**, and any new frame layout must pass all of them. Status:
 
@@ -8,7 +8,7 @@ traded for weight**, and any new frame layout must pass all of them. Status:
 - **Build / inspection:** a fabrication, part-choice or paperwork item to tick off during the build (BUILD_PLAN §3, SES).
 - **N/A:** does not apply to this design; the reason is given.
 
-**Totals:** 83 automated, 94 build/inspection items, 45 not applicable, 15 definitions.
+**Totals:** 84 automated, 94 build/inspection items, 45 not applicable, 15 definitions.
 
 | Rule | Topic | Status | Where / note |
 |---|---|---|---|
@@ -58,13 +58,13 @@ traded for weight**, and any new frame layout must pass all of them. Status:
 | F.3.5.3 | Aluminum Tubing | N/A | aluminium tubing not used |
 | F.5.1.1 | Primary Structure | Build / inspection |  |
 | F.5.1.2 | Primary Structure | Build / inspection |  |
-| F.5.2.1 | Bent Tubes or Multiple Tubes | Automated | fab.py (bend radius) |
+| F.5.2.1 | Bent Tubes or Multiple Tubes | Automated | frame_rules.py (bend CLR >= 3 x OD, from fab.CLR_BY_SIZE) |
 | F.5.2.2 | Bent Tubes or Multiple Tubes | Build / inspection |  |
 | F.5.2.3 | Bent Tubes or Multiple Tubes | Automated | frame_rules.py |
 | F.5.2.4 | Bent Tubes or Multiple Tubes | Build / inspection |  |
 | F.5.3.1 | Holes and Openings in Regulated Tubing | Build / inspection |  |
 | F.5.3.2 | Holes and Openings in Regulated Tubing | Build / inspection |  |
-| F.5.3.3 | Holes and Openings in Regulated Tubing | Automated | rule number cited in a check (see REPORT.md) |
+| F.5.3.3 | Holes and Openings in Regulated Tubing | Build / inspection | weld a cap or plug on every open end; fab.py tube_cut_sheet marks them ("cap end"). Corrected 1 Oct 2026: was listed as automated with no check |
 | F.5.4.1 |  | Build / inspection |  |
 | F.5.4.2 |  | Build / inspection |  |
 | F.5.4.3 |  | Build / inspection |  |
@@ -120,7 +120,7 @@ traded for weight**, and any new frame layout must pass all of them. Status:
 | F.5.16 |  | Build / inspection |  |
 | F.6.1 |  | Automated | frame_rules.py (size) |
 | F.6.2.1 | Front Bulkhead Support | Automated | frame_rules.py (size) |
-| F.6.2.2 | Front Bulkhead Support | Automated | fea.py, frame_rules.py |
+| F.6.2.2 | Front Bulkhead Support | Build / inspection | bulkhead integration at the weld; fea.py frontal() carries the 95 kN IA peak through it. Corrected 1 Oct 2026: was listed as automated |
 | F.6.2.3 | Front Bulkhead Support | Automated | frame_rules.py |
 | F.6.2.4 | Front Bulkhead Support | Build / inspection |  |
 | F.6.2.5 | Front Bulkhead Support | Build / inspection |  |
@@ -167,7 +167,7 @@ traded for weight**, and any new frame layout must pass all of them. Status:
 | F.8.6.2 |  | Build / inspection |  |
 | F.8.6.3 |  | Automated | rule number cited in a check (see REPORT.md) |
 | F.8.7.1 | Front Impact Verification | Build / inspection |  |
-| F.8.7.2 | Front Impact Verification | Build / inspection |  |
+| F.8.7.2 | Front Impact Verification | Automated (load path) + Build | fea.py frontal(): the 95 kN standard-foam IA peak through the front structure, FoS >= 1.0 vs welded UTS (ours); the IA itself is a bought standard part |
 | F.8.7.3 | Front Impact Verification | Build / inspection |  |
 | F.8.7.4 | Front Impact Verification | Build / inspection |  |
 | F.8.7.5 | Front Impact Verification | Build / inspection |  |
@@ -190,6 +190,7 @@ traded for weight**, and any new frame layout must pass all of them. Status:
 | T.1.2.2 |  | Automated | cockpit.py (T.1.2 template) |
 | T.1.2.3 |  | Automated | cockpit.py (T.1.2 template) |
 | T.1.3.1 | Driver Protection | Automated | frame_rules.py |
+| T.1.3.2 | Driver Protection | Automated | frame_rules.py: estimated 95th-male legs inside the structure in side and front view (added 1 Oct 2026; was missing); confirm on the buck |
 | T.1.3.3 | Driver Protection | Build / inspection |  |
 | T.1.3.4 | Driver Protection | Build / inspection |  |
 | T.1.4.1 | Vehicle Controls | Build / inspection |  |
@@ -221,7 +222,7 @@ traded for weight**, and any new frame layout must pass all of them. Status:
 | T.2.3.2 | Harness Requirements | Build / inspection |  |
 | T.2.4 |  | Build / inspection |  |
 | T.2.4.1 |  | Build / inspection |  |
-| T.2.4.2 |  | Build / inspection |  |
+| T.2.4.2 |  | Automated | frame_rules.py F.3.2.1 (harness supports in the "harness" category, size B) |
 | T.2.4.3 |  | Automated | rule number cited in a check (see REPORT.md) |
 | T.2.4.4 |  | Automated | rule number cited in a check (see REPORT.md) |
 | T.2.4.5 |  | Build / inspection |  |
@@ -229,7 +230,7 @@ traded for weight**, and any new frame layout must pass all of them. Status:
 | T.2.5.1 |  | Build / inspection |  |
 | T.2.5.2 |  | Build / inspection |  |
 | T.2.5.3 |  | Build / inspection |  |
-| T.2.5.4 |  | Automated | rule number cited in a check (see REPORT.md) |
+| T.2.5.4 |  | Automated (a) + Build (b) | a: harness.py lap-belt angle; b ("should", 0-75 mm forward of the seat junction): check on the buck |
 | T.2.5.5 |  | N/A | upright driving position |
 | T.2.5.6 |  | Build / inspection |  |
 | T.2.5.7 |  | Build / inspection |  |

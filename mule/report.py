@@ -9,7 +9,7 @@ import mule, fea, loads, suspension, rocker, springs, steering, uprights, powert
 import cockpit, sideview, mass, harness, shutdown, roll, compliance, lapsim, aero, frame_rules, robustness
 
 HERE = pathlib.Path(__file__).parent
-MODULES = [(mule, "FSAE rules (V, F, T)"), (frame_rules, "FSAE frame structure rules (F.1.17, F.3.2.1, F.5, F.6, T.1.3.1, V.1.1)"), (suspension, "Suspension kinematics"), (rocker, "Rockers and shocks"),
+MODULES = [(mule, "FSAE rules (V, F, T)"), (frame_rules, "FSAE frame structure rules (F.1.17, F.3.2.1, F.5, F.6, T.1.3, V.1.1)"), (fea, "Frame strength: roll-over, frontal impact, buckling"), (suspension, "Suspension kinematics"), (rocker, "Rockers and shocks"),
            (steering, "Steering"), (sideview, "Side view, caster, pitch, steering ratio"), (roll, "Roll, static camber, jacking"),
            (compliance, "Compliance steer and camber (pickup stiffness)"), (uprights, "Uprights and hubs"),
            (powertrain, "Powertrain"), (brakes, "Brakes and pedal box"), (cockpit, "Cockpit templates (T.1.1, T.1.2)"),
@@ -41,7 +41,8 @@ def main():
     out += ["\n## Key results\n", "| Quantity | Value | From |", "|---|---|---|",
             f"| Frame | {len(mule.MEMBERS)} members, {frame_kg:.1f} kg, {len(pcs)} pieces | `mule.py`, `fab.py` |",
             f"| Torsional stiffness | {f['torsion']:.0f} N·m/deg | `fea.py` |",
-            f"| Roll-over loads 6/5/9 kN (AF4 support), safety factor vs welded 4130 yield | main {f['fos']['Main hoop']:.2f}, front {f['fos']['Front hoop']:.2f} | `fea.py` |",
+            f"| Roll-over 6/5/9 kN (legacy AF4 loads), worse of hoop-base supports and inertia relief, safety factor vs welded 4130 yield {fea.SY_ROLL:.0f} MPa (criterion under advisor review) | main {f['fos']['Main hoop']:.2f}, front {f['fos']['Front hoop']:.2f} | `fea.py` |",
+            f"| Frontal impact 95 kN (F.8.7.2), frame safety factor vs welded UTS | {fea.frontal()[0]:.2f} | `fea.py` |",
             f"| Wheel-load cases, worst frame safety factor | {ffos:.2f} | `loads.py` |",
             f"| Worst link buckling safety factor | {buck:.1f} ({link}) | `loads.py` |",
             f"| Springs front / rear | {sp['front']['lbs_in']:.0f} / {sp['rear']['lbs_in']:.0f} lb/in | `springs.py` |",

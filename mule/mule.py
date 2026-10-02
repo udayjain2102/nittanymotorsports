@@ -168,7 +168,7 @@ SIDE = [
     ("bh_bot", "pb1", "B", "FBH support lower (pedal box)"), ("pb1", "pb0", "B", "FBH support lower (pedal box)"), ("pb0", "ring_bot", "B", "FBH support lower (pedal box)"),
     ("ring_bot", "fh_bot", "B", "FBH support lower"),
     ("pb0", "pb0m", "B", "Pedal box cross (rear)"), ("pb1", "pb1m", "A", "Pedal box cross (front)"),
-    ("bh_bot", "ring_top", "C", "FBH support diagonal"), ("ring_bot", "fh_sis", "C", "FBH support diagonal"),
+    ("bh_top", "ring_bot", "C", "FBH support diagonal (front bay)"), ("ring_bot", "fh_sis", "C", "FBH support diagonal"),   # bh_top->ring_bot: bh_bot->ring_top passed through the pedal-box node (clash check)
     ("ring_bot", "ring_lsus", "J", "Front susp ring"), ("ring_lsus", "ring_sus", "J", "Front susp ring"), ("ring_sus", "ring_top", "J", "Front susp ring"),   # J: no ring top cross (T.1.2), posts bend
     # main hoop braces (B) rearward + supports (C)
     ("mh_top", "r_top", "B", "Main hoop brace"),
@@ -186,7 +186,7 @@ SIDE = [
 ]
 CROSS = [
     ("bh_bot", "B", "Front bulkhead"), ("bh_top", "B", "Front bulkhead"),
-    ("ring_bot", "B", "Front susp ring"),   # B = lower FBH support size: its F.5.2.3 support at the ring_bot kink. No ring_top cross: T.1.2
+    ("ring_bot", "B", "Lower FBH support cross (F.5.2.3)"),   # = lower FBH support size: its F.5.2.3 support at the ring_bot kink. No ring_top cross: T.1.2
     ("fh_top", "H", "Front hoop"),   # no front hoop base cross: removed in the 2026-10-01 optimisation (not rule-required, lightly loaded)
     ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
     ("sb", "H", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
