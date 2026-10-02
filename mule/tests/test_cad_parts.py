@@ -18,5 +18,7 @@ def test_assembly_step_has_every_part():
     text = (CAD / "NM26_Assembly.step").read_text(errors="ignore").replace("\n", "").replace(" ", "")   # STEP wraps long strings
     for r in csv.DictReader(open(CAD / "NM26_Assembly_parts.csv")):
         assert f"PRODUCT('{r['part_number']}_{r['name']}'" in text
-    for sub in ("01_frame_weldment", "02_corner_front_R", "02_corner_rear_L", "03_cockpit", "04_powertrain", "05_body", "06_electrical", "07_aero"):
+    import aero
+    subs = ["01_frame_weldment", "02_corner_front_R", "02_corner_rear_L", "03_cockpit", "04_powertrain", "05_body", "06_electrical"]
+    for sub in subs + (["07_aero"] if aero.FITTED else []):   # base mule: no wing (aero.FITTED False)
         assert f"PRODUCT('{sub}'" in text

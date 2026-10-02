@@ -405,24 +405,25 @@ def build():
         b.add(shape, nm, "electrical", "06_electrical", what)
     # rear wing with DRS flap (aero.py geometry; flap shown closed)
     import aero as AE
-    sec = AE.section("closed")
-    b.add(m.airfoil(sec["le"], AE.MAIN["chord"], AE.MAIN["angle"], AE.SPAN), "rear_wing_main_plane", "aero", "07_aero",
-          f"rear wing main plane, {AE.MAIN['chord']:.0f} mm chord at {AE.MAIN['angle']:.0f} deg, {AE.SPAN:.0f} mm span")
-    b.add(m.airfoil(sec["fle"], AE.FLAP["chord"], AE.FLAP["closed"], AE.SPAN), "rear_wing_DRS_flap", "aero", "07_aero",
-          f"DRS flap, {AE.FLAP['chord']:.0f} mm chord, shown closed at {AE.FLAP['closed']:.0f} deg (opens to {AE.FLAP['open']:.0f} deg about its 30 % chord pivot)")
-    xs = [q[0] for st in ("closed", "open") for q in AE.section(st).values()]
-    ys = [q[1] for st in ("closed", "open") for q in AE.section(st).values()]
-    for sg, side in ((1, "R"), (-1, "L")):
-        z0 = sg * AE.SPAN / 2
-        b.add(box(min(xs) - 5, max(xs) + 5, min(ys) - 60, max(ys) + 15, min(z0, z0 + sg * AE.ENDPLATE_T), max(z0, z0 + sg * AE.ENDPLATE_T)),
-              f"rear_wing_endplate_{side}", "aero", "07_aero", f"{AE.ENDPLATE_T:.0f} mm aluminium wing endplate, {'right' if sg > 0 else 'left'} side")
-    for i, (a_, b_, sz, role) in enumerate(AE.strut_members()):
-        side = SIDE((a_[2] + b_[2]) / 2); od, t = SIZES[sz]
-        b.add(tube(a_, b_, sz), f"{role.split(' (')[0].lower().replace(' ', '_')}_{side}", "aero", "07_aero",
-              f"4130 tube {od / 25.4:.3f} x {t / 25.4:.3f} in, {role}, {norm(sub(b_, a_)):.0f} mm long")
-    pv = sec["pivot"]
-    b.add(D.drs_servo(pv), "DRS_servo_15Nm", "aero", "07_aero",
-          "12 V DRS servo (>= 15 N*m stall) with output arm to the flap pivot, return spring shuts the flap")
+    if AE.FITTED:   # base mule ships without the wing (aero.FITTED); mount points stay on the frame
+        sec = AE.section("closed")
+        b.add(m.airfoil(sec["le"], AE.MAIN["chord"], AE.MAIN["angle"], AE.SPAN), "rear_wing_main_plane", "aero", "07_aero",
+              f"rear wing main plane, {AE.MAIN['chord']:.0f} mm chord at {AE.MAIN['angle']:.0f} deg, {AE.SPAN:.0f} mm span")
+        b.add(m.airfoil(sec["fle"], AE.FLAP["chord"], AE.FLAP["closed"], AE.SPAN), "rear_wing_DRS_flap", "aero", "07_aero",
+              f"DRS flap, {AE.FLAP['chord']:.0f} mm chord, shown closed at {AE.FLAP['closed']:.0f} deg (opens to {AE.FLAP['open']:.0f} deg about its 30 % chord pivot)")
+        xs = [q[0] for st in ("closed", "open") for q in AE.section(st).values()]
+        ys = [q[1] for st in ("closed", "open") for q in AE.section(st).values()]
+        for sg, side in ((1, "R"), (-1, "L")):
+            z0 = sg * AE.SPAN / 2
+            b.add(box(min(xs) - 5, max(xs) + 5, min(ys) - 60, max(ys) + 15, min(z0, z0 + sg * AE.ENDPLATE_T), max(z0, z0 + sg * AE.ENDPLATE_T)),
+                  f"rear_wing_endplate_{side}", "aero", "07_aero", f"{AE.ENDPLATE_T:.0f} mm aluminium wing endplate, {'right' if sg > 0 else 'left'} side")
+        for i, (a_, b_, sz, role) in enumerate(AE.strut_members()):
+            side = SIDE((a_[2] + b_[2]) / 2); od, t = SIZES[sz]
+            b.add(tube(a_, b_, sz), f"{role.split(' (')[0].lower().replace(' ', '_')}_{side}", "aero", "07_aero",
+                  f"4130 tube {od / 25.4:.3f} x {t / 25.4:.3f} in, {role}, {norm(sub(b_, a_)):.0f} mm long")
+        pv = sec["pivot"]
+        b.add(D.drs_servo(pv), "DRS_servo_15Nm", "aero", "07_aero",
+              "12 V DRS servo (>= 15 N*m stall) with output arm to the flap pivot, return spring shuts the flap")
     # routing: brake lines, throttle cable, fuel line, 12 V harness (rough runs along the frame)
     for nm, key, r, pts, what in D.routes():
         b.add(D.route(pts, r), nm, key, "08_routing", what)

@@ -75,7 +75,7 @@ def aip_kg():
 
 def belly_pan_kg():
     outline = [m.N[k] for k in ("r_bot", "rr_bot", "mh_bot", "fh_bot", "ring_bot", "bh_bot")]
-    xs = [p[0] for p in outline]; zs = [p[2] + 12.7 for p in outline]
+    xs = [p[0] for p in outline]; zs = [p[2] + m.rad("Lower side impact") for p in outline]
     area = 2 * sum((xs[i] - xs[i + 1]) * (zs[i] + zs[i + 1]) / 2 for i in range(len(xs) - 1))
     return abs(area) * m.PAN_T * 2.68e-6
 

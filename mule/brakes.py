@@ -81,7 +81,7 @@ def pedal_travel(split, xf, xr):
 def geometry():
     """Side-view stack-up: pivot, balance bar, MC front end (X), pad height (Y)."""
     s, c = math.sin(math.radians(TILT)), math.cos(math.radians(TILT))
-    y_base = m.N["pb0"][1] + 12.7 + 6.0                         # cross tube top + 6 mm base plate
+    y_base = m.N["pb0"][1] + m.rad("Pedal box cross (rear)") + 6.0   # cross tube top + 6 mm base plate
     x_piv = m.X_PEDAL + H_PAD * s; y_piv = y_base + PIVOT_UP
     x_bar = x_piv - H_MC * s
     return dict(piv=(x_piv, y_piv), bar=(x_bar, y_piv + H_MC * c), pad=(m.X_PEDAL, y_piv + H_PAD * c),
