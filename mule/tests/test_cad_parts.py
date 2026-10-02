@@ -6,7 +6,7 @@ def test_part_files_match_csv():
     rows = list(csv.DictReader(open(CAD / "NM26_Assembly_parts.csv")))
     assert len(rows) >= 250
     files = {p.name for p in (CAD / "parts").glob("*.step")}
-    assert {r["file"] for r in rows} == files
+    assert {r["file"] for r in rows} <= files   # every listed part exists; older parts are kept, never deleted (history)
     pns = [r["part_number"] for r in rows]
     assert len(set(pns)) == len(pns)
     assert all(r["file"].startswith(r["part_number"] + "_") for r in rows)

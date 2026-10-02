@@ -169,7 +169,7 @@ SIDE = [
     ("bh_bot", "pb1", "A", "FBH support lower (pedal box)"), ("pb1", "pb0", "A", "FBH support lower (pedal box)"), ("pb0", "ring_bot", "A", "FBH support lower (pedal box)"),
     ("ring_bot", "fh_bot", "A", "FBH support lower"),
     ("pb0", "pb0m", "B", "Pedal box cross (rear)"), ("pb1", "pb1m", "A", "Pedal box cross (front)"),
-    ("bh_top", "ring_bot", "C", "FBH support diagonal (front bay)"), ("ring_bot", "fh_sis", "C", "FBH support diagonal"),   # bh_top->ring_bot: bh_bot->ring_top passed through the pedal-box node (clash check)
+    ("bh_top", "ring_bot", "C", "FBH support front-bay diagonal"), ("ring_bot", "fh_sis", "C", "FBH support diagonal"),   # bh_top->ring_bot: bh_bot->ring_top passed through the pedal-box node (clash check)
     ("ring_bot", "ring_lsus", "J", "Front susp ring"), ("ring_lsus", "ring_sus", "J", "Front susp ring"), ("ring_sus", "ring_top", "J", "Front susp ring"),   # J: no ring top cross (T.1.2), posts bend
     # main hoop braces (B) rearward + supports (C)
     ("mh_top", "r_top", "A", "Main hoop brace"),
@@ -180,7 +180,7 @@ SIDE = [
     ("mh_bot", "rr_top", "C", "Rear side diagonal"),
     ("mh_bar", "rr_top", "C", "Main hoop bend support (F.5.6.3)"),   # side-view tube at the hoop bend below the braces   # C2: rr_top-r_bot half removed (19 deg cope; spool braces + side bay diagonal triangulate the rear)
     ("sp_bot", "sp_c", "C", "Spool carrier post"), ("sp_c", "sp_top", "C", "Spool carrier post"),
-    ("sp_c", "rr_top", "C", "Spool carrier brace (chain pull)"), ("sp_c", "rr_bot", "C", "Spool carrier brace (chain pull)"),
+    ("sp_c", "rr_top", "B", "Spool carrier brace (chain pull)"), ("sp_c", "rr_bot", "B", "Spool carrier brace (chain pull)"),
     ("r_top", "sp_bot", "C", "Rear side bay diagonal (bulkhead pickups)"),
     ("mh_bot", "em_fb", "H", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),
     ("mh_sis", "em_ft", "H", "Main hoop mid cross / firewall + top engine mounts"),

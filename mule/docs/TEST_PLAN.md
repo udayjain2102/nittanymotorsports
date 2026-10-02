@@ -43,18 +43,18 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 
 ### T1.1 Frame mass and node positions
 - **Objective:** check that the frame was built as modelled.
-- **Predicted:** 44.3 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
+- **Predicted:** 50.4 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
 - **Procedure:**
   1. Weigh the frame.
   2. Measure the 12 hardpoint nodes (suspension pickups, rocker and shock mounts) from the jig table. Use a height gauge and a tape from the jig datum.
 - **Pass:**
-  - mass 44–52 kg (tube plus about 4 kg of tabs and weld, ±8 %);
+  - mass 50–58 kg (tube plus about 4 kg of tabs and weld, ±8 %);
   - every suspension and rocker pickup within ±2 mm of `fab/jig_node_coordinates.csv`;
   - hoops within ±3 mm.
 
 ### T1.2 Torsional stiffness
 - **Objective:** confirm the beam FEA, and find weak welds or joints.
-- **Predicted:** 1946 N·m/deg (`fea.py`). The model has rigid joints, so the real frame will be softer: FSAE frames typically measure about ⅔ of rigid-joint FEA (≈1300), and `robustness.py`'s worst tolerance sample gives 1439. **Expect 1300–1450 measured.**
+- **Predicted:** 2422 N·m/deg (`fea.py`). The model has rigid joints, so the real frame may be softer: it is often said FSAE frames measure about ⅔ of rigid-joint FEA (≈1600; unsourced, and UDel measured above its FEA), and `robustness.py`'s worst tolerance sample gives 1795. **Expect 1600–2400 measured; ≥ 1000 passes.**
 - **Procedure:**
   1. Bolt the rear pickups to a rigid fixture.
   2. Put a beam across the front lower pickups and hang weights at a measured arm, so torque T = W × arm. Use 200, 400 and 600 N·m.
@@ -179,7 +179,7 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 
 ## Stage 3: brakes and pedal box (static)
 
-Precondition: **the pressure ratings of the master cylinders, calipers and hoses are confirmed in writing to be ≥ 296 bar.** `brakes.HYD_LIMIT` is currently an unverified 300 bar. If the ratings are lower, stop, and redesign in `brakes.py` (a bigger caliper piston area lowers the test pressure) before T3.3.
+Precondition: **the proof or burst ratings of the master cylinders, calipers and hoses are confirmed in writing to be ≥ 267 bar** (the 2000 N pressure). Wilwood publishes 2000 psi (138 bar) as its maximum *operating* pressure; normal lock-up needs 80 bar, but T.3.2.2 asks that nothing fails at 2000 N. `brakes.HYD_LIMIT` is an unverified 300 bar. If the ratings are lower, stop and redesign in `brakes.py` before T3.3: more caliper piston area (lower lock pressure) or a lower pedal ratio both lower the 2000 N pressure, at the cost of pedal force.
 
 ### T3.1 Circuits, leaks and bleeding
 - **Objective:** confirm two independent circuits with separate reservoirs (T.3.1.3/4).
@@ -194,13 +194,13 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
   - braided lines only (T.3.1.7).
 
 ### T3.2 Pedal force vs. line pressure (balance check)
-- **Predicted:** balance bar at 56.9 % front, pedal ratio 5.0 (`brakes.pressures`).
+- **Predicted:** balance bar at 58.7 % front, pedal ratio 4.5 (`brakes.pressures`).
 
   | Pedal force | Front | Rear |
   |---|---|---|
-  | 200 N | 28.8 bar | 15.1 bar |
-  | 500 N | 74.0 bar | 36.3 bar |
-  | 1000 N | 143.8 bar | 75.5 bar |
+  | 200 N | 26.7 bar | 11.1 bar |
+  | 500 N | 66.7 bar | 27.8 bar |
+  | 1000 N | 133.5 bar | 55.6 bar |
 
 - **Procedure:** fit gauges on a front and a rear bleeder, then apply each force with the load cell on the pad centre, 3 times each.
 - **Pass:**
@@ -210,9 +210,9 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 ### T3.3 2000 N pedal load (T.3.2.2)
 - **Predicted** (`brakes.py`):
-  - 296 bar front, 145 bar rear (the assumed 300 bar limit leaves only 4 bar: get the ratings in writing first);
-  - pad travel 19 mm;
-  - safety factors: pedal 3.8, pivot bolt 6.8, balance bar 2.1, frame 1.31.
+  - 267 bar front, 111 bar rear (above Wilwood's 138 bar operating rating: get proof ratings in writing first);
+  - pad travel 34 mm (hydraulic compliance 5 mm³/bar per circuit is an ESTIMATE: this test measures it);
+  - safety factors: pedal 3.9, pivot bolt 7.8, balance bar 2.4, frame 1.27.
 - **Procedure:**
   1. Scribe a reference line on the pedal and the base plate.
   2. Ramp to 2000 N over 5 s using the load cell with a lever or press adaptor, and hold 10 s. Record the pressures and pad travel.
@@ -222,14 +222,14 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
   - no leak;
   - no permanent set greater than 0.5 mm at the pad;
   - no cracking;
-  - pad travel ≤ 30 mm.
+  - pad travel ≤ 45 mm (10 mm before the brake over-travel switch trips).
 - **If travel is high:** air in the system or compliant hoses. Update `brakes.COMPLIANCE` with the measured value.
 
 ### T3.4 Brake over-travel switch (T.3.3)
 - **Predicted:**
-  - trips at 45 mm of pad travel;
-  - normal travel at 2000 N is 18 mm;
-  - with a circuit lost, the MC bottoms at 84 mm (front circuit lost) or 74 mm (rear circuit lost).
+  - trips at 55 mm of pad travel;
+  - normal travel at 2000 N is 34 mm;
+  - with a circuit lost, the MC bottoms at 80 mm (front circuit lost) or 80 mm (rear circuit lost).
 - **Procedure:**
   1. With the ignition on (engine off, shutdown circuit live), press to 2000 N: the switch must not trip.
   2. Crack the front bleeder, press, and confirm the switch trips and the shutdown circuit opens. Repeat for the rear.
@@ -255,24 +255,24 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 ### T4.1 Corner weights and CG height
 - **Objective:** measure the three numbers every load case depends on.
-- **Predicted by `mass.py`:** 288 kg with the driver and the rear wing, 47.0 % front, CG 341 mm.
-- **Assumed by the load cases (`loads.py`):** 300 kg, 45 % front, CG 345 mm. They are set to cover the budget.
+- **Predicted by `mass.py`:** 301 kg with the driver, no wing, 48.4 % front, CG 325 mm.
+- **Assumed by the load cases (`loads.py`):** 310 kg, 48 % front, CG 345 mm. They are set to cover the budget.
 - **Procedure:**
   1. Weigh all four corners.
   2. For CG height, lift the rear axle by a measured height h (about 250 mm), with the suspension locked by replacing the shocks with solid links. Re-weigh the front.
   3. CG height = r + (ΔW_front × L) / (W × tan θ), where r is the axle height, L the wheelbase and θ the lift angle.
 - **Pass:**
-  - mass ≤ 300 kg;
+  - mass ≤ 310 kg;
   - front 42–50 %;
-  - **CG height ≤ 345 mm** (the load-case assumption, with the rear wing; also see T4.2).
+  - **CG height ≤ 345 mm** (the load-case assumption; also see T4.2).
 - **If outside:** put the measured masses in `mass.py` and the totals in `loads.py`, then re-run `pytest`. That re-checks the frame, uprights, brakes, springs and tilt.
 
 ### T4.2 Tilt test (IN.11)
 - **Predicted:**
   - the car rolls at 60.5° (both tracks are now 1220 mm), from atan(half-track / CG height) with the assumed 345 mm CG;
-  - it rolls at 60.8° with the 341 mm budget CG, rear wing included (`mass.py`), 60.3° if every mass estimate errs the same way;
+  - it rolls at 61.9° with the 325 mm budget CG, no wing (`mass.py`), 61.5° if every mass estimate errs the same way;
   - at 60° the CG must be ≤ 352 mm.
-- **This is the thinnest margin in the whole design:** about 1°, before tyre and spring compliance, which reduce it further.
+- **Still a thin margin:** about 1.5–2° with the wing off, before tyre and spring compliance, which reduce it further. Record the actual lift-off angle, not just pass/fail.
 - **Procedure:** use a tilt table or a strapped ramp, with a safety strap on the high side.
   1. Tilt to 45° with all fluids at maximum and the driver in: no leaks.
   2. Tilt to 60°: no lift-off.
@@ -357,7 +357,7 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 - **Procedure:** hold 5000 rpm in 1st, 2nd and 3rd; log the speed with phone GPS.
 - **Pass:** within ±5 % of the table. If not, the placeholder ratios are wrong: put the real ones in `powertrain.ENGINE`.
-- **Later, once the engine is real:** time a 75 m standing start (D.9). The point-mass prediction is 4.48 s with DRS open (`lapsim.py`, lower bound; FSAE Michigan 2025 median 4.617 s). A real run 10–20 % slower is normal (launch, shifts, driver).
+- **Later, once the engine is real:** time a 75 m standing start (D.9). The point-mass prediction is 5.05 s (`lapsim.py`, no wing, 33 kW restrictor cap ASSUMED; FSAE Michigan 2025 median 4.617 s). Dyno the engine first: the power cap is the biggest unknown. A real run 5–10 % slower is normal (launch, shifts, driver).
 
 ### T5.2 Shakedown and fastener check
 - **Procedure:**
@@ -400,7 +400,7 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 ## Stage 6: brake test (IN.14)
 
 ### T6.1 Four-wheel lock-up
-- **Predicted:** lock all four at 567 N pedal on 1.5-grip tyres, 525 N on a 1.0-grip lot, with the fronts first at the 59 % front setting (`brakes.py`).
+- **Predicted:** lock all four at 676 N pedal on 1.5-grip tyres, 649 N on a 1.0-grip lot, with the fronts first at the 59 % front setting (`brakes.py`).
 - **Procedure:**
   1. Build up in steps: 20, then 30, then 40 km/h, in a straight line with a spotter watching the wheels (or 4 chalk marks on the tyres).
   2. Log the pedal force with an in-car pedal load cell if available; otherwise log the line pressure.
@@ -409,11 +409,11 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
   - all four lock;
   - the engine stays running (IN.14.2.2);
   - the car stays straight;
-  - lock force ≤ 600 N.
+  - lock force ≤ 700 N.
 - **Record** the lock pressure and the balance-bar setting, then put the implied grip back into `loads.py` `MU` if it is far from 1.5.
 
 ### T6.2 Rotor temperature
-- **Predicted:** +31 °C front and +13 °C rear for one stop from 60 km/h. That is the full-speed prediction scaled by v²: 117 °C / 50 °C from 117 km/h.
+- **Predicted:** +33 °C front and +12 °C rear for one stop from 60 km/h. That is the full-speed prediction scaled by v²: 126 °C / 45 °C from 117 km/h.
 - **Procedure:** measure the IR temperature of all four rotors immediately before and after one hard stop from 60 km/h.
 - **Pass:**
   - within ±50 % of the prediction;
@@ -437,7 +437,7 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 - **Pass:**
   - completes all laps with no spin;
   - left and right times within 5 %.
-- **Same prediction** from `lapsim.py`: 5.12 s at μ 1.3 with the wing closed (R 8.62 m), the calibrated lap-sim grip; the table above is without the wing. FSAE Michigan 2025 median: 5.515 s.
+- **Same prediction** from `lapsim.py`: 5.38 s at μ 1.2 without the wing (R 8.62 m), the lap-sim grip for used tyres. FSAE Michigan 2025 median: 5.515 s.
 - **Use:** implied lateral grip μ = 4π²R / (g t²). If it is much below 1.5, the design loads are conservative. If it is above, raise `MU` and re-check the frame.
 
 ### T7.2 Rear suspension durability
@@ -450,18 +450,18 @@ Precondition: **the pressure ratings of the master cylinders, calipers and hoses
 
 | Test | Date | Predicted | Measured (runs) | Pass? | Model input updated (real-to-sim loop, `SIM_TO_REAL.md`) |
 |---|---|---|---|---|---|
-| T1.1 mass | | 44.3 kg + 4 kg tabs | | | |
-| T1.2 torsion | | 1946 N·m/deg FEA; expect 1300–1450 measured | | | |
+| T1.1 mass | | 50.4 kg + 4 kg tabs | | | |
+| T1.2 torsion | | 2422 N·m/deg FEA; expect 1600–2400 measured | | | |
 | T2.2 camber gain F/R | | −0.72 / −0.75 °/25 mm | | | |
 | T2.3 bump steer F/R | | ≤ 0.11° / 0.00° |
 | T2.7 compliance toe at 1.5 g-equivalent side load F/R | | 0.10° in / 0.18° out | | | | | | |
 | T2.4 motion ratio F/R | | 0.72 / 0.75 | | | |
 | T2.5 wheel rate F/R | | 22.1 / 21.2 N/mm | | | |
 | T2.6 free play | | < 7° | | | |
-| T3.2 pressure @ 500 N F/R | | 74.0 / 36.3 bar | | | |
-| T3.3 2000 N | | 296 / 145 bar, 19 mm | | | |
-| T3.4 BOTS | | trips at 45 mm | | | |
-| T4.1 mass / front % / CG | | 288 kg / 47 % / 341 mm | | | |
+| T3.2 pressure @ 500 N F/R | | 66.7 / 27.8 bar | | | |
+| T3.3 2000 N | | 267 / 111 bar, 34 mm | | | |
+| T3.4 BOTS | | trips at 55 mm | | | |
+| T4.1 mass / front % / CG | | 301 kg / 48 % / 325 mm | | | |
 | T4.2 tilt 45° / 60° | | no leak / no roll | | | |
 | T4.3 egress | | ≤ 5 s | | | |
 | T5.1 speed @ 5000 rpm, 2nd | | 30.0 km/h | | | |
