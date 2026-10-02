@@ -1,6 +1,6 @@
 # Clean-sheet frame: design spec
 
-Goal: a frame of roughly 34–39 kg (46.2 kg when this was written; `main` is now the C2 frame at 44.3 kg) that keeps every FSAE 2026 rule and every margin. The user chose
+Goal: a frame of roughly 34–39 kg (46.2 kg when this was written; the C2 frame was 44.3 kg, and 50.4 kg after the 2 Oct audit gates) that keeps every FSAE 2026 rule and every margin. The user chose
 the most open option (2026-10-01): wheelbase, seat angle, rear length and engine position may all change.
 
 ## Hard gates (never traded)

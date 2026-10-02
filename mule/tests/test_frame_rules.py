@@ -54,3 +54,30 @@ def test_tube_in_front_tyre_zone_fails(members):
     x = m.WHEELBASE; z = m.TRACK_F / 2
     members.append(((x, 300.0, 100.0), (x, 300.0, z), "C", "test tube into the tyre"))
     assert failing("V.1.1")
+
+
+def _kink(members, role, node_xyz, offset):
+    """Move one shared node of a role's two tubes by offset (only those tubes), making a bent member."""
+    k = F.key(node_xyz); new = tuple(np.add(node_xyz, offset))
+    members[:] = [(new if r == role and F.key(a) == k else a, new if r == role and F.key(b) == k else b, s, r)
+                  for a, b, s, r in members]
+
+
+def test_kinked_upper_bulkhead_support_without_same_size_support_fails(members):
+    _kink(members, "FBH support upper", m.N["ring_top"], (0.0, 10.0, -30.0))   # the pre-audit 8.5 deg kink
+    assert failing("F.5.2.3")
+
+
+def test_lower_support_kink_with_smaller_ring_cross_fails(members):
+    members[:] = [(a, b, "C" if r == "Lower FBH support cross (F.5.2.3)" else s, r) for a, b, s, r in members]
+    assert failing("F.5.2.3")
+
+
+def test_main_hoop_bend_without_side_view_tube_fails(members):
+    members[:] = [mb for mb in members if mb[3] != "Main hoop bend support (F.5.6.3)"]
+    assert failing("F.5.6.3 main hoop")
+
+
+def test_leg_above_the_structure_fails(monkeypatch):
+    monkeypatch.setattr(F, "LEG_R", 400.0)   # a leg this thick pokes above the front hoop brace
+    assert failing("T.1.3.2")

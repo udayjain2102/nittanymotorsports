@@ -1,19 +1,23 @@
 """3D beam FEA of the mule frame (rigid welded joints, 12-DOF Euler-Bernoulli elements).
 
 Workflow per structural-analysis skill: material -> geometry -> loads -> constraints -> solve -> FoS.
-Material per FSAE F.3.4.2: E=200 GPa, welded Sy=180 MPa (conservative at every node).
+Material: E=200 GPa. Service cases use the F.3.4.2 welded values for any steel (Sy 180, Su 300 MPa). The roll-over case
+uses a self-chosen welded-4130 allowable (SY_ROLL / SU_ROLL below), under advisor review: sized to F.3.4.2's 180 MPa against
+the 6/5/9 kN loads, no tube on the ladder works (1.5 x 0.095 main hoop still at 1.5x), so F.3.4.2 is read as the SES
+equivalency basis, not an absolute load criterion. Rule compliance of the hoops is the F.3.2.1 tube sizes.
 
 Load cases:
   1. Torsional stiffness: rear suspension pickups fixed, vertical couple on front pickups.
-  2. Main hoop top load: 6 kN lateral + 5 kN rearward + 9 kN down (SES-style; verify vs current SES).
-  3. Front hoop top load: same magnitudes.
-Cases 2-3 fix translations at the bottom nodes of both roll hoops (AF4.1/AF4.2 boundary condition).
+  2/3. Main / front hoop top load 6 kN + 5 kN + 9 kN down (legacy FSAE AF4.1/4.2 loads; the 2026 rules have no AF section),
+     worst of 4 directions and of two supports: hoop bases fixed (AF4 style) and inertia relief.
+  4. Frontal impact: F.8.7.2 standard-foam IA peak 95 kN on the bulkhead, inertia relief (frontal()).
+Every solve also records member buckling (compression / pin-ended Euler load, buckle_fos()).
 Run: python fea.py  (runs a cantilever self-check first)
 """
 import numpy as np
 import mule as m
 
-E, G, SY_WELD = 200e3, 77e3, 180.0  # MPa (N/mm^2)
+E, G, SY_WELD, SU_WELD = 200e3, 77e3, 180.0, 300.0  # MPa (N/mm^2); F.3.4.2 welded values for any steel
 # Roll-over (AF4.1/AF4.2) criterion, chosen 2026-10-01 (docs/SIM_TO_REAL.md): real 4130, weld-limited. Base 4130 normalized
 # tube is Fty 75 / Ftu 95 ksi (MIL-HDBK-5J). No public welded-4130 table exists, so welds are taken at 85 % of the ER70S-2
 # filler minimums (AWS A5.18: 58 ksi yield, 70 ksi ultimate), the weld-allowable rule MIL-HDBK-5 uses. Nominal: FoS >= 1.0 on
@@ -49,6 +53,28 @@ def rot(a, b):
     for i in range(4): T[3 * i:3 * i + 3, 3 * i:3 * i + 3] = R
     return T
 
+BUCKLE_FOS = 1.5   # (ours) compressive force <= Euler load / 1.5, pin-ended (K = 1): welded ends are stiffer, the 1.5
+                   # covers initial crookedness and weld distortion. Audit 1 Oct 2026: no frame buckling check existed.
+
+RECORD = None      # set to a list by buckle_fos(): every solve appends (frame, buckling ratios)
+
+def buckle_fos(fn):
+    """Run fn(); return (its result, worst Euler load / compression over every solve it made, that member's role)."""
+    global RECORD
+    RECORD = []
+    try:
+        out = fn()
+    finally:
+        rec, RECORD = RECORD, None
+    worst, role = 0.0, ""
+    for fr, b in rec:
+        if len(b) and b.max() > worst: worst, role = float(b.max()), fr.el[int(b.argmax())][3]
+    return out, (1 / worst if worst else float("inf")), role
+
+def euler_ratio(f0, EI, L):
+    """Compression / pin-ended Euler load (0 in tension). f0 = local axial end force at node i (+ = compression)."""
+    return max(f0, 0.0) / (np.pi**2 * EI / L**2)
+
 class Frame:
     def __init__(self, members):
         self.pts, self.el = [], []
@@ -72,11 +98,13 @@ class Frame:
         fix = sorted({6 * nd + d for nd, dofs in fixed.items() for d in dofs})
         free = np.setdiff1d(np.arange(6 * n), fix)
         u = np.zeros(6 * n); u[free] = np.linalg.solve(K[np.ix_(free, free)], F[free])
-        stress = []
-        for (idx, T, kl, A, I, c) in cache:
+        stress, buck = [], []
+        for (idx, T, kl, A, I, c), (i, j, *_) in zip(cache, self.el):
             f = kl @ (T @ u[idx])
             s = max(abs(f[0]) / A + np.hypot(f[4], f[5]) * c / I, abs(f[6]) / A + np.hypot(f[10], f[11]) * c / I)
-            stress.append(s)
+            stress.append(s); buck.append(euler_ratio(f[0], E * I, np.linalg.norm(self.P[j] - self.P[i])))
+        self.buck = np.array(buck)
+        if RECORD is not None: RECORD.append((self, self.buck))
         return u, np.array(stress)
     def find(self, p):
         return int(np.argmin(np.linalg.norm(self.P - np.array(p, float), axis=1)))
@@ -86,8 +114,9 @@ class Frame:
 HOOP_DIRS = [(-5000, 6000), (5000, 6000), (-6000, 5000), (6000, 5000)]   # (fore/aft, lateral) N; X fwd, Z right
 
 LUMPED = [(("em_fb", "em_ft", "em_rb"), 32.0), (("mh_bot", "fh_bot", "mh_bar"), 80.0), (("mh_sis",), 5.0), (("sp_c",), 8.0)]
+DRIVER_LUMP = 1    # index of the driver in LUMPED
 
-def inertia_relief(fr, loads):
+def inertia_relief(fr, loads, without_driver=False):
     """Balance applied nodal forces with a rigid-body acceleration field of the frame's tube mass plus LUMPED masses,
     as in the real car, instead of reacting them at arbitrary supports. Returns (balanced loads, supports): one node
     clamped in all 6 DOF, which carries ~zero load and only stops rigid-body motion. (A 3-2-1 set picked by distance
@@ -96,7 +125,8 @@ def inertia_relief(fr, loads):
     for i, j, s, _ in fr.el:
         L = np.linalg.norm(fr.P[j] - fr.P[i]); mm = props(s)[0] * L * 7.85e-6
         mass[i] += mm / 2; mass[j] += mm / 2
-    for names, kg in LUMPED:
+    for li, (names, kg) in enumerate(LUMPED):
+        if without_driver and li == DRIVER_LUMP: continue   # the load IS the driver's inertia (harness crash)
         ks = [fr.find(m.N[n]) for n in names] + [fr.find(m.mir(m.N[n])) for n in names]
         for k in ks: mass[k] += kg / len(ks)
     cg = (mass[:, None] * fr.P).sum(0) / mass.sum(); r = fr.P - cg
@@ -162,11 +192,56 @@ def run(verbose=True):
             u, st = fr.solve(ld, sup); d = np.linalg.norm(u.reshape(-1, 6)[:, :3], axis=1).max()
             if worst is None or st.max() > worst[1].max(): worst = (fx, st)
             out["defl"][name] = max(out["defl"].get(name, 0.0), d)
+            # audit 1 Oct 2026: the fixed-hoop-base support flatters the result. Also balance the same load by the car's
+            # own inertia (it is an impact), and keep the worse of the two. Deflection is only defined with supports.
+            _, st = fr.solve(*inertia_relief(fr, ld))
+            if st.max() > worst[1].max(): worst = (fx, st)
         fx, st = worst
         out["fos"][name] = report(fr, st, f"{name} 6/5/9 kN envelope (worst: {fx / 1e3:+.0f} kN fore/aft)") if verbose else SY_ROLL / st.max()
         say(f"   max deflection {out['defl'][name]:.1f} mm (limit 25)")
     return out
 
+IA_PEAK = 95e3   # N, F.8.7.2 peak load of the Standard Foam Impact Attenuator
+
+def frontal():
+    """F.8.7.2 peak IA load (95 kN, -X) on the anti-intrusion plate, shared by the four front bulkhead corners and
+    balanced by the car's inertia. FoS vs welded ultimate (crash: local yield accepted, no rupture), and where."""
+    fr = Frame(m.MEMBERS)
+    corners = [m.N["bh_top"], m.mir(m.N["bh_top"]), m.N["bh_bot"], m.mir(m.N["bh_bot"])]
+    ld = {fr.find(p): np.array([-IA_PEAK / 4, 0.0, 0.0]) for p in corners}
+    _, st = fr.solve(*inertia_relief(fr, ld)); j = int(np.argmax(st))
+    return SU_WELD / st[j], fr.el[j][3]
+
+def frame_cases():
+    """{case: (callable returning a FoS or a result holding one, buckling FoS required)} for every frame strength case."""
+    import loads, powertrain, brakes, harness, aero
+    return {"roll-over (6/5/9 kN, worst support)": (lambda: min(run(verbose=False)["fos"].values()), 1.0),
+            "frontal impact 95 kN (F.8.7.2)": (lambda: frontal()[0], 1.0),
+            "wheel loads": (lambda: loads.run(verbose=False)[2], BUCKLE_FOS),
+            "launch": (lambda: powertrain.launch_frame()[0], BUCKLE_FOS),
+            "2000 N pedal": (lambda: brakes.frame_2000N()[0], BUCKLE_FOS),
+            "20 g harness": (lambda: harness.crash()[0], 1.0),
+            "wing mounts": (lambda: aero.top_speed_fos(), BUCKLE_FOS)}
+
+def checks():
+    out = []
+    fo, where = frontal()
+    out.append(("frontal impact: 95 kN IA peak (F.8.7.2) through the front structure, FoS >= 1.0 vs welded UTS",
+                fo >= 1.0, f"{fo:.2f} ({where}); crash case: local yield accepted"))
+    r = run(verbose=False)
+    for k, v in r["fos"].items():
+        out.append((f"{k} roll-over 6/5/9 kN (legacy AF4 loads; ours), worse of hoop-base supports and inertia relief, FoS >= 1.0 vs {SY_ROLL:.0f} MPa",
+                    v >= 1.0, f"{v:.2f}; vs F.3.4.2 welded 180 MPa: {v * 180 / SY_ROLL:.2f}"))
+        out.append((f"{k} roll-over deflection <= 25 mm", r["defl"][k] <= 25, f"{r['defl'][k]:.1f} mm"))
+    for name, (fn, need) in frame_cases().items():
+        _, bf, role = buckle_fos(fn)
+        out.append((f"buckling: {name}, Euler load >= {need:.1f} x compression in every frame tube (pin-ended; ours)", bf >= need,
+                    f"{bf:.2f} ({role})"))
+    return out
+
 if __name__ == "__main__":
-    selfcheck()
-    assert min(run()["fos"].values()) >= 1.0, "frame yields at a weld under the AF4 roll-over load"
+    import fea as _fea   # the imported module, not __main__: other modules' solves record into fea.RECORD
+    _fea.selfcheck()
+    res = _fea.checks()
+    for n, p_, d in res: print(("PASS " if p_ else "FAIL ") + f"{n:110s} {d}")
+    assert all(p_ for _, p_, _ in res), "frame check failed"

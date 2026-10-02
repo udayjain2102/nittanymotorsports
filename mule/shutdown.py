@@ -30,7 +30,8 @@ LOC = {"battery": (m.X_MAIN + 60, 150.0, 120.0),
        "DRS servo": (-380.0, 1030.0, 0.0)}                                          # at the flap pivot (aero.py)
 
 # wires: (from, to, gauge, fuse A or None, load it carries)
-WIRES = [("battery", "primary master switch", 4, 100.0, "starter"),        # main feed; fuse = T.9.2.2 overcurrent
+WIRES = [("battery", "primary master switch", 4, 100.0, "starter"),        # main feed; fuse = T.9.2.2 overcurrent. Use a slow-blow
+         # ANL/MIDI type: the 120 A starter draw is 120 % of rating for a few seconds of cranking; such fuses hold 135 % for minutes
          ("primary master switch", "starter", 4, None, "starter"),
          ("primary master switch", "e-stop", 18, 5.0, "kill relay coil"),
          ("e-stop", "bots", 18, None, "kill relay coil"), ("bots", "inertia switch", 18, None, "kill relay coil"),
@@ -38,7 +39,8 @@ WIRES = [("battery", "primary master switch", 4, 100.0, "starter"),        # mai
          ("primary master switch", "kill relay", 12, 20.0, "fuel pump+ignition"),
          ("kill relay", "fuel pump", 16, None, "fuel pump"), ("kill relay", "ignition/ECU", 16, None, "ignition/ECU"),
          ("primary master switch", "fan", 14, 15.0, "fan"), ("primary master switch", "brake light", 18, 5.0, "brake light"),
-         ("primary master switch", "DRS servo", 16, 7.5, "DRS servo")]   # servo loses power with the master switch; its spring shuts the flap
+         ("primary master switch", "DRS servo", 16, 7.5, "DRS servo")]   # provision only (wing not fitted). A jammed flap can blow the
+         # 7.5 A fuse at servo stall: that fails safe, since the return spring shuts the flap without power
 SHUTDOWN_SERIES = ["e-stop", "bots", "inertia switch"]     # normally closed, in series with the kill-relay coil
 KILLED = ["fuel pump", "ignition/ECU"]                     # IC.9.2.2
 

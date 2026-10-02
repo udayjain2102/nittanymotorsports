@@ -48,7 +48,7 @@ countershaft position and envelope; rev limit not found yet.
 
 ## Brakes (chosen, pending pressure ratings)
 
-Every hydraulic part needs a written rating of at least **296 bar** (the 2000 N pedal test, T.3.2.2).
+Every hydraulic part needs a written proof rating covering **267 bar** (the 2000 N pedal test, T.3.2.2); Wilwood's published maximum operating pressure is 2000 psi (138 bar), and lock-up needs 80 bar.
 
 | Part | Choice | Source / check |
 |---|---|---|

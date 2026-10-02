@@ -54,7 +54,8 @@ STEEL_DENSITY = 7.85e-6  # kg/mm^3
 th = math.radians(SEAT_BACK_DEG)
 up = (-math.sin(th), math.cos(th))                     # along seat back, leaning rearward
 # head restraint sits just ahead of the main hoop; head circle <=25 mm from it
-HEAD_X = X_MAIN + 12.7 + 60 + 150                      # hoop face + restraint/padding + head radius
+HEAD_X = X_MAIN + SIZES["J"][0] / 2 + 53.65 + 150     # J main hoop face + 53.65 mm restraint plate and padding + head radius
+                                                       # (same head position as before; the old "12.7 + 60" took the hoop as 1 in)
 HIP = (HEAD_X - up[0] * 770, HIP_Y)                    # 490 + 280 along the back line
 SHOULDER = (HIP[0] + up[0] * 490, HIP[1] + up[1] * 490)
 HEAD = (SHOULDER[0] + up[0] * 280, SHOULDER[1] + up[1] * 280)
@@ -83,6 +84,9 @@ N = {
 }
 def _on(a, b, x):  # point on straight member a-b at station x (keeps rails straight)
     t = (x - N[a][0]) / (N[b][0] - N[a][0]); return tuple(p + t * (q - p) for p, q in zip(N[a], N[b]))
+# F.5.2.3 (audit 1 Oct 2026): the upper FBH support bh_top -> ring_top -> fh_sis is one straight tube line, so ring_top
+# sits ON it (was (X_RING, 395, 220): an 8.5 deg kink with no same-size in-plane support, the ring-top cross is barred by T.1.2)
+N["ring_top"] = tuple(round(c, 1) for c in _on("bh_top", "fh_sis", X_RING))
 N["rr_bot"], N["rr_top"] = _on("mh_bot", "r_bot", X_RR), _on("mh_sis", "r_top", X_RR)
 Y_RLOW = 150.0   # rear lower rail height = rear lower pickup height (C2: pickups on rail nodes); rail kinks up at rr_bot
 N["rr_bot"] = (X_RR, Y_RLOW, N["rr_bot"][2]); N["r_bot"] = (X_REAR, Y_RLOW, Z_REAR)
@@ -150,45 +154,46 @@ SIDE = [
     ("mh_bot", "mh_sis", "J", "Main hoop"), ("mh_sis", "mh_bar", "J", "Main hoop"),
     ("mh_bar", "mh_sh", "J", "Main hoop"), ("mh_sh", "mh_top", "J", "Main hoop"),
     # side impact (B)
-    ("fh_sis", "mh_sis", "B", "Upper side impact"),
-    ("fh_bot", "as", "B", "Lower side impact"), ("as", "lap", "B", "Lower side impact"), ("lap", "mh_bot", "B", "Lower side impact"),
+    ("fh_sis", "mh_sis", "H", "Upper side impact"),
+    ("fh_bot", "as", "H", "Lower side impact"), ("as", "lap", "H", "Lower side impact"), ("lap", "mh_bot", "H", "Lower side impact"),
     ("as", "as_c", "B", "Anti-sub floor cross"), ("as_c", "mh_bot", "C", "Cockpit floor V (anti-sub)"), ("as_c", "fh_bot", "C", "Cockpit floor V (anti-sub)"),
-    ("mh_bar", "sb", "H", "Shoulder harness bar"),
-    ("fh_bot", "lap_up", "A", "Diagonal side impact"), ("lap_up", "mh_sis", "A", "Diagonal side impact"),   # A, not B: the 20 g harness case under tube tolerances (robustness.py)
+    ("mh_bar", "sb", "J", "Shoulder harness bar"),
+    ("fh_bot", "lap_up", "B", "Diagonal side impact"), ("lap_up", "mh_sis", "B", "Diagonal side impact"),   # A, not B: the 20 g harness case under tube tolerances (robustness.py)
     ("lap", "lap_up", "B", "Lap belt tab brace"),
     # front hoop brace (B) to bulkhead
     ("fh_top", "bh_top", "B", "Front hoop brace"),
     # front bulkhead (B) + supports (C)
     ("bh_bot", "bh_lsus", "B", "Front bulkhead"), ("bh_lsus", "bh_sus", "B", "Front bulkhead"), ("bh_sus", "bh_top", "B", "Front bulkhead"),
-    ("bh_top", "ring_top", "A", "FBH support upper"), ("ring_top", "fh_sis", "A", "FBH support upper"),
+    ("bh_top", "ring_top", "H", "FBH support upper"), ("ring_top", "fh_sis", "H", "FBH support upper"),
     ("fh_top", "ring_top", "C", "Front hoop lower brace"),
-    ("bh_bot", "pb1", "B", "FBH support lower (pedal box)"), ("pb1", "pb0", "B", "FBH support lower (pedal box)"), ("pb0", "ring_bot", "B", "FBH support lower (pedal box)"),
-    ("ring_bot", "fh_bot", "B", "FBH support lower"),
+    ("bh_bot", "pb1", "A", "FBH support lower (pedal box)"), ("pb1", "pb0", "A", "FBH support lower (pedal box)"), ("pb0", "ring_bot", "A", "FBH support lower (pedal box)"),
+    ("ring_bot", "fh_bot", "A", "FBH support lower"),
     ("pb0", "pb0m", "B", "Pedal box cross (rear)"), ("pb1", "pb1m", "A", "Pedal box cross (front)"),
-    ("bh_bot", "ring_top", "C", "FBH support diagonal"), ("ring_bot", "fh_sis", "C", "FBH support diagonal"),
+    ("bh_top", "ring_bot", "C", "FBH support front-bay diagonal"), ("ring_bot", "fh_sis", "C", "FBH support diagonal"),   # bh_top->ring_bot: bh_bot->ring_top passed through the pedal-box node (clash check)
     ("ring_bot", "ring_lsus", "J", "Front susp ring"), ("ring_lsus", "ring_sus", "J", "Front susp ring"), ("ring_sus", "ring_top", "J", "Front susp ring"),   # J: no ring top cross (T.1.2), posts bend
     # main hoop braces (B) rearward + supports (C)
-    ("mh_top", "r_top", "B", "Main hoop brace"),
-    ("mh_sis", "rr_top", "B", "MH brace support upper"), ("rr_top", "sp_top", "B", "MH brace support upper"), ("sp_top", "r_top", "B", "MH brace support upper"),
+    ("mh_top", "r_top", "A", "Main hoop brace"),
+    ("mh_sis", "rr_top", "A", "MH brace support upper"), ("rr_top", "sp_top", "A", "MH brace support upper"), ("sp_top", "r_top", "A", "MH brace support upper"),
     ("mh_bot", "rr_bot", "A", "MH brace support lower"), ("rr_bot", "sp_bot", "C", "MH brace support lower"), ("sp_bot", "r_bot", "C", "MH brace support lower"),
-    ("rr_bot", "rr_top", "A", "Rear susp ring"),
+    ("rr_bot", "rr_top", "C", "Rear susp ring"),
     ("r_bot", "r_top", "C", "Rear bulkhead"),
-    ("mh_bot", "rr_top", "C", "Rear side diagonal"),   # C2: rr_top-r_bot half removed (19 deg cope; spool braces + side bay diagonal triangulate the rear)
+    ("mh_bot", "rr_top", "C", "Rear side diagonal"),
+    ("mh_bar", "rr_top", "C", "Main hoop bend support (F.5.6.3)"),   # side-view tube at the hoop bend below the braces   # C2: rr_top-r_bot half removed (19 deg cope; spool braces + side bay diagonal triangulate the rear)
     ("sp_bot", "sp_c", "C", "Spool carrier post"), ("sp_c", "sp_top", "C", "Spool carrier post"),
-    ("sp_c", "rr_top", "C", "Spool carrier brace (chain pull)"), ("sp_c", "rr_bot", "C", "Spool carrier brace (chain pull)"),
+    ("sp_c", "rr_top", "B", "Spool carrier brace (chain pull)"), ("sp_c", "rr_bot", "B", "Spool carrier brace (chain pull)"),
     ("r_top", "sp_bot", "C", "Rear side bay diagonal (bulkhead pickups)"),
-    ("mh_bot", "em_fb", "A", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),
-    ("mh_sis", "em_ft", "A", "Main hoop mid cross / firewall + top engine mounts"),
+    ("mh_bot", "em_fb", "H", "Main hoop base cross + front engine mounts"), ("rr_bot", "em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),
+    ("mh_sis", "em_ft", "H", "Main hoop mid cross / firewall + top engine mounts"),
 ]
 CROSS = [
     ("bh_bot", "B", "Front bulkhead"), ("bh_top", "B", "Front bulkhead"),
-    ("ring_bot", "C", "Front susp ring"),   # no ring_top cross: T.1.2 template passes there
+    ("ring_bot", "A", "Lower FBH support cross (F.5.2.3)"),   # = lower FBH support size: its F.5.2.3 support at the ring_bot kink. No ring_top cross: T.1.2
     ("fh_top", "H", "Front hoop"),   # no front hoop base cross: removed in the 2026-10-01 optimisation (not rule-required, lightly loaded)
-    ("em_fb", "A", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
-    ("sb", "H", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
+    ("em_fb", "H", "Main hoop base cross + front engine mounts"), ("mh_top", "J", "Main hoop"),
+    ("sb", "J", "Shoulder harness bar"),   # 20 g harness load on a 584 mm span; sized by frame_opt.py with the tolerance check
     ("em_rb", "H", "Rear-ring bottom cross + rear engine mounts"),  # no top cross here: it would pass through the engine
     ("r_bot", "C", "Rear bulkhead"), ("r_top", "C", "Rear bulkhead"),
-    ("ring_lsus", "B", "Front pickup cross (rocker/shock loads, rack)"),
+    ("ring_lsus", "C", "Front pickup cross (rocker/shock loads, rack)"),
     ("pb0m", "B", "Pedal box cross (rear)"), ("pb1m", "A", "Pedal box cross (front)"),
 ]
 DIAG = [  # single diagonals (right node -> left node)
@@ -196,7 +201,7 @@ DIAG = [  # single diagonals (right node -> left node)
     ("r_bot", "r_top'", "C", "Rear bulkhead diagonal"),
     ("mh_top", "r_top'", "C", "MH brace-plane diagonal (lateral)"),
     ("fh_top", "ring_top'", "C", "FH brace-plane diagonal (lateral)"),
-    ("em_ft", "em_ft'", "A", "Main hoop mid cross / firewall + top engine mounts"),
+    ("em_ft", "em_ft'", "H", "Main hoop mid cross / firewall + top engine mounts"),
 ]
 MEMBERS = []
 for a, b, s, r in SIDE:
@@ -205,6 +210,10 @@ for a, s, r in CROSS:
     MEMBERS.append((node(a), mir(node(a)), s, r))
 for a, b, s, r in DIAG:
     MEMBERS.append((node(a), node(b), s, r))
+
+def rad(role):
+    """Outside radius (mm) of the tube a role is built from (audit: checks assumed 1 in tube everywhere)."""
+    return SIZES[next(s for _, _, s, r in MEMBERS if r == role)][0] / 2
 
 # ---------------- GEOMETRY HELPERS ----------------
 def sub(a, b): return tuple(x - y for x, y in zip(a, b))
@@ -233,31 +242,31 @@ def cyl_z(x, y, z0, z1, r):
 def checks():
     R = []
     def ok(name, cond, detail): R.append((name, bool(cond), detail))
-    bot_low = Y_LOW - 12.7
+    bot_low = Y_LOW - rad("Lower side impact")
     ok("V.1.2 wheelbase >=1525", WHEELBASE >= 1525, f"{WHEELBASE}")
     ok("V.1.3.2 small/large track >=75%", min(TRACK_F, TRACK_R) / max(TRACK_F, TRACK_R) >= .75,
        f"{min(TRACK_F, TRACK_R) / max(TRACK_F, TRACK_R):.2f}")
     ok("V.1.4.2 lower SIS to ground <=90 (should <=75)", bot_low <= 90, f"{bot_low:.1f}")
-    top_edge = Y_SIS + 12.7 - bot_low
+    top_edge = Y_SIS + rad("Upper side impact") - bot_low
     ok("F.6.4.4 upper SIS top edge 290-345 above lower SIS bottom", 290 <= top_edge <= 345, f"{top_edge:.1f}")
     for s in SIZES:
         I, A = tube_props(s)
         ok(f"F.3.4.1 size {s} I>={RULE_MIN[s][0]}, A>={RULE_MIN[s][1]}",
            I >= RULE_MIN[s][0] and A >= RULE_MIN[s][1] and SIZES[s][0] >= 25, f"I={I:.0f} A={A:.0f}")
     ok("F.5.8.4 main hoop inside width at base >=380", 2 * Z_COCKPIT - 25.4 >= 380, f"{2 * Z_COCKPIT - 25.4:.0f}")
-    drop = H_MAIN + 12.7 - N["mh_top"][1]
+    drop = H_MAIN + rad("Main hoop") - N["mh_top"][1]
     ok("F.5.9.4 MH brace attach <=160 below top", drop <= 160, f"{drop:.1f}")
     brace = sub(N["r_top"], N["mh_top"]); hoop = sub(N["mh_bot"], N["mh_top"])
     ok("F.5.9.5 MH/brace included angle >=30", ang(brace, (hoop[0], hoop[1], 0)) >= 30,
        f"{ang(brace, (hoop[0], hoop[1], 0)):.1f} deg")
-    fdrop = H_FRONT + 12.7 - N["fh_top"][1]
+    fdrop = H_FRONT + rad("Front hoop") - N["fh_top"][1]
     ok("F.6.3.4 FH brace attach <=50 below top", fdrop <= 50, f"{fdrop:.1f}")
     wtop = WHEEL_C[1] + WHEEL_DIA / 2
-    ok("F.5.7.4 FH top >= steering wheel top", H_FRONT + 12.7 >= wtop, f"{H_FRONT + 12.7:.0f} vs {wtop:.0f}")
-    gap = (X_FRONT - 12.7) - (WHEEL_C[0] + 15)
+    ok("F.5.7.4 FH top >= steering wheel top", H_FRONT + rad("Front hoop") >= wtop, f"{H_FRONT + rad('Front hoop'):.0f} vs {wtop:.0f}")
+    gap = (X_FRONT - rad("Front hoop")) - (WHEEL_C[0] + 15)
     ok("F.5.7.5 FH <=250 forward of steering wheel", 0 <= gap <= 250, f"{gap:.0f}")
-    ok("T.1.4.4 controls below FH top", wtop < H_FRONT + 12.7, "steering wheel")
-    mt, ft = (X_MAIN, H_MAIN + 12.7), (X_FRONT, H_FRONT + 12.7)
+    ok("T.1.4.4 controls below FH top", wtop < H_FRONT + rad("Front hoop"), "steering wheel")
+    mt, ft = (X_MAIN, H_MAIN + rad("Main hoop")), (X_FRONT, H_FRONT + rad("Front hoop"))
     clr = seg_dist(HEAD, mt, ft) - 150
     ok("F.5.6.4a helmet >=50 from MH-FH line", clr >= 50, f"{clr:.0f}")
     ok("F.5.6.4b helmet >=50 from MH-brace line", seg_dist(HEAD, mt, (X_REAR, Y_REAR_TOP)) - 150 >= 50,
@@ -266,8 +275,8 @@ def checks():
     ok("F.5.6.6 hip->pedal >=915", round(X_PEDAL - HIP[0], 3) >= 915, f"{X_PEDAL - HIP[0]:.0f}")
     ob_w, ob_h = 2 * Z_BH + 25.4, Y_BH_TOP - Y_BH_BOT + 25.4
     ok("F.8.4.3 bulkhead <=400x350 (no X-brace needed)", ob_w <= 400 and ob_h <= 350, f"{ob_w:.0f}x{ob_h:.0f}")
-    ok("F.8.6.3 pedal box 25 mm clear of AIP", X_BH - 12.7 - (X_PEDAL + PEDAL_BOX_LEN) >= 25,
-       f"{X_BH - 12.7 - (X_PEDAL + PEDAL_BOX_LEN):.0f}")
+    ok("F.8.6.3 pedal box 25 mm clear of AIP", X_BH - rad("Front bulkhead") - (X_PEDAL + PEDAL_BOX_LEN) >= 25,
+       f"{X_BH - rad('Front bulkhead') - (X_PEDAL + PEDAL_BOX_LEN):.0f}")
     ia_bot = IA[2] - bot_low
     ok("F.8.5.6a IA bottom leading edge <=175 above lower SIS bottom", ia_bot <= 175, f"{ia_bot:.0f}")
     ok("F.8.4.2 IA >=200 long, >=200 wide, >=100 high", round(IA[1] - IA[0]) >= 200 and 2 * IA[4] >= 200 and IA[3] - IA[2] >= 100, "")
@@ -275,9 +284,9 @@ def checks():
     sa = math.degrees(math.atan2(dy, dx))
     ok("T.2.6.1 shoulder belt angle -20..+10", -20 <= sa <= 10, f"{sa:.1f} deg")
     ok("T.2.6.2 shoulder belt spacing 175-235", 175 <= 2 * BELT_Z <= 235, f"{2 * BELT_Z}")
-    ok("T.1.5.1a seat not below top of lowest tube", SEAT_Y0 >= Y_LOW + 12.7, f"{SEAT_Y0} vs {Y_LOW + 12.7}")
+    ok("T.1.5.1a seat not below top of lowest tube", SEAT_Y0 >= Y_LOW + rad("Lower side impact"), f"{SEAT_Y0} vs {Y_LOW + rad('Lower side impact'):.1f}")
     inner_f = TRACK_F / 2 - TIRE_W / 2
-    ok("frame clear of front tires (steer room >=80)", inner_f - (Z_BH + 12.7) >= 80, f"{inner_f - Z_BH - 12.7:.0f}")
+    ok("frame clear of front tires (steer room >=80)", inner_f - (Z_BH + rad("Front bulkhead")) >= 80, f"{inner_f - Z_BH - rad('Front bulkhead'):.0f}")
     return R
 
 IA = (X_BH + 12.7 + 1.5, X_BH + 12.7 + 1.5 + 200, 120, 320, 100)  # x0,x1,y0,y1,half-width (standard foam envelope)
@@ -320,9 +329,9 @@ PAN_T = 1.6   # belly pan / floor closeout (T.1.7): 1.6 mm 5052 aluminium, flat,
 def belly_pan():
     """Flat sheet under the whole frame, following the lower-rail outline in plan, with the two
     25 mm drain holes T.5.5.4 asks for (behind the driver, ahead of the fuel/engine)."""
-    y1 = Y_LOW - 12.7                       # touches the underside of the lowest (side-impact) tubes
+    y1 = Y_LOW - rad("Lower side impact")   # touches the underside of the lowest (side-impact) tubes
     outline = [N[k] for k in ("r_bot", "rr_bot", "mh_bot", "fh_bot", "ring_bot", "bh_bot")]
-    pts = [(p[0], p[2] + 12.7) for p in outline] + [(p[0], -p[2] - 12.7) for p in reversed(outline)]
+    pts = [(p[0], p[2] + rad("Lower side impact")) for p in outline] + [(p[0], -p[2] - rad("Lower side impact")) for p in reversed(outline)]
     pan = (cq.Workplane("XZ", origin=(0, y1, 0)).polyline([(x, -z) for x, z in pts]).close()
            .extrude(PAN_T).val())      # XZ workplane normal is -Y, so extrude goes down from y1
     for z in (-100, 100):
@@ -423,6 +432,8 @@ def build():
         x, y, z = SD.LOC[nm]
         add(box(x - w / 2, x + w / 2, y - h / 2, y + h / 2, z - d / 2, z + d / 2), name=nm.replace(" ", "_"), key=("electrical"))
     import aero as AE   # local: aero imports mule
+    if not AE.FITTED:   # wing not fitted on the base mule: the CAD shows the car as built
+        return asm
     for st, label in (("closed", "DRS_flap_closed"),):
         sec = AE.section(st)
         for el, (le, chord, ang) in (("main_plane", (sec["le"], AE.MAIN["chord"], AE.MAIN["angle"])),
