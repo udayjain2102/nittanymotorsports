@@ -16,7 +16,7 @@ import mule as m
 CLR_BY_SIZE = {"J": 127.0, "H": 101.6, "A": 76.2, "B": 76.2, "C": 76.2}   # bend die centreline radius (5" / 4" / 3"), >= 3 x OD (F.5.2.1)
 EXT_GAP = 3.0       # mm a square-cut end runs past the outer face of the biggest tube coped onto it (audit: ends stopped at
                     # the node centre, so the lower half of every tube coped onto them landed on air)
-TABLE_Y = m.Y_LOW - 12.7                                       # jig table = underside of the lower side-impact tubes
+TABLE_Y = m.Y_LOW - m.rad("Lower side impact")                                      # jig table = underside of the lower side-impact tubes
 HOOP_ROLES = ("Main hoop", "Front hoop")
 RANK = {"J": 5, "H": 4, "A": 3, "B": 2, "C": 1}
 

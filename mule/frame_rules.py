@@ -215,7 +215,7 @@ def inside(h, p): return h.find_simplex(np.asarray(p, float)) >= 0
 
 def primary_points(exclude_above_sis=False):
     pts = []
-    y_sis_top = m.Y_SIS + 12.7
+    y_sis_top = m.Y_SIS + m.rad("Upper side impact")
     for a, b, s, r in m.MEMBERS:
         c = cat(r)
         if c not in PRIMARY: continue
@@ -285,7 +285,7 @@ def checks():
        not unsupported, "; ".join(unsupported) or "all supported")
 
     low = min(min(a[1], b[1]) for a, b, *_ in members("side_lower"))
-    y_sis_top = max(max(a[1], b[1]) for a, b, *_ in members("side_upper")) + 12.7
+    y_sis_top = max(max(a[1], b[1]) for a, b, *_ in members("side_upper")) + m.rad("Upper side impact")
     for c, name, lim in (("front_hoop", "F.5.7", 20.0), ("main_hoop", "F.5.8", 10.0)):
         paths = chain(members(c))
         ends = [p for path in paths for p in (path[0], path[-1])]
@@ -330,9 +330,9 @@ def checks():
     bh_top = max(a[1] for a, b, *_ in members("bulkhead") for a in (a, b)); bh_bot = min(a[1] for a, b, *_ in members("bulkhead") for a in (a, b))
     fh = nodes_of("front_hoop"); bh = nodes_of("bulkhead")
     up = chain(members("fbh_upper"))
-    up_ok = any(abs(max(p[0], p[-1], key=lambda q: q[0])[1] + 12.7 - (bh_top + 12.7)) <= 50
+    up_ok = any(abs(max(p[0], p[-1], key=lambda q: q[0])[1] + m.rad("FBH support upper") - (bh_top + m.rad("Front bulkhead"))) <= 50
                 and key(min(p[0], p[-1], key=lambda q: q[0])) in fh
-                and (y_sis_top - (min(p[0], p[-1], key=lambda q: q[0])[1] + 12.7)) <= 50 for p in up)
+                and (y_sis_top - (min(p[0], p[-1], key=lambda q: q[0])[1] + m.rad("FBH support upper"))) <= 50 for p in up)
     ok("F.6.2.3a upper bulkhead support within 50 mm of the bulkhead top and of the upper side impact at the front hoop", up_ok)
     lo = chain(members("fbh_lower"))
     lo_ok = any(abs(max(p[0], p[-1], key=lambda q: q[0])[1] - bh_bot) < TOL and key(min(p[0], p[-1], key=lambda q: q[0])) in fh
@@ -340,7 +340,7 @@ def checks():
     ok("F.6.2.3c lower bulkhead support from the bulkhead base to the front hoop base", lo_ok)
     ok("F.6.2.3d bulkhead support diagonal fitted (triangulation checked by the truss test)", len(members("fbh_diag")) + len(members("fbh_diag_front")) >= 2)
     tops = [max(p[0], p[-1], key=lambda q: q[0]) for p in up]
-    rise = max(t[1] + 12.7 - y_sis_top for t in tops)
+    rise = max(t[1] + m.rad("FBH support upper") - y_sis_top for t in tops)
     ok("F.6.2.3b upper bulkhead support <= 100 mm above the upper side impact, or triangulated back (side-view truss test)",
        rise <= 100 or all(side_mechanisms(sg)[0] == 0 for sg in (1, -1)), f"{rise:.0f} mm")
 
