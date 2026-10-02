@@ -35,7 +35,7 @@ What's worth keeping from the concept: the 4-corner double-wishbone layout, the 
 - The driver sits upright at 20° (T.2.1.d), so a **5-point harness is allowed**. Hip-to-pedal distance is 915 mm.
 - Main hoop top is at 1280 mm and front hoop top at 850 mm. Helmet clearance to the hoop line is **65 mm** (the rule needs ≥50).
 - Lower side-impact tube bottom is 60 mm above the ground (V.1.4.2 requires ≤90 and prefers ≤75).
-- The frame is **126 members, about 44.3 kg** of 4130 (section 2l explains the latest changes; the 2026-10-01 C2 rear puts the rear wishbone pickups on rail nodes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
+- The frame is **128 members, about 50.4 kg** of 4130 after the 2 Oct audit fixes (section 2o; it was 44.3 kg before them; section 2l explains the earlier changes; the 2026-10-01 C2 rear puts the rear wishbone pickups on rail nodes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
 - These changes came out of the FEA (see section 2b).
 - Tube schedule after the 2026-10-01 optimisation (each tube at the smallest size its loads and its F.3.2.1 rule size allow; `frame_rules.py` checks the rule size per job):
   - 1.5″×0.095″: main hoop (AF4 roll-over), front suspension-ring posts (no top cross, T.1.2).
@@ -243,7 +243,7 @@ Part values came from Wilwood and Tilton listings. The pad friction (0.40), line
 | Master cylinders | Front 5/8″, rear 0.75″ (27.9 mm stroke) |
 | Lock all four at 1.5 g | **567 N** at the pedal (limit 600). Front 77 bar, rear 41 bar, 59 % front balance. |
 | Balance | Both axles lock together at 54.9 % front on 1.5-grip tyres and 44.0 % on a 1.0-grip surface; the adjuster covers 40–60 %. Start at **57 % front** so the fronts lock first. |
-| 2000 N pedal (T.3.2.2) | 296 bar front, 145 bar rear (limit 300 bar, unverified). Safety factors: pedal blade 3.8, pivot bolt 6.8, balance bar 2.1, frame 1.31. |
+| 2000 N pedal (T.3.2.2) | *Superseded 2 Oct (section 2o): 267 bar front, 111 bar rear.* Was 296 bar front, 145 bar rear (limit 300 bar, unverified). Safety factors: pedal blade 3.8, pivot bolt 6.8, balance bar 2.1, frame 1.31. |
 | Pedal travel | 18 mm at 2000 N. With one circuit lost, the pedal travels 74–84 mm before the master cylinder bottoms. |
 | BOTS | Trips at **45 mm** pad travel: 26 mm beyond normal travel, at least 29 mm before either master cylinder bottoms |
 | Rotor heat | One stop from top speed (117 km/h): +117 °C front, +50 °C rear |
@@ -283,14 +283,14 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
 - uprights, all checks pass.
 
 **Mass and CG budget (`mass.py`).** Every item is listed with a mass and position.
-- **Result:** **288 kg**, **47.4 %** front, CG **323 mm**, unsprung **15.3 kg** per corner.
+- **Result:** **288 kg**, **47.4 %** front, CG **323 mm**, unsprung **15.3 kg** per corner. *(2 Oct, section 2o: 301 kg, 48.4 %, 325 mm without the wing, with the missing items added.)*
 - **What that exposed:** the load cases had assumed CG 300 mm and 12 kg unsprung, both unconservative. They are now 330 mm and 15 kg, and a test fails if they stop covering the budget.
 - **Knock-on fixes:**
   - hub bearings → **6209-2RS1**;
   - rear master cylinder → **0.75″**;
   - rear lower rail → 1.0×0.095;
   - main-hoop mid cross → 1.25×0.095.
-- **Tilt test (IN.11):** the car rolls at **60.8°** against the required 60° (60.3° if every mass estimate errs the same way) (with the rear wing and the 1220 mm rear track; it was 61.3° before the wing). **That is the thinnest margin on the car**, so measure the CG early (TEST_PLAN T4.1).
+- **Tilt test (IN.11):** *(2 Oct, wing off: 61.9°, 61.5° if the estimates err together.)* Before that the car rolled at **60.8°** against the required 60° (60.3° if every mass estimate errs the same way) (with the rear wing and the 1220 mm rear track; it was 61.3° before the wing). **That is the thinnest margin on the car**, so measure the CG early (TEST_PLAN T4.1).
 
 **Harness (`harness.py`):**
 - **Lap belt:** the old plan put the lap belts on the main-hoop base, which gave a **15° lap-belt angle** (T.2.5.4 needs 45–65°). The lap tabs moved onto the lower side-impact tubes under the hips, giving **55°**. Each tab has a brace up to the side-impact diagonal, and a floor cross ties the two tabs together.
@@ -307,7 +307,7 @@ This round checked the last unchecked rules and the review notes (Kevin Hayward'
   - voltage drop to the pump and ignition is 0.23 V;
   - battery, master switch and brake light positions are legal.
 
-**Frame totals now** (after the 2026-10-01 optimisation, robustness fix, AF4 roll-over correction and C2 node-mounted rear, see PROJECT_LOG): 126 members, **44.3 kg**, 73 pieces (2 bent). Torsion is **1946 N·m/deg** FEA (target ≥ 1500 FEA, ≥ 1000 measured). Safety factors, nominal and worst of 16 tube-tolerance samples (`robustness.py`):
+**Frame totals on 1 Oct, superseded by section 2o** (after the 2026-10-01 optimisation, robustness fix, AF4 roll-over correction and C2 node-mounted rear, see PROJECT_LOG): 126 members, **44.3 kg**, 73 pieces (2 bent). Torsion is **1946 N·m/deg** FEA (target ≥ 1500 FEA, ≥ 1000 measured). Safety factors, nominal and worst of 16 tube-tolerance samples (`robustness.py`):
 
 | Case | Criterion | FoS nominal | FoS worst with tolerances |
 |---|---|---|---|
@@ -505,3 +505,20 @@ Buying used where possible and machining uprights in-house, the total comes to r
 10. **Shakedown.** Parking-lot laps at low speed, then build up. Keep a fire extinguisher at hand, have a spotter, and log what breaks.
 
 Rough total: **14–16 weeks** with 4–6 active members.
+
+## 2o. Audit fixes (2 October 2026)
+A full audit (WORKDONE §9, PROJECT_LOG) found checks that were looser than the rules and analyses that were missing.
+After the fixes, `docs/REPORT.md` holds the current numbers; the headline ones:
+- **Frame 50.4 kg**, 128 members, 73 pieces, torsion 2422 N·m/deg FEA. It was 44.3 kg. The mass came from the new
+  frontal-impact case (95 kN, F.8.7.2), member buckling, a 100 kg harness driver without the double-counted relief,
+  inertia-relief roll-over and a tolerance check on fresh samples.
+- **Bent tubes (F.5.2.3) and hoop bends (F.5.6.3)** now meet the rule text: the upper bulkhead support is straight (the
+  suspension-ring top moved onto it), the ring-bottom cross is the lower support's size, and a new tube triangulates the
+  main hoop bend in side view. The bulkhead diagonal now runs top-front to bottom-rear (the old one passed through the
+  pedal-box node).
+- **Wing not fitted** on the base mule; the mounts stay. Car 301 kg, CG 325 mm, tilt 61.9°.
+- **Brakes:** pedal ratio 4.5, rear master cylinder 13/16″, over-travel switch at 55 mm; 676 N to lock all four, 80 bar
+  at lock-up, 267 bar at 2000 N.
+- **Roll-hoop criterion** stays open for the advisor: sized to welded 4130 at 340 MPa (main 1.23, front 1.18); F.3.4.2's
+  180 MPa cannot be met by any tube on the ladder against the 6/5/9 kN loads.
+

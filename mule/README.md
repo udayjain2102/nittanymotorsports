@@ -146,9 +146,9 @@ These match `NM26_FSAE_Concept.step`. STEP exports are rotated to Z-up, so they 
 
 | What | Value | Where |
 |---|---|---|
-| Hoop load case | 6 kN lateral, 5 kN rearward, 9 kN down. **Not verified against the current SES.** | `fea.py` `run()` |
-| Welded steel yield | 180 MPa (F.3.4.2) | `fea.py` `SY_WELD` |
-| Car + driver mass, CG height, front split | 300 kg, 345 mm, 45 %. These must cover the `mass.py` budget with the rear wing: 288 kg, 341 mm, 47 %. | `loads.py`, `mass.py` |
+| Hoop load case | 6 kN lateral, 5 kN rearward, 9 kN down (legacy AF4; the 2026 rules have no AF section), worse of hoop-base supports and inertia relief | `fea.py` `run()` |
+| Welded steel yield / ultimate | 180 / 300 MPa (F.3.4.2) for service and crash cases; roll-over uses welded 4130 340 / 410 MPa (under advisor review) | `fea.py` `SY_WELD`, `SU_WELD`, `SY_ROLL` |
+| Car + driver mass, CG height, front split | 310 kg, 345 mm, 48 %. These must cover the `mass.py` budget (no wing): 301 kg, 325 mm, 48 %. | `loads.py`, `mass.py` |
 | Tyre grip for design cases | 1.5 | `loads.py` `MU` |
 | Ride frequency front/rear, unsprung mass, tyre rate | 3.0/2.6 Hz (front stiffer for balance), 15 kg, 120 N/mm | `springs.py` |
 | Motion ratios front/rear (the rocker ratios follow) | 0.72 / 0.75; travel 50 mm bump, 25 mm droop | `springs.py` `MR`, `TRAVEL`, `DROOP` |

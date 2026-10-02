@@ -28,7 +28,7 @@ fabricated steel uprights instead of machined aluminium, a cheaper rack first, a
     shocks, rod ends and uprights;
   - ask about material and part sponsorship (Keizer ran a sponsorship program for FSAE teams);
   - Hoosier reportedly discounts FSAE tyres; ask before buying.
-- Get the brake pressure ratings in writing (296 bar needed at 2000 N) before Phase 4 parts are chosen.
+- Get the brake pressure ratings in writing (proof rating covering 267 bar at 2000 N) before Phase 4 parts are chosen.
 
 ## Phase 1: frame ($1,350–2,300)
 | Item | Est. $ |
@@ -38,7 +38,7 @@ fabricated steel uprights instead of machined aluminium, a cheaper rack first, a
 | TIG filler, notcher hole saws, jig lumber/steel | 200–300 |
 | Bend service for the two hoops (if the school has no bender) | 0–150 |
 
-Deliverable: the frame on its wheels-off stand, T1 twist test (predicted 1946 N·m/deg FEA, ≥ 1000 measured). This is the strongest thing
+Deliverable: the frame on its wheels-off stand, T1 twist test (predicted 2422 N·m/deg FEA, ≥ 1000 measured). This is the strongest thing
 to show the next approver.
 
 ## Phase 2: rolling chassis ($1,800–2,500)
@@ -81,7 +81,7 @@ smaller, Option A needs the fuel cell moved, so Option B is now the recommendati
 | Item | Est. $ | Note |
 |---|---|---|
 | Calipers ×4 | 500–800 | Wilwood GP200 lists at about $280 each; PS-1s for the rear are cheaper. Used calipers are fine if rebuilt. |
-| Master cylinders ×2, reservoirs, balance bar | 250–450 | Only parts with a written pressure rating ≥ 296 bar (T.3.2.2) |
+| Master cylinders ×2, reservoirs, balance bar | 250–450 | Only parts with a written proof rating ≥ 267 bar (T.3.2.2) |
 | Rotors, lines, fittings, fluid, BOTS, brake light | 250–400 | |
 | Pedal box (machined/fabricated in-house) | 80–150 | |
 | 5-point SFI harness | 250–400 | Buy new: never used harnesses |
@@ -96,7 +96,7 @@ Deliverable: **the car drives.** Run TEST_PLAN stages 3–6.
 1. **Used 450 engine** (Option B above) if Phase 3 used the kit engine: biggest performance gain.
 2. **New tyres**: grip is worth ~2.4 s per autocross lap per 0.1 of grip (`lapsim.py`), far more than anything else.
 3. **Kaz FSAE rack** ($850): faster steering, 178° lock-to-lock.
-4. **Rear wing + DRS** ($600–1,200): about −0.67 s per autocross lap. It adds 7.4 kg high up, so re-check the tilt test.
+4. **Rear wing + DRS** ($600–1,200): about −0.62 s per autocross lap (assumed coefficients). It adds 7.4 kg high up, so re-check the tilt test.
 5. Data logging (GPS + accelerometer + shock pots): turns the test plan into measured numbers.
 
 ## Price sources (looked up 2026-09-30; verify before ordering)
