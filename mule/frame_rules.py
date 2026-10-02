@@ -19,7 +19,7 @@ CATEGORY = {
     "Upper side impact": "side_upper", "Lower side impact": "side_lower", "Diagonal side impact": "side_diag",
     "Front bulkhead": "bulkhead", "Front hoop brace": "fh_brace", "Main hoop brace": "mh_brace",
     "FBH support upper": "fbh_upper", "FBH support lower": "fbh_lower", "FBH support lower (pedal box)": "fbh_lower",
-    "FBH support diagonal": "fbh_diag", "FBH support diagonal (front bay)": "fbh_diag_front",
+    "FBH support diagonal": "fbh_diag", "FBH support front-bay diagonal": "fbh_diag_front",
     "MH brace support upper": "mhs_upper", "MH brace support lower": "mhs_lower", "Rear side diagonal": "mhs_diag",
     "Rear bulkhead": "mhs_post",
     "Anti-sub floor cross": "harness", "Lap belt tab brace": "harness",

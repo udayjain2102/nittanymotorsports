@@ -17,7 +17,7 @@ def test_skidpad_is_steady_state_circle():
 
 def test_traction_limited_accel_matches_constant_acceleration(monkeypatch):
     monkeypatch.setattr(S, "torque", lambda rpm: 1e6)       # engine never limits
-    monkeypatch.setattr(S, "CRR", 0.0); monkeypatch.setattr(S, "SHIFT_S", 0.0)
+    monkeypatch.setattr(S, "CRR", 0.0); monkeypatch.setattr(S, "SHIFT_S", 0.0); monkeypatch.setattr(S, "ROT_MASS", 0.0)
     a = S.GRIP * L.G * (1 - L.FRONT_SPLIT) / (1 - S.GRIP * L.CG_H / m.WHEELBASE)   # rear-drive traction limit
     t, _ = S.accel(cda=0.0)
     assert math.isclose(t, math.sqrt(2 * 75 / a), rel_tol=0.02)

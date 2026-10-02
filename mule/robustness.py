@@ -17,7 +17,7 @@ import mule as m
 import fea
 
 N_FRAME, N_MASS, SEED = 16, 200, 2026          # frame_opt sizes against these samples, with a 5 % margin (OPT_MARGIN)
-N_CHECK, SEED_CHECK, OPT_MARGIN = 32, 7, 1.05  # the reported gate uses a FRESH, larger set (audit 1 Oct: sizing and checking
+N_CHECK, SEED_CHECK, OPT_MARGIN = 32, 7, 1.08  # the reported gate uses a FRESH, larger set; margin 1.08 (1.05 still left launch at 0.99 on the fresh set). Audit 1 Oct: sizing and checking
                                                # on the same 16 draws gave FoS 1.00, and 0.97 on new seeds)
 WALL, NODE, STIFF = 0.10, 2.0, (0.6, 1.0)
 REAL_OVER_FEA = 2 / 3     # ASSUMED, no source found (audit): UDel measured ABOVE its FEA (FRAME_RESEARCH.md). Cross-check only

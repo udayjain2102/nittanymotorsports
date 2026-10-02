@@ -45,6 +45,14 @@ def test_gearing_and_ride():
 
 def test_event_predictions():
     import lapsim
-    quoted(f"prediction is {lapsim.accel()[0]:.2f} s with DRS open (`lapsim.py`")
-    quoted(f"`lapsim.py`: {lapsim.skidpad()[0]:.2f} s at μ {lapsim.GRIP} with the wing closed")
+    quoted(f"prediction is {lapsim.accel()[0]:.2f} s (`lapsim.py`")
+    quoted(f"`lapsim.py`: {lapsim.skidpad()[0]:.2f} s at μ {lapsim.GRIP} without the wing")
     assert f"| {lapsim.skidpad(1.5, aero_on=False)[0]:.2f} |" in PLAN
+
+
+def test_mass_numbers():
+    import mass
+    s = mass.summary()
+    quoted(f"{s['kg']:.0f} kg with the driver")
+    quoted(f"CG {s['cg_h']:.0f} mm")
+    quoted(f"rolls at {s['tilt']:.1f}°")

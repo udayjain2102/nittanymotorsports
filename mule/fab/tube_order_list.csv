@@ -1,39 +1,41 @@
 size,OD_mm,wall_mm,role,pieces,total_length_mm,mass_kg
-A,25.4,2.41,Diagonal side impact,4,1707,2.33
-A,25.4,2.41,FBH support upper,4,1641,2.24
+A,25.4,2.41,FBH support lower,2,635,0.87
+A,25.4,2.41,FBH support lower (pedal box),6,1003,1.37
+A,25.4,2.41,Lower FBH support cross (F.5.2.3),1,440,0.6
 A,25.4,2.41,MH brace support lower,2,662,0.9
-A,25.4,2.41,Main hoop base cross + front engine mounts,3,584,0.8
-A,25.4,2.41,Main hoop mid cross / firewall + top engine mounts,3,584,0.8
+A,25.4,2.41,MH brace support upper,6,1652,2.26
+A,25.4,2.41,Main hoop brace,2,2516,3.44
 A,25.4,2.41,Pedal box cross (front),3,368,0.5
-A,25.4,2.41,Rear susp ring,2,404,0.55
 B,25.4,1.65,Anti-sub floor cross,2,584,0.56
-B,25.4,1.65,FBH support lower,2,635,0.61
-B,25.4,1.65,FBH support lower (pedal box),6,1003,0.97
+B,25.4,1.65,Diagonal side impact,4,1707,1.65
 B,25.4,1.65,Front bulkhead,8,1340,1.3
 B,25.4,1.65,Front hoop brace,2,1842,1.78
-B,25.4,1.65,"Front pickup cross (rocker/shock loads, rack)",1,440,0.43
 B,25.4,1.65,Lap belt tab brace,2,299,0.29
-B,25.4,1.65,Lower side impact,6,1602,1.55
-B,25.4,1.65,MH brace support upper,6,1652,1.6
-B,25.4,1.65,Main hoop brace,2,2516,2.43
 B,25.4,1.65,Pedal box cross (rear),3,389,0.38
-B,25.4,1.65,Upper side impact,2,1602,1.55
+B,25.4,1.65,Spool carrier brace (chain pull),4,901,0.87
 C,25.4,1.24,Cockpit floor V (anti-sub),4,2048,1.51
 C,25.4,1.24,Engine bay floor diagonal,1,959,0.71
-C,25.4,1.24,FBH support diagonal,4,2006,1.48
-C,25.4,1.24,FH brace-plane diagonal (lateral),1,680,0.5
-C,25.4,1.24,Front hoop lower brace,2,1103,0.81
-C,25.4,1.24,Front susp ring,1,440,0.33
+C,25.4,1.24,FBH support diagonal,2,842,0.62
+C,25.4,1.24,FBH support front-bay diagonal,2,1190,0.88
+C,25.4,1.24,FH brace-plane diagonal (lateral),1,705,0.52
+C,25.4,1.24,Front hoop lower brace,2,1128,0.83
+C,25.4,1.24,"Front pickup cross (rocker/shock loads, rack)",1,450,0.33
 C,25.4,1.24,MH brace support lower,4,1006,0.74
 C,25.4,1.24,MH brace-plane diagonal (lateral),1,1302,0.96
+C,25.4,1.24,Main hoop bend support (F.5.6.3),2,838,0.62
 C,25.4,1.24,Rear bulkhead,4,1156,0.85
 C,25.4,1.24,Rear bulkhead diagonal,1,438,0.32
 C,25.4,1.24,Rear side bay diagonal (bulkhead pickups),2,701,0.52
 C,25.4,1.24,Rear side diagonal,2,852,0.63
-C,25.4,1.24,Spool carrier brace (chain pull),4,901,0.67
+C,25.4,1.24,Rear susp ring,2,404,0.3
 C,25.4,1.24,Spool carrier post,4,385,0.28
+H,31.75,2.41,FBH support upper,4,1636,2.85
 H,31.75,2.41,Front hoop,7,1940,3.38
+H,31.75,2.41,Lower side impact,6,1602,2.79
+H,31.75,2.41,Main hoop base cross + front engine mounts,3,584,1.02
+H,31.75,2.41,Main hoop mid cross / firewall + top engine mounts,3,584,1.02
 H,31.75,2.41,Rear-ring bottom cross + rear engine mounts,3,512,0.89
-H,31.75,2.41,Shoulder harness bar,3,584,1.02
-J,38.1,2.41,Front susp ring,6,610,1.29
+H,31.75,2.41,Upper side impact,2,1602,2.79
+J,38.1,2.41,Front susp ring,6,590,1.25
 J,38.1,2.41,Main hoop,9,2729,5.79
+J,38.1,2.41,Shoulder harness bar,3,584,1.24
