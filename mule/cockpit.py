@@ -60,7 +60,7 @@ def _hits(poly, circles):
 def opening():
     """T.1.1. Returns (min over heights of the best clearance at that height, height, blocking obstacle)."""
     P, R, names = _samples(obstacles())
-    y_final = min(m.Y_SIS + 12.7 - 25, (m.Y_LOW - 12.7) + 320)
+    y_final = min(m.Y_SIS + m.rad("Upper side impact") - 25, (m.Y_LOW - m.rad("Lower side impact")) + 320)
     x_lo, x_hi = m.X_MAIN + 15.9, m.X_FRONT - 15.9          # hoop faces bound the fore/aft travel
     worst = (1e9, None, "")
     for y in np.arange(m.H_FRONT, y_final - 1e-6, -STEP)[::-1]:
@@ -103,7 +103,7 @@ def cross_section():
     for x in np.arange(x0, x1 + 1e-6, STEP):
         sel = (np.abs(P[:, 0] - x) < R) & keep
         circ = [((p[2], p[1]), np.sqrt(r * r - (p[0] - x) ** 2)) for p, r in zip(P[sel], R[sel])]
-        floor = m.SEAT_Y0 + 6 if x <= m.X_PEDAL - 450 else m.Y_LOW - 12.7   # seat base top, else pan top
+        floor = m.SEAT_Y0 + 6 if x <= m.X_PEDAL - 450 else m.Y_LOW - m.rad("Lower side impact")   # seat base top, else pan top
         ceil = ceiling(x, floor)
         idx = np.flatnonzero(sel); best = (-1e9, "", None)
         for y0 in np.arange(floor, 700, STEP):

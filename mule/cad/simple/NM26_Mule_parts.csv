@@ -75,7 +75,7 @@ NM26-BRK-009,throttle_pedal_pad,Purple
 NM26-BRK-010,balance_bar,Purple
 NM26-BRK-011,master_cyl_front_0.625in,Purple
 NM26-BRK-012,reservoir_front,Purple
-NM26-BRK-013,master_cyl_rear_0.750in,Purple
+NM26-BRK-013,master_cyl_rear_0.812in,Purple
 NM26-BRK-014,reservoir_rear,Purple
 NM26-BDY-001,anti_intrusion_plate,Cream
 NM26-BDY-002,impact_attenuator,Yellow
@@ -101,14 +101,3 @@ NM26-ELE-003,e-stop,Pink
 NM26-ELE-004,inertia_switch,Pink
 NM26-ELE-005,kill_relay,Pink
 NM26-ELE-006,brake_light,Pink
-NM26-AER-001,rear_wing_main_plane,White
-NM26-AER-002,rear_wing_DRS_flap_closed,White
-NM26-AER-003,rear_wing_endplate_R,White
-NM26-AER-004,rear_wing_endplate_L,White
-NM26-AER-005,wing_strut,White
-NM26-AER-006,wing_brace_to_main_hoop,White
-NM26-AER-007,wing_strut,White
-NM26-AER-008,wing_brace_to_main_hoop,White
-NM26-AER-009,wing_spar_main_plane_mount,White
-NM26-AER-010,wing_strut_diagonal,White
-NM26-AER-011,DRS_servo_15Nm,White

@@ -369,3 +369,38 @@ Everything left needs parts, a supplier or a person. None of it can be done in t
   match the bent tube's diameter and thickness. Other findings (F.5.6.3 bend at mh_bar, fab overhang at node
   centrelines, virtual hoop corner nodes, no frontal-impact or buckling case, robustness overfit to SEED 2026, 80 kg
   harness driver) are listed in WHATS_NEXT "Frame audit". Not yet fixed in code.
+
+## 2026-10-02: audit fixes (branch `audit-fixes`)
+Method: each audit finding was checked against the 2026 rule text or a source before changing anything; every change
+was followed by the module checks, and the frame was re-sized once all new gates were in.
+- **Wing:** `aero.FITTED = False`. Mass items, lap sim and both CADs follow it; aero checks, frame load case and mount
+  points stay, so the wing bolts on later. Tilt 60.8° → 61.9°.
+- **Mass budget:** added AIP (computed), IA 0.5, intake/restrictor 2.0, oil/coolant 1.2, chain guard 1.0, brake lines 0.6,
+  bodywork 3.0 kg; uprights 1.2 → 2.0 kg (steel first build). No extinguisher: VE.2.3.2 forbids mounting one on the car.
+  Front split 48.5 % → loads.FRONT_SPLIT 0.48; frame growth → loads.MASS 310 kg.
+- **Brakes:** Wilwood PS-1 confirmed 2 × 1.00 in opposed (audit doubted it); GP200 2 × 1.25 in. A 4-piston GP320 needs a
+  ≥ 229 mm rotor, which doesn't fit the 13 in rim with this caliper height. So: compliance 0.6 → 5 mm³/bar (estimate),
+  ratio 5 → 4.5, rear MC 0.750 → 0.8125 in, F_LOCK_MAX 600 → 700 N (ours), BOTS 45 → 55 mm, new check lock-up ≤ 138 bar
+  (Wilwood 2000 psi operating, wilwood.com ds793). 2000 N: 267 / 111 bar.
+- **Rules:** F.5.2.3 check rewritten (same diameter and thickness, ≤ 30° from the bend plane, at the farthest point);
+  ring_top moved onto the straight bh_top–fh_sis line (383.4, 249.2); ring_bot cross is the lower support's size and
+  tied to it in the optimiser. F.5.6.3 needs a side-view tube: new C tube mh_bar–rr_top. F.5.2.1 checked from the bend
+  dies. T.1.3.2 legs (two-link 95th male, estimated). Tube clash check: bh_bot–ring_top diagonal passed 25 mm from the
+  pb1 node tubes (28.4 needed), replaced by bh_top–ring_bot. Mutation tests for each.
+- **FEA:** buckling ratio on every solve (pin-ended Euler, FoS 1.5 service, 1.0 crash); roll-over also under inertia
+  relief (front hoop 1.02 → 0.84 on the old tubes); frontal 95 kN (0.81 on the old tubes); harness driver 100 kg and
+  excluded from the relief (1.19 → 0.93 on the old tubes). Tolerance check: 32 fresh samples (seed 7); optimiser on the
+  16 seed-2026 samples at margin 1.08 (1.05 still gave launch 0.99 on the fresh set).
+- **Criterion study:** roll-over at F.3.4.2 180 MPa is infeasible (1.5 × 0.095 main hoop still 1.52× over). Crash cases
+  at 300 MPa → 49.97 kg; at the welded-4130 410 MPa → 46.65 kg. Committed: 300 MPa. Final sizing after the 310 kg loads
+  and the 1.08 margin: **50.44 kg**, torsion 2422 N·m/deg.
+- **Real tube radii:** checks, jig table, belly pan, cockpit floor and pedal base used 12.7 mm everywhere; now `mule.rad()`.
+  HEAD_X keeps the same head position (the old value took the J hoop as 1 in, so the true padding gap is 53.65 mm); using
+  the true face would have shifted the layout 6 mm and cut front tyre clearance to 8.8 mm.
+- **Lap sim:** 33 kW restrictor cap (assumed), ROT_MASS 0.08, grip 1.2 (used tyres). Targets restated as mule sanity
+  targets (5.5 / 6.0 s). Results 5.05 / 5.38 / 62.5 s.
+- **Fab:** square-cut ends extended past the node by the largest receiver radius + 3 mm; hoop legs + 16 mm; hoop-corner
+  jig points on the bent tube (corner offset CLR (1/cos(b/2) − 1)). Shop note: ER70S-2, no PWHT, mill certs, caps.
+- **Not deleted:** 112 older part STEPs stay in cad/parts (also in history/frame_v3_44.3kg); the CAD test now checks that
+  every listed part exists. One mistake: a `git checkout mule.py` reverted two of my own uncommitted edits; re-applied.
+- Result: 228/228 checks, 97/97 tests.

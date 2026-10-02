@@ -1,13 +1,13 @@
 piece,hoop,tube (in),CLR mm,step,feed Y mm,rotate B deg,bend C deg
-P01,Main hoop,1.500 x 0.095,127.0,1,532.6,0.0,13.0
+P01,Main hoop,1.500 x 0.095,127.0,1,551.4,0.0,13.0
 P01,Main hoop,1.500 x 0.095,127.0,2,561.8,0.0,77.0
 P01,Main hoop,1.500 x 0.095,127.0,3,77.8,0.0,77.0
 P01,Main hoop,1.500 x 0.095,127.0,4,561.8,0.0,13.0
-P01,Main hoop,,127.0,end,532.6,,developed length 2665 mm (+50 mm grip each end)
-P01,Main hoop,,,note,,,"legs square-cut at the lower rail nodes (open lower ends OK, F.5.3.3); 1in tubes cope onto the hoop"
-P02,Front hoop,1.250 x 0.095,101.6,1,282.4,0.0,13.1
+P01,Main hoop,,127.0,end,551.4,,developed length 2703 mm (+50 mm grip each end)
+P01,Main hoop,,,note,,,legs run 19 / 19 mm past the lower rail nodes so the rails land on tube; cap the ends (F.5.3.3)
+P02,Front hoop,1.250 x 0.095,101.6,1,301.2,0.0,13.1
 P02,Front hoop,1.250 x 0.095,101.6,2,403.5,0.0,76.9
 P02,Front hoop,1.250 x 0.095,101.6,3,198.5,0.0,76.9
 P02,Front hoop,1.250 x 0.095,101.6,4,403.5,0.0,13.1
-P02,Front hoop,,101.6,end,282.4,,developed length 1889 mm (+50 mm grip each end)
-P02,Front hoop,,,note,,,"legs square-cut at the lower rail nodes (open lower ends OK, F.5.3.3); 1in tubes cope onto the hoop"
+P02,Front hoop,,101.6,end,301.2,,developed length 1927 mm (+50 mm grip each end)
+P02,Front hoop,,,note,,,legs run 19 / 19 mm past the lower rail nodes so the rails land on tube; cap the ends (F.5.3.3)

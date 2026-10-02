@@ -14,18 +14,32 @@ import mule as m, fea, loads, powertrain, brakes, harness, aero, frame_rules, co
 
 LADDER = ["J", "H", "A", "B", "C"]
 ALLOW = {"roll-over": fea.SY_ROLL, "wheel": fea.SY_WELD / 1.2, "launch": fea.SY_WELD / 1.2, "pedal": fea.SY_WELD / 1.2,
-         "harness": harness.UTS_WELD, "wing": fea.SY_WELD / 1.5}
+         "harness": harness.UTS_WELD, "wing": fea.SY_WELD / 1.5, "frontal": fea.SU_WELD}
+BUCKLE_NEED = {"roll-over": 1.0, "frontal": 1.0, "harness": 1.0}   # crash cases; every other case fea.BUCKLE_FOS
 BASE = list(m.MEMBERS)
 _REC, _LABEL = [], [None]
 _solve = fea.Frame.solve
 def _recording_solve(self, ld, fx):
     u, st = _solve(self, ld, fx)
-    if _LABEL[0]: _REC.append((_LABEL[0], [e[3] for e in self.el], [e[2] for e in self.el], st))
+    if _LABEL[0]: _REC.append((_LABEL[0], [e[3] for e in self.el], [e[2] for e in self.el], util(_LABEL[0], st, self.buck)))
     return u, st
 
+def util(lab, st, buck):
+    """Per-element utilisation: stress / allowable, or compression x required buckling FoS / Euler load, whichever is worse."""
+    return np.maximum(st / ALLOW[lab], buck * BUCKLE_NEED.get(lab, fea.BUCKLE_FOS))
+
+# F.5.2.3c: the support tube at a bend is the bent member's size, so these roles follow their leader's size
+TIES = {"Lower FBH support cross (F.5.2.3)": "FBH support lower (pedal box)", "FBH support lower": "FBH support lower (pedal box)"}
+
 def floor(role): return LADDER.index(frame_rules.REQUIRED.get(frame_rules.cat(role), "C"))
-def groups(): return sorted({(r, s) for _, _, s, r in BASE})
-def apply(over): m.MEMBERS[:] = [(a, b, over.get((r, s), s), r) for a, b, s, r in BASE]
+def groups(): return sorted({(r, s) for _, _, s, r in BASE if r not in TIES})
+def lead(r, s):
+    """Optimised group of a member: its leader's group if it is tied."""
+    if r not in TIES: return (r, s)
+    ld = TIES[r]; return (ld, next(s_ for _, _, s_, r_ in BASE if r_ == ld))
+def sized(over, r, s):
+    g = lead(r, s); return over.get(g, g[1])
+def apply(over): m.MEMBERS[:] = [(a, b, sized(over, r, s), r) for a, b, s, r in BASE]
 def mass(): return sum(fea.props(s)[0] * np.linalg.norm(np.subtract(b, a)) for a, b, s, _ in m.MEMBERS) * m.STEEL_DENSITY
 
 def evaluate(over, robust=False):
@@ -37,16 +51,17 @@ def evaluate(over, robust=False):
     try:
         _LABEL[0] = "roll-over"; f = fea.run(verbose=False)
         for lab, fn in (("wheel", lambda: loads.run(verbose=False)), ("launch", powertrain.launch_frame),
-                        ("pedal", brakes.frame_2000N), ("harness", harness.crash), ("wing", aero.top_speed_fos)):
+                        ("pedal", brakes.frame_2000N), ("harness", harness.crash), ("wing", aero.top_speed_fos),
+                        ("frontal", fea.frontal)):
             _LABEL[0] = lab; fn()
     finally:
         _LABEL[0] = None; fea.Frame.solve = _solve
     recs = _REC[1:]                      # the first solve is the 1000 N*m torsion stiffness case
-    worst = max(st.max() / ALLOW[lab] for lab, _, _, st in recs)
+    worst = max(u.max() for lab, _, _, u in recs)
     good = worst <= 1.0 and f["torsion"] >= 1500 and max(f["defl"].values()) <= 25
     if good and robust:
         import robustness
-        good = all(p for n, p, _ in robustness.checks() if "tilt" not in n)
+        good = all(p for n, p, _ in robustness.frame_gate(robustness.N_FRAME, robustness.SEED, robustness.OPT_MARGIN)[0])
         if not good: worst = max(worst, 1.0 + 1e-3)
     return good, worst, f["torsion"], mass(), list(recs)
 
@@ -54,14 +69,16 @@ def most_loaded(recs, over, case=None):
     best = (0.0, None)
     for lab, roles, szs, st in recs:
         if case and lab != case: continue
-        j = int(st.argmax()); u = st[j] / ALLOW[lab]
+        j = int(st.argmax()); u = st[j]
         if u > best[0]: best = (u, (roles[j], szs[j]))
     r, cur = best[1]
-    return next(g for g in groups() if g[0] == r and over.get(g, g[1]) == cur)
+    s0 = next(s for _, _, s, r_ in BASE if r_ == r and sized(over, r_, s) == cur)
+    return lead(r, s0)
 
 def repair(over, robust=False, steps=60):
     import robustness
-    case_of = {"roll-over": "roll-over", "wheel": "wheel", "launch": "launch", "2000 N": "pedal", "20 g": "harness", "wing": "wing"}
+    case_of = {"roll-over": "roll-over", "wheel": "wheel", "launch": "launch", "2000 N": "pedal", "20 g": "harness", "wing": "wing",
+               "frontal": "frontal", "buckling": None}
     for _ in range(steps):
         good, w, t, kg, recs = evaluate(over, robust)
         if good or w >= 9.0: return over
@@ -71,6 +88,14 @@ def repair(over, robust=False, steps=60):
             failing = min(keys, key=lambda c: min(s[0][c] for s in samples))
             case = next(v for k, v in case_of.items() if k in failing)
             apply(over); good, w, t, kg, recs = evaluate(over)
+            if case is None:                   # buckling: upsize the tube nearest its Euler load (nominal), not the most stressed
+                _, _, role = fea.buckle_fos(lambda: [fn() for fn, _ in fea.frame_cases().values()])
+                cur_b = next(s for a_, b_, s, r in m.MEMBERS if r == role)
+                g = lead(role, next(s for _, _, s, r in BASE if r == role and sized(over, r, s) == cur_b))
+                cur = over.get(g, g[1]); i = LADDER.index(cur)
+                if i == 0: print("cannot upsize", g); return over
+                over = dict(over); over[g] = LADDER[i - 1]; print(f"  up   {g[0]} [{g[1]}] {cur}->{LADDER[i - 1]} (buckling)", flush=True)
+                continue
         g = most_loaded(recs, over, case); cur = over.get(g, g[1]); i = LADDER.index(cur)
         if i == 0: print("cannot upsize", g); return over
         over = dict(over); over[g] = LADDER[i - 1]; print(f"  up   {g[0]} [{g[1]}] {cur}->{LADDER[i - 1]} (worst {w:.2f})", flush=True)
@@ -94,6 +119,10 @@ def greedy(over, robust=False):
 def write(over, path=pathlib.Path(__file__).parent / "mule.py"):
     """Apply size changes to mule.py's member tables (every tuple ending in '"<size>", "<role>")')."""
     s = path.read_text()
+    over = dict(over)
+    for r, ld in TIES.items():            # followers get their leader's new size
+        s0 = next(s_ for _, _, s_, r_ in BASE if r_ == r); g = lead(r, s0)
+        if g in over: over[(r, s0)] = over[g]
     for (role, old), new in over.items():
         if new != old:
             s = re.sub(r'"%s", "%s"\)' % (old, re.escape(role)), f'"{new}", "{role}")', s)

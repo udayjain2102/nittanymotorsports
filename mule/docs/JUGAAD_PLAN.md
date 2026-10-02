@@ -36,7 +36,7 @@ The wide range is mostly the engine, the tube and how much other teams give. Eac
 - **Roll hoops and welds:** rule tube sizes; weld test coupons cut and bent before the frame; advisor review of the
   welded-1020 criterion (294/394 MPa) before tube is ordered.
 - **Brake hydraulics:** every master cylinder, caliper, hose and fitting needs a **written pressure rating** above the
-  2000 N test pressure (296 bar now; 237 bar at pedal ratio 4.0, which raises lock-up force to 709 N). Donor-bike or
+  2000 N test pressure (267 bar at the 4.5 pedal ratio; a lower ratio cuts it further but raises the lock-up force). Donor-bike or
   used brake parts are fine **only** with that rating.
 - **Impact attenuator:** the standard FSAE foam unit; anti-intrusion plate to spec.
 - **Shutdown circuit:** master switch, E-stop, BOTS, inertia switch must meet the rules (`shutdown.py`).
@@ -44,7 +44,7 @@ The wide range is mostly the engine, the tube and how much other teams give. Eac
 
 ## Weight cost of jugaad
 1020 frame +1.0 kg. Steel uprights instead of 7075 add weight at each corner (re-check in `uprights.py` and
-`mass.py`). The tilt margin is thin (60.8°, 60.3° if every estimate errs the same way), so **weigh every part** and
+`mass.py`). The tilt margin is thin (61.9° with the wing off, 61.5° if every estimate errs the same way), so **weigh every part** and
 re-run `mass.py` as it arrives.
 
 ## Next

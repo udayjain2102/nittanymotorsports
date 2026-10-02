@@ -30,7 +30,7 @@ def test_no_zero_length_or_duplicate_members():
 
 def test_belly_pan_sits_under_lowest_tubes():
     bb = m.belly_pan().BoundingBox()
-    assert abs(bb.ymax - (m.Y_LOW - 12.7)) < 0.01 and bb.zlen >= 2 * m.Z_REAR and bb.xlen >= m.X_BH - m.X_REAR - 1
+    assert abs(bb.ymax - (m.Y_LOW - m.rad("Lower side impact"))) < 0.01 and bb.zlen >= 2 * m.Z_REAR and bb.xlen >= m.X_BH - m.X_REAR - 1
     assert bb.ymin > 50, "pan must not drag: V.1.4.1"
     assert m.belly_pan().isValid()
 

@@ -1,12 +1,12 @@
 # What's next
 
 In order. Tick them off here as they're done. The costs come from [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md), the parts from [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md).
-Last updated 2026-10-01. Engine chosen (CRF450R 2018+); frame 44.3 kg (C2 node-mounted rear, merged), every check passing; total to a driving car about **$7,700–11,600** (list prices; see the jugaad plan for the donated/sponsored route).
+Last updated 2026-10-02. Engine chosen (CRF450R 2018+); frame 50.4 kg after the audit fixes (C2 layout, re-sized against frontal impact, buckling, a 100 kg driver and fresh tolerance samples), every check passing; total to a driving car about **$7,700–11,600** (list prices; see the jugaad plan for the donated/sponsored route).
 
 ## Funding is smaller: jugaad plan
 - [ ] No limit yet. [`mule/docs/JUGAAD_PLAN.md`](mule/docs/JUGAAD_PLAN.md): about $6,200–10,700 paying for everything, about $4,000–6,000 with a donated engine and sponsored tube (real prices, 1 Oct 2026).
 - [ ] Before applying: ask for an engine donation / crashed 2018+ CRF450R (dealers, riders, alumni), a tube sponsor (local steel distributor), and used parts from nearby teams.
-- [ ] Decide steel by who welds it: 4130 (TIG, 44.3 kg) or 1020 DOM (team MIG, 45.3 kg, branch `jugaad-1020`). Same price per foot.
+- [ ] Decide steel by who welds it: 4130 (TIG, 50.4 kg) or 1020 DOM (team MIG; branch `jugaad-1020` was sized before the audit gates and must be re-run). Same price per foot.
 
 ## This week (no money needed)
 - [ ] Ask nearby FSAE teams for used 13″ wheels, slicks, MTB coil shocks, rod ends and uprights.
@@ -18,7 +18,7 @@ Last updated 2026-10-01. Engine chosen (CRF450R 2018+); frame 44.3 kg (C2 node-m
 - [ ] Send the shop the whole `mule/quote/` folder (frame STEP, material list, shop data, cover note) for a preliminary quote, in 4130 and 1020 DOM.
 - [ ] Ask the faculty advisor or an FSAE alum to review the roll-over criterion (welded 4130: 340 MPa yield, 410 MPa ultimate; `SIM_TO_REAL.md`) and the TIG procedure. If the shop quotes 1020 DOM, the criterion has to be redone for that steel.
 
-## Clean-sheet frame designs (each on its own branch; `main` is now C2, 44.3 kg)
+## Clean-sheet frame designs (history: C2 won at 44.3 kg; after the audit gates the same layout is 50.4 kg)
 Realistic target with the current safety standards: **~44–45 kg** for the frame types tried so far; the 30s need a different packaging (see WORKDONE §8).
 - [x] B1 front box ahead of the leg template: 51 kg, rejected (branch `clean-sheet-B`).
 - [x] C1 "short" (branch `clean-sheet-short`): 46.5 kg, 74 pieces, torsion 2305 (main: 46.4 kg, 78, 2004). Same mass, stiffer, more margin, fewer pieces; helmet clearance thinner (54 vs 65 mm). **No weight win**; keep as the candidate if stiffness/fewer pieces matter more than 0.1 kg.
@@ -28,15 +28,16 @@ Realistic target with the current safety standards: **~44–45 kg** for the fram
 - [ ] Give `frame_opt.py` a rule that a straight run of one tube keeps one size (it can currently size two collinear parts differently, which can't be coped).
 
 ## Frame audit, 1 Oct 2026: fix before ordering tube
-A read-only audit found problems the passing checks hide. Hold the tube order until these are fixed or consciously accepted. Detail in `mule/docs/PROJECT_LOG.md`.
-- [ ] **Roll-hoop strength criterion.** `fea.py` uses a self-chosen 340/410 MPa welded allowable and legacy AF4 loads; the 2026 rules have no AF section, and F.3.4.2 sets welded steel at 180/300 MPa "for ANY steel" in SES calculations. Hoop FoS 1.02–1.09 drops to about 0.55 at 180 MPa and below 1.0 under other reasonable supports. Decide the criterion with the advisor, then re-size.
-- [ ] **F.5.2.3 bent tubes.** The check accepts any stiffer tube at a kink; the rule needs a support of the same diameter and thickness. The upper bulkhead support kinks about 8.5° at `ring_top` with only an out-of-plane post; the lower one kinks at `ring_bot` with a smaller cross. Straighten them or add compliant supports, and fix the check.
-- [ ] **F.5.6.3 main-hoop bend at `mh_bar`.** It passes only because the lateral shoulder bar is counted; the rule needs side-view triangulation (or < 25 mm from an attachment point). Move the bend or add a side-view tube.
-- [ ] **Fab data.** Hoop legs and ring posts end at node centrelines, so tubes coped onto them overhang air; several nodes take 6–7 tubes. Hoop corner nodes sit 28–35 mm outside the real bent tube. Re-issue cut lengths and jig points from the real bend radius.
-- [ ] **Missing analyses.** No frontal-impact load path (F.8.7.2, 95 kN through the bulkhead) and no member buckling check (main-hoop brace at about 0.63 of its Euler load).
-- [ ] **Robustness gate is overfit.** The optimiser sized tubes against the same 16 seeded samples; fresh seeds give front-hoop FoS 0.974 and harness 0.975. Use fresh samples or a margin.
-- [ ] **Harness case.** Driver mass is 80 kg but the cockpit is sized to the 95th-percentile male (about 100 kg); at 100 kg the 20 g case falls below 1.0.
-- [ ] **RULES_MATRIX** marks F.5.2.1, F.5.3.3 and F.6.2.2 as automated with no real check; T.1.3.2 (legs below structure ahead of the front hoop) is missing.
+A read-only audit found problems the passing checks hide. Fixed on 2 Oct (branch `audit-fixes`) except the first item, which needs the advisor. Detail in `mule/docs/PROJECT_LOG.md`.
+- [ ] **Roll-hoop strength criterion (advisor decision).** Sized to 340 MPa under the worse of two supports: main 1.23, front 1.18. At 180 MPa no tube on the ladder works (1.5 × 0.095 main hoop still 1.5× over), so F.3.4.2 reads as the SES equivalency basis, not an absolute load check. Original note: `fea.py` uses a self-chosen 340/410 MPa welded allowable and legacy AF4 loads; the 2026 rules have no AF section, and F.3.4.2 sets welded steel at 180/300 MPa "for ANY steel" in SES calculations. Hoop FoS 1.02–1.09 drops to about 0.55 at 180 MPa and below 1.0 under other reasonable supports. Decide the criterion with the advisor, then re-size.
+  - Same question for the crash cases (95 kN frontal, 20 g harness): they use F.3.4.2's 300 MPa welded UTS and give the 50.4 kg frame. Against the welded-4130 410 MPa the roll-over case already uses, the frame sizes to **46.65 kg** (checked 2 Oct). Show the advisor both.
+- [x] **F.5.2.3 bent tubes.** Fixed: check rewritten to the rule (same size, within 30°); upper support straightened, ring-bottom cross sized to the lower support. Original note: The check accepts any stiffer tube at a kink; the rule needs a support of the same diameter and thickness. The upper bulkhead support kinks about 8.5° at `ring_top` with only an out-of-plane post; the lower one kinks at `ring_bot` with a smaller cross. Straighten them or add compliant supports, and fix the check.
+- [x] **F.5.6.3 main-hoop bend at `mh_bar`.** Fixed: check needs a side-view tube; new C tube from the bend to the rear ring top. Original note: It passes only because the lateral shoulder bar is counted; the rule needs side-view triangulation (or < 25 mm from an attachment point). Move the bend or add a side-view tube.
+- [x] **Fab data.** Fixed: square-cut ends run past the joint (hoop legs +16 mm), hoop-corner jig points on the bent tube, tube clash check (the bulkhead diagonal went through the pedal-box node: moved). Ask the bender about the 78 mm main-hoop top straight. Original note: Hoop legs and ring posts end at node centrelines, so tubes coped onto them overhang air; several nodes take 6–7 tubes. Hoop corner nodes sit 28–35 mm outside the real bent tube. Re-issue cut lengths and jig points from the real bend radius.
+- [x] **Missing analyses.** Added: frontal 95 kN (FoS 1.31 vs 300 MPa), member buckling in every case, inertia-relief roll-over. Original note: No frontal-impact load path (F.8.7.2, 95 kN through the bulkhead) and no member buckling check (main-hoop brace at about 0.63 of its Euler load).
+- [x] **Robustness gate is overfit.** Fixed: the report checks 32 fresh samples (seed 7); the optimiser sizes on its own 16 with a 1.08 margin. Original note: The optimiser sized tubes against the same 16 seeded samples; fresh seeds give front-hoop FoS 0.974 and harness 0.975. Use fresh samples or a margin.
+- [x] **Harness case.** Fixed: 100 kg driver, driver no longer in the inertia relief (FoS 1.33 vs 300 MPa). Original note: Driver mass is 80 kg but the cockpit is sized to the 95th-percentile male (about 100 kg); at 100 kg the 20 g case falls below 1.0.
+- [x] **RULES_MATRIX** Fixed: F.5.2.1 now a real check, F.5.3.3/F.6.2.2 build items, T.1.3.2 leg check added (F.5.9.7 doesn't exist). Original note: marks F.5.2.1, F.5.3.3 and F.6.2.2 as automated with no real check; T.1.3.2 (legs below structure ahead of the front hoop) is missing.
 
 ## Before ordering frame tube: pin down the engine
 The frame's engine mounts are welded in step 1, so the engine has to be known first.
@@ -52,26 +53,26 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 ## Step 1: frame ($1,350–2,300)
 - [ ] Order 4130 tube from `mule/fab/tube_order_list.csv` (+25 %), plus tabs, plate and filler.
 - [ ] Build the jig from `mule/fab/jig_node_coordinates.csv`; cut and cope from `mule/fab/tube_cut_sheet.csv`; bend hoops from `mule/fab/hoop_bend_program.csv`.
-- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 1946 N·m/deg FEA, pass ≥ 1000 measured).
+- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 2422 N·m/deg FEA, pass ≥ 1000 measured).
 - [ ] Take photos and results to the next funding request.
 
 ## Steps 2–4: to a driving car
 - [ ] Step 2, rolling chassis ($1,800–2,500): suspension, used shocks, fabricated steel uprights (re-check in `uprights.py`), used wheels and tyres, cheap rack. Then TEST_PLAN stage 2.
 - [ ] Step 3, engine and drive ($2,600–4,000 with a used 450). This is over the ~$2,500 per request, so split it: **3a** the engine ($1,500–2,800, a running 2018+ CRF450R with electric start), then **3b** chain, sprockets, spool, CV shafts, cooling, exhaust and fuel. Check the engine against the measured numbers before 3b.
-- [ ] Before step 4: email Wilwood (GP200, PS-1 calipers), Tilton (78-series master cylinders) and the hose supplier for their **maximum pressure ratings in writing**. We need at least 296 bar (4,290 psi). *(On hold for now.)*
-- [ ] Step 4, brakes, safety and electrics ($1,800–2,600): buy only brake parts rated for 296 bar or more; buy the harness new. Then TEST_PLAN stages 3–6. **First drive.**
+- [ ] Before step 4: email Wilwood (GP200, PS-1 calipers), Tilton (78-series master cylinders) and the hose supplier for their **maximum (proof/burst) pressure ratings in writing**. The 2000 N pedal test needs 267 bar (3,870 psi); Wilwood's published maximum operating pressure is 2000 psi (138 bar), normal lock-up needs 80 bar. *(On hold for now.)*
+- [ ] Step 4, brakes, safety and electrics ($1,800–2,600): buy only brake parts whose written proof rating covers 267 bar; buy the harness new. Then TEST_PLAN stages 3–6. **First drive.**
 
 ## After it drives
-- [ ] Weigh the car and enter real masses in `mule/mass.py`: the tilt margin is only 0.3–0.8° (60.8° nominal, 60.3° if the mass estimates all err the same way).
+- [ ] Weigh the car and enter real masses in `mule/mass.py`: the tilt margin is about 1.5–1.9° (61.9° nominal, 61.5° if the mass estimates all err the same way).
 - [ ] TEST_PLAN stage 7 (skidpad); put the measured grip back into `lapsim.py`.
-- [ ] Upgrades, one request each: new tyres → Kaz rack → rear wing + DRS → data logging.
+- [ ] Upgrades, one request each: new tyres → Kaz rack → rear wing + DRS (bolt-on; set `aero.FITTED = True` and re-run everything) → data logging.
 
 ## Keeping the repo useful
 - After every test stage, run the real-to-sim loop in `mule/docs/SIM_TO_REAL.md`: record predicted vs measured, fix the model input that was wrong, re-run `report.py`.
-- Weigh every part as it arrives and enter it in `mule/mass.py`: the tilt margin is only 0.3–0.8°.
+- Weigh every part as it arrives and enter it in `mule/mass.py`: the tilt margin is about 1.5–1.9°.
 - Every FSAE rule is a hard requirement. A design change must keep all automated checks passing, and `mule/docs/RULES_MATRIX.md` lists the build/inspection items to tick off.
 - **Nothing is ever deleted.** Before a change that regenerates CAD, shop data or the quote package, freeze the current version: `python snapshot.py frame_vN_<mass>kg` in `mule/` (it goes to the top-level `history/` folder), and add a git tag with the same name.
 - Every design change: edit the code, run `python report.py` in `mule/`, add a line to `mule/docs/PROJECT_LOG.md`, then commit and push (GitHub re-runs every check).
 - A day's work goes into `WORKDONE.md` as a short summary; the detail stays in `PROJECT_LOG.md`.
 - No MATLAB needed: everything runs in Python (see the README quick start for the setup).
-- New Fusion uploads go in `adi laptop files > Nittany Motorsports` as the next version. Current: `NM26_Assembly_v5` (C2 frame, 44.3 kg, uploaded 1 Oct 2026); next is `_v6`. v4 (46.4 kg frame) is still in the same folder; nothing is deleted.
+- New Fusion uploads go in `adi laptop files > Nittany Motorsports` as the next version. Latest uploaded: `NM26_Assembly_v5` (C2 frame, 44.3 kg, 1 Oct 2026). **Upload the 50.4 kg post-audit frame as `_v6`.** v4 (46.4 kg frame) is still in the same folder; nothing is deleted.

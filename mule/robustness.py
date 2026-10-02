@@ -16,13 +16,16 @@ import numpy as np
 import mule as m
 import fea
 
-N_FRAME, N_MASS, SEED = 16, 200, 2026
+N_FRAME, N_MASS, SEED = 16, 200, 2026          # frame_opt sizes against these samples, with a 5 % margin (OPT_MARGIN)
+N_CHECK, SEED_CHECK, OPT_MARGIN = 32, 7, 1.08  # the reported gate uses a FRESH, larger set; margin 1.08 (1.05 still left launch at 0.99 on the fresh set). Audit 1 Oct: sizing and checking
+                                               # on the same 16 draws gave FoS 1.00, and 0.97 on new seeds)
 WALL, NODE, STIFF = 0.10, 2.0, (0.6, 1.0)
-REAL_OVER_FEA = 2 / 3
+REAL_OVER_FEA = 2 / 3     # ASSUMED, no source found (audit): UDel measured ABOVE its FEA (FRAME_RESEARCH.md). Cross-check only
 
+_SEED = [SEED]
 def _rng(sample, key):
     """A random stream fixed by (seed, sample, geometry key): adding a tube elsewhere doesn't reshuffle this one's draw."""
-    return np.random.default_rng([SEED, sample, zlib.crc32(repr(key).encode())])
+    return np.random.default_rng([_SEED[0], sample, zlib.crc32(repr(key).encode())])
 
 class _Perturbed:
     """Per-sample tube wall and stiffness factors, keyed by tube end points (before the joint shift)."""
@@ -46,15 +49,18 @@ def _patched_solve(pert):
             A, I, J, c = _section(s, wall); L = np.linalg.norm(b - a)
             T = fea.rot(a, b); kl = fea.k_local(L, A, I, J)
             idx = np.r_[6 * i:6 * i + 6, 6 * j:6 * j + 6]
-            K[np.ix_(idx, idx)] += ks * (T.T @ kl @ T); cache.append((idx, T, ks * kl, A, I, c))
+            K[np.ix_(idx, idx)] += ks * (T.T @ kl @ T); cache.append((idx, T, ks * kl, A, I, c, ks * fea.E * I, L))
         for node, f in loads.items(): F[6 * node:6 * node + 3] += f
         fix = sorted({6 * nd + d for nd, dofs in fixed.items() for d in dofs})
         free = np.setdiff1d(np.arange(6 * n), fix)
         u = np.zeros(6 * n); u[free] = np.linalg.solve(K[np.ix_(free, free)], F[free])
-        st = []
-        for idx, T, kl, A, I, c in cache:
+        st, buck = [], []
+        for idx, T, kl, A, I, c, EI, L in cache:
             f = kl @ (T @ u[idx])
             st.append(max(abs(f[0]) / A + np.hypot(f[4], f[5]) * c / I, abs(f[6]) / A + np.hypot(f[10], f[11]) * c / I))
+            buck.append(fea.euler_ratio(f[0], EI, L))     # thinner wall and joint flex lower the Euler load too
+        self.buck = np.array(buck)
+        if fea.RECORD is not None: fea.RECORD.append((self, self.buck))
         return u, np.array(st)
     return solve
 
@@ -68,10 +74,17 @@ def frame_cases():
     out["2000 N pedal"] = brakes.frame_2000N()[0]
     out["20 g harness (vs welded UTS)"] = harness.crash()[0]
     out["wing mounts / 1.5"] = aero.top_speed_fos() / 1.5
+    out["frontal impact 95 kN (vs welded UTS)"] = fea.frontal()[0]
     return out, r["torsion"]
 
-def frame_samples(n=N_FRAME):
-    orig_solve, orig_init = fea.Frame.solve, fea.Frame.__init__; res = []
+def _with_buckling():
+    """frame_cases() plus one entry: the worst Euler load / compression over every case (thin walls, joint flex)."""
+    (out, tors), bf, role = fea.buckle_fos(frame_cases)
+    out["buckling, all cases (Euler / compression)"] = bf
+    return out, tors
+
+def frame_samples(n=N_FRAME, seed=SEED):
+    orig_solve, orig_init = fea.Frame.solve, fea.Frame.__init__; res = []; _SEED[0] = seed
     try:
         for i in range(n):
             pert = _Perturbed(i)
@@ -82,9 +95,9 @@ def frame_samples(n=N_FRAME):
                     self.P[j] = p + _rng(_i, ("node",) + tuple(np.round(p, 0))).uniform(-NODE, NODE, 3)
             fea.Frame.__init__ = init
             fea.Frame.solve = _patched_solve(pert)
-            res.append(frame_cases())
+            res.append(_with_buckling())
     finally:
-        fea.Frame.solve, fea.Frame.__init__ = orig_solve, orig_init
+        fea.Frame.solve, fea.Frame.__init__ = orig_solve, orig_init; _SEED[0] = SEED
     return res
 
 def roll_stiffness():
@@ -129,13 +142,17 @@ def lap_band():
     g0 = lapsim.GRIP
     return {round(g, 2): (lapsim.accel(grip=g)[0], lapsim.skidpad(g)[0]) for g in (g0 - 0.1, g0, g0 + 0.1)}
 
-def checks():
-    R = []
-    samples = frame_samples()
+def frame_gate(n=N_CHECK, seed=SEED_CHECK, need=1.0):
+    """[(name, ok, detail)] for every frame case over n tolerance samples, plus the samples (for the torsion check)."""
+    samples = frame_samples(n, seed); R = []
     worst = {c: min(s[0][c] for s in samples) for c in samples[0][0]}
     for c, v in worst.items():
-        R.append((f"robust: {c} FoS >= 1.0 in all {len(samples)} tolerance samples (walls ±10 %, joints ±2 mm, stiffness 60-100 %)",
-                  v >= 1.0, f"worst {v:.2f}"))
+        R.append((f"robust: {c} FoS >= {need:.2f} in all {len(samples)} tolerance samples (seed {seed}; walls ±10 %, joints ±2 mm, stiffness 60-100 %)",
+                  v >= need, f"worst {v:.2f}"))
+    return R, samples
+
+def checks():
+    R, samples = frame_gate()
     tors = min(s[1] for s in samples); need = 2 * roll_stiffness()
     R.append(("robust: worst sampled torsion (joint flex modelled) >= 2 x suspension roll stiffness",
               tors >= need, f"{tors:.0f} vs {need:.0f} N*m/deg (cross-check: 2/3 x nominal FEA = {REAL_OVER_FEA * fea.run(verbose=False)['torsion']:.0f})"))
