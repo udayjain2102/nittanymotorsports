@@ -8,4 +8,5 @@ tag with the same name points at it. Nothing here is edited or deleted.
 |---|---|---|---|---|
 | `frame_v1_50.1kg` | 50.1 kg | 81 | — | First complete rules-checked frame (tag `frame-v1-50kg`) |
 | `frame_v2_46.4kg` | 46.4 kg | 78 | 2004 N·m/deg | Optimised tube sizes, robustness fix, AF4 roll-over correction (1 Oct 2026) |
-| `frame_v3_44.3kg` | 44.3 kg | 73 | 1946 N·m/deg | C2: rear wishbone pickups on rail nodes, rear posts no longer bend (1 Oct 2026); current design |
+| `frame_v3_44.3kg` | 44.3 kg | 73 | 1946 N·m/deg | C2: rear wishbone pickups on rail nodes, rear posts no longer bend (1 Oct 2026) |
+| `frame_v4_50.4kg` | 50.4 kg | 73 | 2422 N·m/deg | Audit fixes (2 Oct 2026): F.5.2.3/F.5.6.3 geometry, frontal 95 kN, buckling, 100 kg harness driver, fresh tolerance samples; wing not fitted; current design |
