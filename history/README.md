@@ -1,5 +1,7 @@
 # Design history
 
+What changed between each version, tube by tube, and which Fusion file shows which frame: [`mule/docs/VERSIONS.md`](../mule/docs/VERSIONS.md).
+
 One folder per frame version: the whole `mule/` folder (scripts, CAD, shop data, quote, docs) exactly as it was,
 frozen with `python mule/snapshot.py <name> <commit>`. Each folder's `SNAPSHOT.md` gives the commit and date, and the git
 tag with the same name points at it. Nothing here is edited or deleted.

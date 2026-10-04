@@ -404,3 +404,9 @@ was followed by the module checks, and the frame was re-sized once all new gates
 - **Not deleted:** 112 older part STEPs stay in cad/parts (also in history/frame_v3_44.3kg); the CAD test now checks that
   every listed part exists. One mistake: a `git checkout mule.py` reverted two of my own uncommitted edits; re-applied.
 - Result: 228/228 checks, 97/97 tests.
+
+## 2026-10-03: Fusion v7, version history
+- `NM26_Assembly_v7` uploaded (v6 frame without the two DRS wires); opened in Fusion and checked: upright, no wing, no stray wire.
+- `docs/VERSIONS.md`: every Fusion file mapped to its frame, and every frame version compared by running each frozen
+  `history/` copy's own code (member-by-member role/size diff, node moves, key results). Found while writing it: the
+  F.5.2.3 fix moved the front upper inboard pickup 25 mm outboard (ring posts follow `ring_top`); checks still pass.
