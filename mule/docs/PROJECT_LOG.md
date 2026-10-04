@@ -410,3 +410,7 @@ was followed by the module checks, and the frame was re-sized once all new gates
 - `docs/VERSIONS.md`: every Fusion file mapped to its frame, and every frame version compared by running each frozen
   `history/` copy's own code (member-by-member role/size diff, node moves, key results). Found while writing it: the
   F.5.2.3 fix moved the front upper inboard pickup 25 mm outboard (ring posts follow `ring_top`); checks still pass.
+- Documentation sweep (3 Oct): module tables in README and mule/README (fea, frame_rules, robustness, brakes, aero,
+  lapsim, harness, fab) rewritten for the post-audit code; BUILD_PLAN brake/BOTS/wing checklist items and torsion row;
+  FRAME_RESEARCH table (50.4 kg, 41.1 m, 1.23 kg/m); VERSIONS, JUGAAD_PLAN and CLEAN_SHEET added to the file indexes;
+  WORKDONE §10. 228/228 checks, 97/97 tests.

@@ -57,7 +57,7 @@ Modelling limits to know before cutting tube:
 
 | Case | Original | Final |
 |---|---|---|
-| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (2004 after the 2026-10-01 weight optimisation, robustness fix and AF4 roll-over correction; 1946 with the C2 node-mounted rear) |
+| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (2004 after the 2026-10-01 weight optimisation, robustness fix and AF4 roll-over correction; 1946 with the C2 node-mounted rear; **2422** after the 2 Oct audit re-size) |
 | Main hoop top load 6/5/9 kN: peak stress | 1009 MPa | **140 MPa (safety factor 1.28, worst of the 4 load directions)** |
 | Front hoop top load 6/5/9 kN: peak stress | 867 MPa | **133 MPa (safety factor 1.36)** |
 
@@ -404,7 +404,7 @@ The wing sits behind the rear axle, so at top speed it adds 587 N to the rear ax
 - The wing, servo and struts add 7.4 kg high up. The CG rises from 323 to 340 mm.
 - To keep the tilt test above 60°, the **rear track widened from 1180 to 1220 mm**. Every check was re-run. The tilt angle was 60.9° then; with the 44.3 kg frame it is 60.8°.
 - Load cases now assume a 345 mm CG. Frame and uprights still pass.
-- Brake pressure at the 2000 N pedal test rose to **296 bar**, against the unverified 300 bar limit, so the supplier ratings are now urgent.
+- Brake pressure at the 2000 N pedal test rose to **296 bar**, against the unverified 300 bar limit, so the supplier ratings are now urgent. *(2 Oct: 267 bar after the brake re-size, §2o.)*
 
 **Lap-sim value** (point mass, wing closed in corners and braking, open on straights): autocross −0.67 s (about 1 %), skidpad −0.04 s, acceleration ±0.00 s. Most of the benefit is in faster corners, and it grows with speed.
 
@@ -438,13 +438,13 @@ The wing sits behind the rear axle, so at top speed it adds 587 N to the rear ax
 
 **Aero (T.7, IN.6.2)**
 - ✅ T.7.3–T.7.7 Wing in the rear aero zone, ≤ 250 mm behind the rear tyres, inboard of the rear tyres, ≤ 1200 mm high, at both flap positions (`aero.py`)
-- ✅ IN.6.2.2 200 N push ≤ 25 mm (calculated 0.1 mm) · ✅ T.7.1.3 mounts stiff, first mode 159 Hz · ☐ T.7.1.4 5 mm / 3 mm edge radii · ☐ T.7.1.5 no sharp edges · ☐ DRS fails closed: test on brake, button release and power off (TEST_PLAN T5.5)
+- *(Wing not fitted on the base mule since 2 Oct; these apply when it is bolted on.)* ✅ IN.6.2.2 200 N push ≤ 25 mm (calculated 0.1 mm) · ✅ T.7.1.3 mounts stiff, first mode 154 Hz as a rigid lump (real wing flex will be lower) · ☐ T.7.1.4 5 mm / 3 mm edge radii · ☐ T.7.1.5 no sharp edges · ☐ DRS fails closed: test on brake, button release and power off (TEST_PLAN T5.5)
 
 **Brakes (T.3)**
-- ✅ T.3.1.2 All 4 wheels, one pedal, able to lock all 4 (567 N at μ 1.5, `brakes.py`) · ✅ T.3.1.3/4 Two circuits (front/rear), one MC and reservoir each
-- ✅ T.3.2.2 Pedal, pivot, balance bar and frame survive 2000 N (calculated) · ☐ confirm the MC, caliper and hose pressure rating ≥ 296 bar · ☐ T.3.2.1 Pedal is 6061-T6, machined
+- ✅ T.3.1.2 All 4 wheels, one pedal, able to lock all 4 (676 N at μ 1.5, `brakes.py`) · ✅ T.3.1.3/4 Two circuits (front/rear), one MC and reservoir each
+- ✅ T.3.2.2 Pedal, pivot, balance bar and frame survive 2000 N (calculated) · ☐ confirm the MC, caliper and hose proof rating covers 267 bar · ☐ T.3.2.1 Pedal is 6061-T6, machined
 - ☐ T.3.1.7 Braided stainless lines only · ☐ T.3.1.9 Nothing on the sprung mass below the chassis · ☐ T.3.1.10 Brake fasteners are critical fasteners (T.8.2)
-- ✅ T.3.3 BOTS position calculated (trips at 45 mm pad travel) · ☐ push-pull/flip switch, latches off, not driver-resettable, analog, opens the shutdown circuit · ☐ T.3.4 Red brake light on black, ≥15 cm², centreline, between wheel centre and shoulder height
+- ✅ T.3.3 BOTS position calculated (trips at 55 mm pad travel) · ☐ push-pull/flip switch, latches off, not driver-resettable, analog, opens the shutdown circuit · ☐ T.3.4 Red brake light on black, ≥15 cm², centreline, between wheel centre and shoulder height
 - ✅ IC.3.3 Mechanical throttle cable (so no APPS/BSPD, which are ETC-only) · ☐ two return springs at the throttle body, positive pedal stop, cable ≥50 mm from the exhaust and guarded from the driver's feet
 
 **Powertrain and shutdown (T.5, IC)**
