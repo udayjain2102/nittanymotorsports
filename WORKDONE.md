@@ -1,6 +1,6 @@
 # Work done: NM26 mule
 
-A record of everything Claude did on this project, from 27 September to 2 October 2026 (30 September is section 7, 1 October section 8, the 1–2 October audit section 9). The step-by-step engineering log, with
+A record of everything Claude did on this project, from 27 September to 3 October 2026 (30 September is section 7, 1 October section 8, the 1–2 October audit section 9, the Fusion uploads and version history section 10). The step-by-step engineering log, with
 every method, result and error, is [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md). This page is the overview.
 
 **Starting point:** the concept CAD (`NM26_FSAE_Concept.step`) and the 2026 FSAE rules PDF.
@@ -238,7 +238,19 @@ tests, CI and outputs) went through the whole repo. Their main points, checked a
   mill certs and end caps.
 - 228/228 checks, 97/97 tests.
 
-## 10. Still open (needs people, parts or suppliers)
+## 10. 2–3 October: Fusion uploads and version history
+
+- `NM26_Assembly_v6` (2 Oct) and `NM26_Assembly_v7` (3 Oct) uploaded to Fusion, `adi laptop files > Nittany Motorsports`.
+  Both are the 50.4 kg post-audit frame without the wing. v6 still drew the DRS servo wire up to where the wing was;
+  the detailed CAD now drops that wiring when the wing isn't fitted, and v7 is clean. **v7 is current.**
+- `mule/docs/VERSIONS.md` records what changed between every frame version and which Fusion file shows which frame.
+  Each frozen `history/` copy was re-run with its own code, so the numbers are measured, not copied from old docs.
+- Writing it showed one change not reported before: straightening the upper bulkhead support moved the front upper
+  suspension pickup 25 mm outboard (lower 5 mm). Every suspension and steering check still passes.
+- Documentation sweep: module descriptions in both READMEs, the build plan's brake and wing items, and the frame
+  research table brought to the post-audit design.
+
+## 11. Still open (needs people, parts or suppliers)
 
 1. **Brake pressure ratings in writing** from Wilwood, Tilton and the hose supplier: proof rating covering 267 bar (the 2000 N test); 300 bar assumed.
 2. **Measure a CRF450R 2018+:** its mounts, output shaft and size go into `ENGINE` in `powertrain.py` **before ordering tube** (gear ratios and mass are already in, from the service manual).

@@ -6,7 +6,8 @@ against the 2026 FSAE rulebook. Forum figures are self-reported; treat them as i
 ## The gap
 | Frame | Mass | Tube length | kg per m | Source |
 |---|---|---|---|---|
-| NM26 now (C2 rear) | 44.3 kg | ~42 m | ~1.05 | `mule.py` |
+| NM26 now (post-audit, 2 Oct) | 50.4 kg | ~41 m | ~1.23 | `mule.py` |
+| NM26 C2 rear (1 Oct) | 44.3 kg | ~42 m | ~1.05 | tag `frame_v3_44.3kg` |
 | NM26 before C2 | 46.4 kg | ~44 m | ~1.05 | git history |
 | NM26 before 1 Oct | 50.1 kg | 44.8 m | 1.12 | tag `frame-v1-50kg` |
 | Univ. of Delaware 2017 (4130) | ~31.8 kg | ~41 m | ~0.78 | [UDel report](https://udel.edu/~pgeneva/downloads/fsae/2017_FSAE_chassis.pdf) |
@@ -61,7 +62,7 @@ maximum deviation of the same size (F.5.2.3), so bends rarely save mass outside 
   weakens when welded; small quantities may need shipping. Same conclusion as the steel note above.
 - **NAU 2025 suspension report:** pickup points are a joint decision of the frame and suspension teams; its roll
   stiffness method (K = 2·k·MR²·t²/2 per axle) applied to NM26 gives ~476 N·m/deg total (242 front, 234 rear,
-  `roll.py`). The frame (1946 N·m/deg FEA now) is ~4× that. Real frames measure ~⅔ of FEA, so the target is **≥ 1500 FEA and
+  `roll.py`). The frame (2422 N·m/deg FEA now; 1946 at C2) is ~5× that. Real frames measure ~⅔ of FEA, so the target is **≥ 1500 FEA and
   ≥ 1000 measured** (2× roll stiffness), see `SIM_TO_REAL.md`.
 
 ## Checked and rejected
