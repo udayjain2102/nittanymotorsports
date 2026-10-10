@@ -1,6 +1,6 @@
 # Work done: NM26 mule
 
-A record of everything Claude did on this project, from 27 September to 3 October 2026 (30 September is section 7, 1 October section 8, the 1–2 October audit section 9, the Fusion uploads and version history section 10). The step-by-step engineering log, with
+A record of the work done on this project, from 27 September to 3 October 2026 (30 September is section 7, 1 October section 8, the 1–2 October audit section 9, the Fusion uploads and version history section 10). The step-by-step engineering log, with
 every method, result and error, is [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md). This page is the overview.
 
 **Starting point:** the concept CAD (`NM26_FSAE_Concept.step`) and the 2026 FSAE rules PDF.
@@ -67,8 +67,8 @@ These would have been expensive to discover after welding:
 
 - **Simple model** (`mule/cad/simple/NM26_Mule.step`): every system in one colour, every part numbered `NM26-<system>-<nnn>`.
 - **Detailed model** (`mule/cad/NM26_Assembly.step` + one STEP per part in `mule/cad/parts/`):
-  - The "Go kart CAD assembly" Claude session built the detailed parts: treads, springs, CV boots, the 15-part engine and the brake-line and wiring routing.
-  - This session:
+  - An earlier "Go kart CAD assembly" work session built the detailed parts: treads, springs, CV boots, the 15-part engine and the brake-line and wiring routing.
+  - This pass:
     - made every part name unique and descriptive;
     - added a "contains" description to each part;
     - added the rear wing;
