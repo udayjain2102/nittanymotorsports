@@ -424,3 +424,19 @@ was followed by the module checks, and the frame was re-sized once all new gates
   anti-sub tab node must sit on a harness-size tube (removing the anti-sub floor cross put as_c on 1.0x0.049 only).
   Fixed a display crash in the F.1.17 movable-joint message (unnamed nodes). Not yet done: re-sizing after removal, adding
   candidate diagonals (ground structure), CAD/Fusion/quote/cut list regeneration. 230/230 checks, 97/97 tests.
+- Ground-structure topology search, branch `topo-experiment` (5 Oct, NOT merged): `topo_search.py` tries every new
+  size-C tube between existing nodes (same side mirrored, or across the car; 150-1000 mm, not along an existing line) and
+  every non-rule tube removal, re-sizes each with frame_opt repair + greedy, and keeps the lightest move per round.
+  Against nominal loads it reached 45.40 kg, but against the robust (tolerance) gate that every frame must pass, the
+  current 49.44 kg frame is already optimal (robust re-size: 49.44), and the best layout with new tubes is 49.36 kg
+  (diagonals bh_sus-pb1m, pb1-ring_sus, em_ft-mh_bot, em_ft-lap; 8 extra tubes for 0.08 kg). Variants: r1 49.61, r1r2 50.37,
+  +em_fb-mh_sis 49.86, +em_ft-mh_bot 49.86, +em_ft-lap 49.89, +E1+E3 49.38, +E2+E3 49.36 (greedy sizing is path-dependent,
+  about +-0.5 kg). Verdict: adding tubes does not pay; keep the two-removal frame. Picture: views/topo_search_best.png.
+  The search found two more check gaps, now closed: (1) `frame_rules.leg_clearance()`: no tube within 10 mm of the
+  driver's legs/feet (LEG_R capsules hip-knee-ankle-toe at +-KNEE_Z; current frame 22 mm). An fh_sis cross had passed
+  every check while running through the thighs, because T.1.2 lets the template rise over a tube. (2)
+  `powertrain.tubes_in_engine()`: no tube inside the engine box except within 60 mm of an engine mount (mount-to-mount
+  crosses exempt); em_rb-mh_sis had run ~136 mm through the engine. Open: the rear-ring bottom cross (y 150) sits inside
+  the generic engine box (bottom y 130); re-check when the CRF450R is measured. The em_ft-lap diagonal would pass near the
+  seat; no torso/seat clearance check exists. topo_search.json's round 3 (em_rb-mh_sis) predates the engine check and
+  is invalid. Multiprocessing needs the sandbox off (sysconf SC_SEM_NSEMS_MAX).

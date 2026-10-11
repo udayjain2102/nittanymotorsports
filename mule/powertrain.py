@@ -77,6 +77,20 @@ def clearances():
     low = min(p[1] for p in samples)
     return worst, low, low - pan_top if abs(CHAIN_Z) < m.Z_REAR else None
 
+def tubes_in_engine(near=60.0, n=60):
+    """Roles of tubes with a point inside ENGINE["box"] (grown by the tube radius) farther than `near` from every engine
+    mount node (em_*). Mount tubes end inside the box at their mount; a tube running through the engine would not."""
+    x0, x1, y0, y1, z0, z1 = ENGINE["box"]
+    mounts = [np.array(p, float) for k, p in m.N.items() if k.startswith("em_")]; mounts += [np.array(m.mir(p)) for p in mounts]
+    bad = set()
+    for a_, b_, sz, role in m.MEMBERS:
+        a_, b_ = np.array(a_, float), np.array(b_, float); r = m.SIZES[sz][0] / 2
+        if all(min(np.linalg.norm(e - mp) for mp in mounts) < 1 for e in (a_, b_)): continue   # mount-to-mount cross under the engine
+        for q in a_ + np.linspace(0, 1, n)[:, None] * (b_ - a_):
+            if (x0 - r < q[0] < x1 + r and y0 - r < q[1] < y1 + r and z0 - r < q[2] < z1 + r
+                    and min(np.linalg.norm(q - mp) for mp in mounts) > near): bad.add(role)
+    return sorted(bad)
+
 def cv():
     """Half-shaft angle (deg) and plunge (mm) over +/-TRAVEL from the spool carrier to the rear hub."""
     import uprights as U, springs
@@ -177,6 +191,8 @@ def checks():
         ("CV plunge <= limit", plunge <= CV["plunge"], f"{plunge:.1f} mm"),
         ("rear toe link clears the CV half-shaft >= 10 mm over travel (boot included)", toe_link_to_halfshaft() >= 10, f"{toe_link_to_halfshaft():.0f} mm"),
         ("engine envelope clear of main hoop / firewall", bx[1] <= m.X_MAIN - 40, f"engine front {bx[1]:.0f}, firewall {m.X_MAIN - 40:.0f}"),
+        ("no frame tube passes through the engine envelope (except within 60 mm of a mount)", not tubes_in_engine(),
+         ", ".join(tubes_in_engine()) or "none"),
         ("frame FoS >= 1.2 under full-traction launch", fos >= 1.2, f"{fos:.2f} ({where})"),
     ]
 

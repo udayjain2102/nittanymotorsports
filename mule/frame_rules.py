@@ -147,6 +147,23 @@ def legs_outside(n=12):
     out_f = [p for p in pts for z in (KNEE_Z + LEG_R, -(KNEE_Z + LEG_R)) if front.find_simplex((z, p[1] + LEG_R)) < 0]
     return out_s, out_f, knee + np.array([0, LEG_R])
 
+def leg_clearance(margin=10.0, n=24):
+    """Smallest (tube surface to leg surface) gap, mm, and the tube: each leg is a LEG_R capsule hip -> knee -> ankle ->
+    toe at the pedal face, at z = +-KNEE_Z. The T.1.2 template may rise over a tube; the legs can't (topology search find)."""
+    hip = np.array(m.HIP, float); ank = np.array([m.X_PEDAL - 50.0, m.N["pb0"][1] + 110.0])
+    knee = legs_outside()[2] - np.array([0, LEG_R]); toe = np.array([m.X_PEDAL, ank[1] + 150.0])   # toe: estimate
+    worst = (1e9, "")
+    for zs in (KNEE_Z, -KNEE_Z):
+        leg = [np.array([*p, zs]) for p in (hip, knee, ank, toe)]
+        for a, b, s, r in m.MEMBERS:
+            a, b = np.array(a, float), np.array(b, float)
+            for q in a + np.linspace(0, 1, n)[:, None] * (b - a):
+                for u, v in zip(leg, leg[1:]):
+                    t = np.clip(np.dot(q - u, v - u) / np.dot(v - u, v - u), 0, 1)
+                    g = np.linalg.norm(q - (u + t * (v - u))) - LEG_R - m.SIZES[s][0] / 2
+                    if g < worst[0]: worst = (g, r)
+    return worst
+
 # ---------- triangulation (F.1.17): each side, in side view, must be a truss that cannot fold ----------
 STRUCTURAL = PRIMARY | {"structural", "harness"}   # F.1.17: triangles may use any Structural (Size C or larger) tube
 
@@ -395,6 +412,8 @@ def checks():
     out_s, out_f, knee = legs_outside()
     ok("T.1.3.2 driver's legs ahead of the front hoop inside the structural tubing in side and front view (95th male, estimated)",
        not out_s and not out_f, f"knee top at x {knee[0]:.0f}, y {knee[1]:.0f}; {len(out_s)} side-view / {len(out_f)} front-view leg points outside")
+    g, who = leg_clearance()
+    ok("T.1.3.2 / ours: no tube within 10 mm of the driver's legs and feet (95th male capsules, estimated)", g >= 10, f"{g:.0f} mm ({who})")
 
     # V.1.1 open wheel: frame and impact attenuator out of the tyre zones (wing: aero.py T.7.6.3)
     zin, zout = m.TRACK_F / 2 - m.TIRE_W / 2, m.TRACK_F / 2 + m.TIRE_W / 2
