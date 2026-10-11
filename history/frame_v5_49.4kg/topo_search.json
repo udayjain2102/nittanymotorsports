@@ -1,0 +1,471 @@
+{
+ "start_kg": 49.438313376447724,
+ "resized_kg": 46.741147144586954,
+ "rounds": [
+  {
+   "move": [
+    "add-side",
+    "bh_sus",
+    "pb1m"
+   ],
+   "kg": 46.07687283265477
+  },
+  {
+   "move": [
+    "add-side",
+    "pb1",
+    "ring_sus"
+   ],
+   "kg": 45.61594665106681
+  },
+  {
+   "move": [
+    "add-side",
+    "em_rb",
+    "mh_sis"
+   ],
+   "kg": 45.40119410281119
+  }
+ ],
+ "spec": [
+  [
+   [
+    "fh_bot",
+    "fh_sis",
+    "H",
+    "Front hoop"
+   ],
+   [
+    "fh_sis",
+    "fh_sh",
+    "H",
+    "Front hoop"
+   ],
+   [
+    "fh_sh",
+    "fh_top",
+    "H",
+    "Front hoop"
+   ],
+   [
+    "mh_bot",
+    "mh_sis",
+    "J",
+    "Main hoop"
+   ],
+   [
+    "mh_sis",
+    "mh_bar",
+    "J",
+    "Main hoop"
+   ],
+   [
+    "mh_bar",
+    "mh_sh",
+    "J",
+    "Main hoop"
+   ],
+   [
+    "mh_sh",
+    "mh_top",
+    "J",
+    "Main hoop"
+   ],
+   [
+    "fh_sis",
+    "mh_sis",
+    "H",
+    "Upper side impact"
+   ],
+   [
+    "fh_bot",
+    "as",
+    "H",
+    "Lower side impact"
+   ],
+   [
+    "as",
+    "lap",
+    "H",
+    "Lower side impact"
+   ],
+   [
+    "lap",
+    "mh_bot",
+    "H",
+    "Lower side impact"
+   ],
+   [
+    "as",
+    "as_c",
+    "B",
+    "Anti-sub floor cross"
+   ],
+   [
+    "as_c",
+    "mh_bot",
+    "C",
+    "Cockpit floor V (anti-sub)"
+   ],
+   [
+    "as_c",
+    "fh_bot",
+    "C",
+    "Cockpit floor V (anti-sub)"
+   ],
+   [
+    "mh_bar",
+    "sb",
+    "J",
+    "Shoulder harness bar"
+   ],
+   [
+    "fh_bot",
+    "lap_up",
+    "B",
+    "Diagonal side impact"
+   ],
+   [
+    "lap_up",
+    "mh_sis",
+    "B",
+    "Diagonal side impact"
+   ],
+   [
+    "lap",
+    "lap_up",
+    "B",
+    "Lap belt tab brace"
+   ],
+   [
+    "fh_top",
+    "bh_top",
+    "B",
+    "Front hoop brace"
+   ],
+   [
+    "bh_bot",
+    "bh_lsus",
+    "B",
+    "Front bulkhead"
+   ],
+   [
+    "bh_lsus",
+    "bh_sus",
+    "B",
+    "Front bulkhead"
+   ],
+   [
+    "bh_sus",
+    "bh_top",
+    "B",
+    "Front bulkhead"
+   ],
+   [
+    "bh_top",
+    "ring_top",
+    "H",
+    "FBH support upper"
+   ],
+   [
+    "ring_top",
+    "fh_sis",
+    "H",
+    "FBH support upper"
+   ],
+   [
+    "fh_top",
+    "ring_top",
+    "C",
+    "Front hoop lower brace"
+   ],
+   [
+    "bh_bot",
+    "pb1",
+    "A",
+    "FBH support lower (pedal box)"
+   ],
+   [
+    "pb1",
+    "pb0",
+    "A",
+    "FBH support lower (pedal box)"
+   ],
+   [
+    "pb0",
+    "ring_bot",
+    "A",
+    "FBH support lower (pedal box)"
+   ],
+   [
+    "ring_bot",
+    "fh_bot",
+    "A",
+    "FBH support lower"
+   ],
+   [
+    "pb0",
+    "pb0m",
+    "B",
+    "Pedal box cross (rear)"
+   ],
+   [
+    "pb1",
+    "pb1m",
+    "C",
+    "Pedal box cross (front)"
+   ],
+   [
+    "ring_bot",
+    "fh_sis",
+    "C",
+    "FBH support diagonal"
+   ],
+   [
+    "ring_bot",
+    "ring_lsus",
+    "J",
+    "Front susp ring"
+   ],
+   [
+    "ring_lsus",
+    "ring_sus",
+    "J",
+    "Front susp ring"
+   ],
+   [
+    "ring_sus",
+    "ring_top",
+    "J",
+    "Front susp ring"
+   ],
+   [
+    "mh_top",
+    "r_top",
+    "B",
+    "Main hoop brace"
+   ],
+   [
+    "mh_sis",
+    "rr_top",
+    "B",
+    "MH brace support upper"
+   ],
+   [
+    "rr_top",
+    "sp_top",
+    "B",
+    "MH brace support upper"
+   ],
+   [
+    "sp_top",
+    "r_top",
+    "B",
+    "MH brace support upper"
+   ],
+   [
+    "mh_bot",
+    "rr_bot",
+    "C",
+    "MH brace support lower"
+   ],
+   [
+    "rr_bot",
+    "sp_bot",
+    "C",
+    "MH brace support lower"
+   ],
+   [
+    "sp_bot",
+    "r_bot",
+    "C",
+    "MH brace support lower"
+   ],
+   [
+    "rr_bot",
+    "rr_top",
+    "C",
+    "Rear susp ring"
+   ],
+   [
+    "r_bot",
+    "r_top",
+    "C",
+    "Rear bulkhead"
+   ],
+   [
+    "mh_bot",
+    "rr_top",
+    "C",
+    "Rear side diagonal"
+   ],
+   [
+    "mh_bar",
+    "rr_top",
+    "C",
+    "Main hoop bend support (F.5.6.3)"
+   ],
+   [
+    "sp_bot",
+    "sp_c",
+    "C",
+    "Spool carrier post"
+   ],
+   [
+    "sp_c",
+    "rr_top",
+    "B",
+    "Spool carrier brace (chain pull)"
+   ],
+   [
+    "sp_c",
+    "rr_bot",
+    "B",
+    "Spool carrier brace (chain pull)"
+   ],
+   [
+    "r_top",
+    "sp_bot",
+    "C",
+    "Rear side bay diagonal (bulkhead pickups)"
+   ],
+   [
+    "mh_bot",
+    "em_fb",
+    "H",
+    "Main hoop base cross + front engine mounts"
+   ],
+   [
+    "rr_bot",
+    "em_rb",
+    "H",
+    "Rear-ring bottom cross + rear engine mounts"
+   ],
+   [
+    "mh_sis",
+    "em_ft",
+    "H",
+    "Main hoop mid cross / firewall + top engine mounts"
+   ],
+   [
+    "bh_sus",
+    "pb1m",
+    "C",
+    "Topo diagonal bh_sus-pb1m"
+   ],
+   [
+    "pb1",
+    "ring_sus",
+    "C",
+    "Topo diagonal pb1-ring_sus"
+   ],
+   [
+    "em_rb",
+    "mh_sis",
+    "C",
+    "Topo diagonal em_rb-mh_sis"
+   ]
+  ],
+  [
+   [
+    "bh_bot",
+    "B",
+    "Front bulkhead"
+   ],
+   [
+    "bh_top",
+    "B",
+    "Front bulkhead"
+   ],
+   [
+    "ring_bot",
+    "A",
+    "Lower FBH support cross (F.5.2.3)"
+   ],
+   [
+    "fh_top",
+    "H",
+    "Front hoop"
+   ],
+   [
+    "em_fb",
+    "H",
+    "Main hoop base cross + front engine mounts"
+   ],
+   [
+    "mh_top",
+    "J",
+    "Main hoop"
+   ],
+   [
+    "sb",
+    "J",
+    "Shoulder harness bar"
+   ],
+   [
+    "em_rb",
+    "H",
+    "Rear-ring bottom cross + rear engine mounts"
+   ],
+   [
+    "r_bot",
+    "C",
+    "Rear bulkhead"
+   ],
+   [
+    "r_top",
+    "C",
+    "Rear bulkhead"
+   ],
+   [
+    "ring_lsus",
+    "C",
+    "Front pickup cross (rocker/shock loads, rack)"
+   ],
+   [
+    "pb0m",
+    "B",
+    "Pedal box cross (rear)"
+   ],
+   [
+    "pb1m",
+    "C",
+    "Pedal box cross (front)"
+   ]
+  ],
+  [
+   [
+    "mh_bot",
+    "r_bot'",
+    "C",
+    "Engine bay floor diagonal"
+   ],
+   [
+    "r_bot",
+    "r_top'",
+    "C",
+    "Rear bulkhead diagonal"
+   ],
+   [
+    "mh_top",
+    "r_top'",
+    "C",
+    "MH brace-plane diagonal (lateral)"
+   ],
+   [
+    "fh_top",
+    "ring_top'",
+    "C",
+    "FH brace-plane diagonal (lateral)"
+   ],
+   [
+    "em_ft",
+    "em_ft'",
+    "H",
+    "Main hoop mid cross / firewall + top engine mounts"
+   ]
+  ]
+ ],
+ "robust_kg": 48.90335039585487,
+ "robust_pass": true
+}
