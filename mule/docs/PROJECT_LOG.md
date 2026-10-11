@@ -414,3 +414,13 @@ was followed by the module checks, and the frame was re-sized once all new gates
   lapsim, harness, fab) rewritten for the post-audit code; BUILD_PLAN brake/BOTS/wing checklist items and torsion row;
   FRAME_RESEARCH table (50.4 kg, 41.1 m, 1.23 kg/m); VERSIONS, JUGAAD_PLAN and CLEAN_SHEET added to the file indexes;
   WORKDONE §10. 228/228 checks, 97/97 tests.
+- Topology study, branch `topo-experiment` (5 Oct, NOT merged): `topo_study.py` removes each mirrored member pair at
+  current sizes and keeps the removal if every `frame_opt` gate passes (all load cases, rules, torsion, deflection),
+  then the robust gate. 37.0 of 50.4 kg is rule-named tube, so only ~13 kg is in play; five cross tubes are load-bearing
+  (removing one leaves a mechanism). Removed: FBH support front-bay diagonal (bh_top->ring_bot) and the upper spool carrier
+  post (sp_c->sp_top): 50.44 -> 49.44 kg, worst utilisation 0.944, torsion 2422 -> 2399 (robust worst 1778). The upper spool
+  brace passed nominal but failed robust (1.001). The study exposed two rule-checker gaps, now closed in `frame_rules.py`:
+  F.6.2 front bulkhead must be a closed perimeter (removing the bh_bot cross passed before), and F.3.2.1 every lap /
+  anti-sub tab node must sit on a harness-size tube (removing the anti-sub floor cross put as_c on 1.0x0.049 only).
+  Fixed a display crash in the F.1.17 movable-joint message (unnamed nodes). Not yet done: re-sizing after removal, adding
+  candidate diagonals (ground structure), CAD/Fusion/quote/cut list regeneration. 230/230 checks, 97/97 tests.

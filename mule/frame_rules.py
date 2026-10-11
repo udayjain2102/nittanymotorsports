@@ -260,7 +260,7 @@ def checks():
     for sg, side in ((1, "right"), (-1, "left")):
         mech, which, nn = side_mechanisms(sg)
         ok(f"F.1.17 / F.5.6.2 Primary Structure triangulated in side view ({side}): no primary joint can move in a pin-jointed truss", mech == 0,
-           f"{nn} joints; " + (f"movable primary joints: {', '.join(which)}" if which else "none movable"))
+           f"{nn} joints; " + (f"movable primary joints: {', '.join(map(str, which))}" if which else "none movable"))
 
     deg = degree_primary()
     y_brace = {}
@@ -339,6 +339,15 @@ def checks():
                 and abs(min(p[0], p[-1], key=lambda q: q[0])[1] - low) < 30 for p in lo)
     ok("F.6.2.3c lower bulkhead support from the bulkhead base to the front hoop base", lo_ok)
     ok("F.6.2.3d bulkhead support diagonal fitted (triangulation checked by the truss test)", len(members("fbh_diag")) + len(members("fbh_diag_front")) >= 2)
+    deg = {}
+    for a, b, *_ in members("bulkhead"):
+        for p in (a, b): deg[key(p)] = deg.get(key(p), 0) + 1
+    open_ = [n for n, d in deg.items() if d < 2]
+    ok("F.6.2 front bulkhead is a closed perimeter (the AIP mounts around it)", not open_, f"{len(open_)} open ends" if open_ else "closed")
+    tabs = [m.N["lap"], m.mir(m.N["lap"]), m.N["as_c"]]   # lap and anti-sub belt tab nodes (harness.py)
+    weak = [key(t) for t in tabs if not any(meets(s, REQUIRED["harness"]) for a, b, s, _ in m.MEMBERS
+                                            if key(t) in (key(a), key(b)))]
+    ok("F.3.2.1 every lap / anti-sub tab node sits on a harness-size (or larger) tube", not weak, ", ".join(map(str, weak)) or "all")
     tops = [max(p[0], p[-1], key=lambda q: q[0]) for p in up]
     rise = max(t[1] + m.rad("FBH support upper") - y_sis_top for t in tops)
     ok("F.6.2.3b upper bulkhead support <= 100 mm above the upper side impact, or triangulated back (side-view truss test)",

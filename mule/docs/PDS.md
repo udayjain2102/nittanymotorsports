@@ -14,7 +14,7 @@ This page lists the car's requirements. Each one has a number and a way to verif
 | # | Requirement | Target | Predicted (code) | Verified by |
 |---|---|---|---|---|
 | R1 | Roll-over strength, 6/5/9 kN hoop loads with the AF4 support (hoop bottoms fixed; inertia relief agrees) | FoS ≥ 1.0 vs welded 4130 yield 340 MPa; FoS ≥ 1.0 vs welded ultimate 410 MPa under tube tolerances (`fea.SY_ROLL`, `SIM_TO_REAL.md`) | 1.08 main / 1.02 front; 1.11 / 1.00 under tolerances (`fea.py`, `robustness.py`); deflection ≤ 25 mm | T1.2, T1.3 |
-| R2 | Chassis torsional stiffness | FEA ≥ 1500 N·m/deg; **measured ≥ 1000** (2 × roll stiffness; real frames measure ~⅔ of FEA, `SIM_TO_REAL.md`) | 2422 FEA; 1795 worst tolerance sample (`fea.py`, `robustness.py`) | T1.2 twist test |
+| R2 | Chassis torsional stiffness | FEA ≥ 1500 N·m/deg; **measured ≥ 1000** (2 × roll stiffness; real frames measure ~⅔ of FEA, `SIM_TO_REAL.md`) | 2399 FEA; 1778 worst tolerance sample (`fea.py`, `robustness.py`) | T1.2 twist test |
 | R3 | Frame under wheel, launch and pedal loads | FoS ≥ 1.2 | 1.23 / 1.21 / 1.32 nominal; ≥ 1.02 under tube tolerances (`loads.py`, `powertrain.py`, `brakes.py`, `robustness.py`) | T5.2, T7.2 |
 | R4 | Harness mounts survive a crash | 20 g, FoS ≥ 1 vs welded UTS; tabs ≥ 15 kN | 1.19 nominal, 1.07 under tube tolerances; 31.7 kN (`harness.py`, `robustness.py`) | T1.3, T4.3c |
 | R5 | Rules geometry (hoops, braces, triangulation, tube size per job, bulkhead and brace supports, side impact, shoulder bar, helmet, IA, belts, templates, open wheel) | every frame-relevant rule passes; none traded (`RULES_MATRIX.md`) | 28 + 34 + 2 + 8 checks (`mule.py`, `frame_rules.py`, `cockpit.py`, `harness.py`) | T4.3, T4.3b |

@@ -43,7 +43,7 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 
 ### T1.1 Frame mass and node positions
 - **Objective:** check that the frame was built as modelled.
-- **Predicted:** 50.4 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
+- **Predicted:** 49.4 kg of tube (`mule.py`); welds, tabs and brackets add about 4 kg (`mass.py`). Node coordinates are in `fab/jig_node_coordinates.csv`.
 - **Procedure:**
   1. Weigh the frame.
   2. Measure the 12 hardpoint nodes (suspension pickups, rocker and shock mounts) from the jig table. Use a height gauge and a tape from the jig datum.
@@ -54,7 +54,7 @@ Nobody drives until stages 1–4 pass. Brakes (stage 3) and shutdown (stage 4) a
 
 ### T1.2 Torsional stiffness
 - **Objective:** confirm the beam FEA, and find weak welds or joints.
-- **Predicted:** 2422 N·m/deg (`fea.py`). The model has rigid joints, so the real frame may be softer: it is often said FSAE frames measure about ⅔ of rigid-joint FEA (≈1600; unsourced, and UDel measured above its FEA), and `robustness.py`'s worst tolerance sample gives 1795. **Expect 1600–2400 measured; ≥ 1000 passes.**
+- **Predicted:** 2399 N·m/deg (`fea.py`). The model has rigid joints, so the real frame may be softer: it is often said FSAE frames measure about ⅔ of rigid-joint FEA (≈1600; unsourced, and UDel measured above its FEA), and `robustness.py`'s worst tolerance sample gives 1778. **Expect 1600–2400 measured; ≥ 1000 passes.**
 - **Procedure:**
   1. Bolt the rear pickups to a rigid fixture.
   2. Put a beam across the front lower pickups and hang weights at a measured arm, so torque T = W × arm. Use 200, 400 and 600 N·m.
@@ -255,7 +255,7 @@ Precondition: **the proof or burst ratings of the master cylinders, calipers and
 
 ### T4.1 Corner weights and CG height
 - **Objective:** measure the three numbers every load case depends on.
-- **Predicted by `mass.py`:** 301 kg with the driver, no wing, 48.4 % front, CG 325 mm.
+- **Predicted by `mass.py`:** 300 kg with the driver, no wing, 48.4 % front, CG 325 mm.
 - **Assumed by the load cases (`loads.py`):** 310 kg, 48 % front, CG 345 mm. They are set to cover the budget.
 - **Procedure:**
   1. Weigh all four corners.
