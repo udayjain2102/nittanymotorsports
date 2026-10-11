@@ -35,7 +35,7 @@ What's worth keeping from the concept: the 4-corner double-wishbone layout, the 
 - The driver sits upright at 20° (T.2.1.d), so a **5-point harness is allowed**. Hip-to-pedal distance is 915 mm.
 - Main hoop top is at 1280 mm and front hoop top at 850 mm. Helmet clearance to the hoop line is **65 mm** (the rule needs ≥50).
 - Lower side-impact tube bottom is 60 mm above the ground (V.1.4.2 requires ≤90 and prefers ≤75).
-- The frame is **128 members, about 50.4 kg** of 4130 after the 2 Oct audit fixes (section 2o; it was 44.3 kg before them; section 2l explains the earlier changes; the 2026-10-01 C2 rear puts the rear wishbone pickups on rail nodes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
+- The frame is **124 members, about 49.4 kg** of 4130 after the 2 Oct audit fixes (section 2o, 50.4 kg) and the 10 Oct topology study, which removed two tubes (`docs/VERSIONS.md`; it was 44.3 kg before them; section 2l explains the earlier changes; the 2026-10-01 C2 rear puts the rear wishbone pickups on rail nodes). See `tube_order_list.csv` for tube lengths by size. Buy about 25% extra for notching scrap and mistakes.
 - These changes came out of the FEA (see section 2b).
 - Tube schedule after the 2026-10-01 optimisation (each tube at the smallest size its loads and its F.3.2.1 rule size allow; `frame_rules.py` checks the rule size per job):
   - 1.5″×0.095″: main hoop (AF4 roll-over), front suspension-ring posts (no top cross, T.1.2).

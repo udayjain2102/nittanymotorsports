@@ -16,7 +16,6 @@ B,25.4,1.65,Spool carrier brace (chain pull),4,901,0.87
 C,25.4,1.24,Cockpit floor V (anti-sub),4,2048,1.51
 C,25.4,1.24,Engine bay floor diagonal,1,959,0.71
 C,25.4,1.24,FBH support diagonal,2,842,0.62
-C,25.4,1.24,FBH support front-bay diagonal,2,1190,0.88
 C,25.4,1.24,FH brace-plane diagonal (lateral),1,705,0.52
 C,25.4,1.24,Front hoop lower brace,2,1128,0.83
 C,25.4,1.24,"Front pickup cross (rocker/shock loads, rack)",1,450,0.33
@@ -28,7 +27,7 @@ C,25.4,1.24,Rear bulkhead diagonal,1,438,0.32
 C,25.4,1.24,Rear side bay diagonal (bulkhead pickups),2,701,0.52
 C,25.4,1.24,Rear side diagonal,2,852,0.63
 C,25.4,1.24,Rear susp ring,2,404,0.3
-C,25.4,1.24,Spool carrier post,4,385,0.28
+C,25.4,1.24,Spool carrier post,2,221,0.16
 H,31.75,2.41,FBH support upper,4,1636,2.85
 H,31.75,2.41,Front hoop,7,1940,3.38
 H,31.75,2.41,Lower side impact,6,1602,2.79

@@ -1,12 +1,12 @@
 # What's next
 
 In order. Tick them off here as they're done. The costs come from [`mule/docs/BUDGET_PLAN.md`](mule/docs/BUDGET_PLAN.md), the parts from [`mule/docs/PARTS_LIST.md`](mule/docs/PARTS_LIST.md).
-Last updated 2026-10-02. Engine chosen (CRF450R 2018+); frame 50.4 kg after the audit fixes (C2 layout, re-sized against frontal impact, buckling, a 100 kg driver and fresh tolerance samples), every check passing; total to a driving car about **$7,700–11,600** (list prices; see the jugaad plan for the donated/sponsored route).
+Last updated 2026-10-10. Engine chosen (CRF450R 2018+); frame 49.4 kg (the 50.4 kg post-audit frame minus two tubes from the topology study, merged 10 Oct), every check passing; total to a driving car about **$7,700–11,600** (list prices; see the jugaad plan for the donated/sponsored route).
 
 ## Funding is smaller: jugaad plan
 - [ ] No limit yet. [`mule/docs/JUGAAD_PLAN.md`](mule/docs/JUGAAD_PLAN.md): about $6,200–10,700 paying for everything, about $4,000–6,000 with a donated engine and sponsored tube (real prices, 1 Oct 2026).
 - [ ] Before applying: ask for an engine donation / crashed 2018+ CRF450R (dealers, riders, alumni), a tube sponsor (local steel distributor), and used parts from nearby teams.
-- [ ] Decide steel by who welds it: 4130 (TIG, 50.4 kg) or 1020 DOM (team MIG; branch `jugaad-1020` was sized before the audit gates and must be re-run). Same price per foot.
+- [ ] Decide steel by who welds it: 4130 (TIG, 49.4 kg) or 1020 DOM (team MIG; branch `jugaad-1020` was sized before the audit gates and must be re-run). Same price per foot.
 
 ## This week (no money needed)
 - [ ] Ask nearby FSAE teams for used 13″ wheels, slicks, MTB coil shocks, rod ends and uprights.
@@ -18,19 +18,21 @@ Last updated 2026-10-02. Engine chosen (CRF450R 2018+); frame 50.4 kg after the 
 - [ ] Send the shop the whole `mule/quote/` folder (frame STEP, material list, shop data, cover note) for a preliminary quote, in 4130 and 1020 DOM.
 - [ ] Ask the faculty advisor or an FSAE alum to review the roll-over criterion (welded 4130: 340 MPa yield, 410 MPa ultimate; `SIM_TO_REAL.md`) and the TIG procedure. If the shop quotes 1020 DOM, the criterion has to be redone for that steel.
 
-## Clean-sheet frame designs (history: C2 won at 44.3 kg; after the audit gates the same layout is 50.4 kg)
+## Clean-sheet frame designs (history: C2 won at 44.3 kg; after the audit gates the same layout is 50.4 kg; the topology study took it to 49.4 kg)
 Realistic target with the current safety standards: **~44–45 kg** for the frame types tried so far; the 30s need a different packaging (see WORKDONE §8).
 - [x] B1 front box ahead of the leg template: 51 kg, rejected (branch `clean-sheet-B`).
 - [x] C1 "short" (branch `clean-sheet-short`): 46.5 kg, 74 pieces, torsion 2305 (main: 46.4 kg, 78, 2004). Same mass, stiffer, more margin, fewer pieces; helmet clearance thinner (54 vs 65 mm). **No weight win**; keep as the candidate if stiffness/fewer pieces matter more than 0.1 kg.
 - [x] **C2 node-mounted rear** (developed on branch `clean-sheet-C2`, now merged into `main`): **44.3 kg**, 73 pieces, torsion 1946, every check passing. −2.1 kg against `main`, the best concept so far. Thinner: robust tilt 60.3°, rear upright arm FoS 1.6. Combining it with C1's seat/front hoop is untested.
 - [x] C3 direct-acting front shocks: **checked, not built.** No frame node is within a shock's length of the upright (nearest usable 384 mm; shocks are 207–223 mm at ride). It would need a front outrigger tower each side (≈1.2 kg), about cancelling the rockers it removes, with a wishbone clash risk. Details in PROJECT_LOG.
 - [x] Winner so far: C2, merged into `main`; CAD, shop data and the quote package regenerated. If C3 or a C1+C2 combination beats it, merge that the same way.
+- [x] Topology study (branch `topo-experiment`, merged 10 Oct): two tubes removed, 50.4 → 49.4 kg; adding diagonals saved only 0.08 kg for 8 tubes, so none added. Details in `mule/docs/VERSIONS.md`.
+- [ ] Upload frame v5 (49.4 kg) to Fusion as `NM26_Assembly_v8`.
 - [ ] Give `frame_opt.py` a rule that a straight run of one tube keeps one size (it can currently size two collinear parts differently, which can't be coped).
 
 ## Frame audit, 1 Oct 2026: fix before ordering tube
 A read-only audit found problems the passing checks hide. Fixed on 2 Oct (branch `audit-fixes`) except the first item, which needs the advisor. Detail in `mule/docs/PROJECT_LOG.md`.
 - [ ] **Roll-hoop strength criterion (advisor decision).** Sized to 340 MPa under the worse of two supports: main 1.23, front 1.18. At 180 MPa no tube on the ladder works (1.5 × 0.095 main hoop still 1.5× over), so F.3.4.2 reads as the SES equivalency basis, not an absolute load check. Original note: `fea.py` uses a self-chosen 340/410 MPa welded allowable and legacy AF4 loads; the 2026 rules have no AF section, and F.3.4.2 sets welded steel at 180/300 MPa "for ANY steel" in SES calculations. Hoop FoS 1.02–1.09 drops to about 0.55 at 180 MPa and below 1.0 under other reasonable supports. Decide the criterion with the advisor, then re-size.
-  - Same question for the crash cases (95 kN frontal, 20 g harness): they use F.3.4.2's 300 MPa welded UTS and give the 50.4 kg frame. Against the welded-4130 410 MPa the roll-over case already uses, the frame sizes to **46.65 kg** (checked 2 Oct). Show the advisor both.
+  - Same question for the crash cases (95 kN frontal, 20 g harness): they use F.3.4.2's 300 MPa welded UTS and gave the 50.4 kg frame (now 49.4 kg after the topology study). Against the welded-4130 410 MPa the roll-over case already uses, the frame sizes to **46.65 kg** (checked 2 Oct). Show the advisor both.
 - [x] **F.5.2.3 bent tubes.** Fixed: check rewritten to the rule (same size, within 30°); upper support straightened, ring-bottom cross sized to the lower support. Original note: The check accepts any stiffer tube at a kink; the rule needs a support of the same diameter and thickness. The upper bulkhead support kinks about 8.5° at `ring_top` with only an out-of-plane post; the lower one kinks at `ring_bot` with a smaller cross. Straighten them or add compliant supports, and fix the check.
 - [x] **F.5.6.3 main-hoop bend at `mh_bar`.** Fixed: check needs a side-view tube; new C tube from the bend to the rear ring top. Original note: It passes only because the lateral shoulder bar is counted; the rule needs side-view triangulation (or < 25 mm from an attachment point). Move the bend or add a side-view tube.
 - [x] **Fab data.** Fixed: square-cut ends run past the joint (hoop legs +16 mm), hoop-corner jig points on the bent tube, tube clash check (the bulkhead diagonal went through the pedal-box node: moved). Ask the bender about the 78 mm main-hoop top straight. Original note: Hoop legs and ring posts end at node centrelines, so tubes coped onto them overhang air; several nodes take 6–7 tubes. Hoop corner nodes sit 28–35 mm outside the real bent tube. Re-issue cut lengths and jig points from the real bend radius.

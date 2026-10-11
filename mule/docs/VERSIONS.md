@@ -1,7 +1,7 @@
 # NM26 versions: what changed between each one
 
 Two numbering schemes exist, so both are listed here:
-- **Frame versions** (`frame_v1` to `frame_v4`) are frozen copies of the whole `mule/` folder in `history/`, each with a
+- **Frame versions** (`frame_v1` to `frame_v5`) are frozen copies of the whole `mule/` folder in `history/`, each with a
   git tag of the same name. Numbers below come from running each frozen copy's own code (2026-10-03).
 - **Fusion uploads** (`NM26_Assembly_v1` to `_v7`) are the CAD files in Fusion, `adi laptop files > Nittany Motorsports`
   (older ones in `adi laptop files`). Nothing has been deleted from either. Dates marked ≈ predate git and come from
@@ -24,26 +24,26 @@ Two numbering schemes exist, so both are listed here:
 
 ## Frame versions at a glance
 
-| | v1 | v2 | v3 | v4 |
-|---|---|---|---|---|
-| Date, commit | 30 Sep, `6958de2` | 1 Oct, `95d2f37` | 1 Oct, `fce6480` | 2 Oct, `d9d45c2` |
-| Frame tube mass | 50.1 kg | 46.4 kg | 44.3 kg | 50.4 kg |
-| Members / cut pieces | 146 / 81 | 143 / 78 | 126 / 73 | 128 / 73 |
-| Torsion (FEA) | 2138 N·m/deg | 2004 | 1946 | 2422 |
-| Roll-over FoS main / front | 1.28 / 1.36 * | 1.08 / 1.02 | 1.09 / 1.02 | 1.23 / 1.18 ** |
-| Frontal impact 95 kN | not checked | not checked | not checked | 1.31 |
-| 20 g harness FoS | 1.17 (80 kg driver) | 1.19 (80 kg) | 1.19 (80 kg) | 1.33 (100 kg) |
-| Car with driver, CG, tilt | 294 kg, 340 mm, 60.9° | 290 kg, 339 mm, 60.9° | 288 kg, 341 mm, 60.8° | 301 kg, 325 mm, 61.9° |
-| Rear wing | fitted | fitted | fitted | not fitted |
-| Brakes: lock force, 2000 N pressure | 567 N, 296 bar | 567 N, 296 bar | 567 N, 296 bar | 676 N, 267 bar |
-| Lap sim: 75 m, skidpad | 4.48 s, 5.12 s | same | same | 5.05 s, 5.38 s *** |
-| Design checks / tests | 166 / 82 | 210 / 92 | 210 / 92 | 228 / 97 |
+| | v1 | v2 | v3 | v4 | v5 |
+|---|---|---|---|---|---|
+| Date, commit | 30 Sep, `6958de2` | 1 Oct, `95d2f37` | 1 Oct, `fce6480` | 2 Oct, `d9d45c2` | 10 Oct, merge of `topo-experiment` |
+| Frame tube mass | 50.1 kg | 46.4 kg | 44.3 kg | 50.4 kg | 49.4 kg |
+| Members / cut pieces | 146 / 81 | 143 / 78 | 126 / 73 | 128 / 73 | 124 / 71 |
+| Torsion (FEA) | 2138 N·m/deg | 2004 | 1946 | 2422 | 2399 |
+| Roll-over FoS main / front | 1.28 / 1.36 * | 1.08 / 1.02 | 1.09 / 1.02 | 1.23 / 1.18 ** | 1.22 / 1.11 ** |
+| Frontal impact 95 kN | not checked | not checked | not checked | 1.31 | 1.26 |
+| 20 g harness FoS | 1.17 (80 kg driver) | 1.19 (80 kg) | 1.19 (80 kg) | 1.33 (100 kg) | 1.34 (100 kg) |
+| Car with driver, CG, tilt | 294 kg, 340 mm, 60.9° | 290 kg, 339 mm, 60.9° | 288 kg, 341 mm, 60.8° | 301 kg, 325 mm, 61.9° | 300 kg, 325 mm, 61.9° |
+| Rear wing | fitted | fitted | fitted | not fitted | not fitted |
+| Brakes: lock force, 2000 N pressure | 567 N, 296 bar | 567 N, 296 bar | 567 N, 296 bar | 676 N, 267 bar | same as v4 |
+| Lap sim: 75 m, skidpad | 4.48 s, 5.12 s | same | same | 5.05 s, 5.38 s *** | same as v4 |
+| Design checks / tests | 166 / 82 | 210 / 92 | 210 / 92 | 228 / 97 | 232 / 97 |
 
 \* v1's roll-over case held the car at its suspension pickups, which hid about 2.5× the hoop stress (fixed in v2).
 \*\* v4 takes the worse of two supports (hoop bases fixed, and inertia relief); v2 and v3 used hoop bases only.
 \*\*\* v4 adds the 20 mm restrictor power cap, rotating mass and used-tyre grip; v1–v3 had an unrestricted engine.
 
-Unchanged across all four: wheelbase 1750 mm, tracks 1220 / 1220 mm, main hoop 1280 mm and front hoop 850 mm high,
+Unchanged across all five: wheelbase 1750 mm, tracks 1220 / 1220 mm, main hoop 1280 mm and front hoop 850 mm high,
 main hoop at X 520, front hoop at X 1321, front bulkhead at X 2130, rear end at X −300.
 
 Tube sizes: J = 1.5 × 0.095 in, H = 1.25 × 0.095, A = 1.0 × 0.095, B = 1.0 × 0.065, C = 1.0 × 0.049.
@@ -107,6 +107,19 @@ Rest of the car:
 - Shop data: tube ends run past their joints, hoop-corner jig points on the real bend; quote note specifies filler.
 - Design checks 210 → 228, tests 92 → 97.
 
+## v4 → v5: topology experiment (50.4 → 49.4 kg)
+
+**Why:** with tube sizes at their optimum, the next saving had to come from the layout. A removal study and a
+ground-structure search (try every new tube, re-size, keep the lightest) ran on branch `topo-experiment`, merged 10 Oct.
+- **Tubes removed (4 members, 2 fewer cut pieces):** the FBH-support front-bay diagonal (`bh_top` → `ring_bot`) and the upper
+  spool carrier post (`sp_c` → `sp_top`). No node moved.
+- **No tubes added:** the best layout with new diagonals was 49.36 kg with 8 extra tubes; not worth it.
+- Front hoop roll-over FoS 1.18 → 1.11 and frontal impact 1.31 → 1.26: thinner, still above 1.0 under the robust gate.
+- **New checks (4):** front bulkhead is a closed perimeter (F.6.2); harness tab nodes sit on harness-size tube (F.3.2.1);
+  no tube within 10 mm of the driver's legs; no tube through the engine box away from its mounts.
+- Open: the rear-ring bottom cross sits inside the generic engine box; re-check when the CRF450R is measured.
+- Design checks 228 → 232, tests 97.
+
 ## Other branches (not frame versions)
 
 | Branch | Frame | Status |
@@ -115,4 +128,5 @@ Rest of the car:
 | `clean-sheet-short` | C1 short, 46.5 kg | No weight win; kept |
 | `clean-sheet-C2` | C2, 44.3 kg | Merged as frame v3 |
 | `clean-sheet-C3` | direct-acting front shocks | Checked, not built (empty branch) |
+| `topo-experiment` | removal + topology search, 49.4 kg | Merged as frame v5 |
 | `jugaad-1020` | C2 in 1020 DOM, 45.3 kg | Sized before the audit gates; must be re-run |

@@ -440,3 +440,12 @@ was followed by the module checks, and the frame was re-sized once all new gates
   the generic engine box (bottom y 130); re-check when the CRF450R is measured. The em_ft-lap diagonal would pass near the
   seat; no torso/seat clearance check exists. topo_search.json's round 3 (em_rb-mh_sis) predates the engine check and
   is invalid. Multiprocessing needs the sandbox off (sysconf SC_SEM_NSEMS_MAX).
+
+## 2026-10-10: topology branch merged (frame v5, 49.4 kg)
+- Re-ran `report.py` on `topo-experiment`: 232/232 checks, 97/97 tests, same results as the 5 Oct commit.
+- Regenerated what the 5 Oct commits had left stale: `mule.py` (simple CAD, tube order list), `fab.py` (cut sheet, jig,
+  hoop bends), `cad_parts.py` (detailed CAD) and `quote_package.py`. The cut sheet now has 71 pieces (was 73). Re-ran
+  `report.py` after: 232/232, 97/97.
+- Docs moved to 49.4 kg (README, WHATS_NEXT, VERSIONS v5 column and v4 → v5 section). Thinner than v4: front hoop
+  roll-over 1.11 (was 1.18), frontal impact 1.26 (was 1.31). Merged into `main`; snapshot `history/frame_v5_49.4kg`.
+- The quote package was regenerated but not sent (the user is holding the quote and funding requests).
