@@ -452,3 +452,7 @@ was followed by the module checks, and the frame was re-sized once all new gates
 
 ## 2026-10-11: docs sweep for frame v5
 - Current-state numbers brought to frame v5 (49.4 kg, 124 members / 71 pieces, torsion 2399, 300 kg car, 232 checks) in README, WORKDONE (new section 11), WHATS_NEXT, BUDGET_PLAN, TEST_PLAN results log, PDS, FRAME_RESEARCH, CLEAN_SHEET and the mule/README file index (topology scripts added, frame_rules 40 checks). Historical sections left as written.
+
+## 2026-10-12: Fusion v8 and version clean-up
+- Uploaded `mule/cad/NM26_Assembly.step` (frame v5, 49.4 kg) to `adi laptop files > Nittany Motorsports` as `NM26_Assembly_v8`; thumbnail upright.
+- Checked that every Fusion version differs significantly from the next. Near-duplicates renamed with `_superseded`, nothing deleted: `NM26_Assembly_v6` (v7 minus nothing but a stray DRS wire), `NM26_Mule_simple_v2` (v3 is the same geometry recoloured; opened all three), `NM26_FSAE_Concept_first_import_sideways` (the original concept lying on its side). v7 → v8 is real but small to the eye: the front-bay diagonal pair and the upper half of each spool carrier post are gone (−1.0 kg). VERSIONS.md updated.

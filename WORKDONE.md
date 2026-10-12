@@ -240,7 +240,7 @@ tests, CI and outputs) went through the whole repo. Their main points, checked a
 
 ## 10. 2–3 October: Fusion uploads and version history
 
-- `NM26_Assembly_v6` (2 Oct) and `NM26_Assembly_v7` (3 Oct) uploaded to Fusion, `adi laptop files > Nittany Motorsports`.
+- `NM26_Assembly_v6` (2 Oct; renamed `_v6_stray_wire_superseded` on 12 Oct) and `NM26_Assembly_v7` (3 Oct) uploaded to Fusion, `adi laptop files > Nittany Motorsports`.
   Both are the 50.4 kg post-audit frame without the wing. v6 still drew the DRS servo wire up to where the wing was;
   the detailed CAD now drops that wiring when the wing isn't fitted, and v7 is clean. Frame v5 (section 11) went up as `NM26_Assembly_v8` on 12 Oct.
 - `mule/docs/VERSIONS.md` records what changed between every frame version and which Fusion file shows which frame.

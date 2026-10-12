@@ -4,22 +4,24 @@ Two numbering schemes exist, so both are listed here:
 - **Frame versions** (`frame_v1` to `frame_v5`) are frozen copies of the whole `mule/` folder in `history/`, each with a
   git tag of the same name. Numbers below come from running each frozen copy's own code (2026-10-03).
 - **Fusion uploads** (`NM26_Assembly_v1` to `_v8`) are the CAD files in Fusion, `adi laptop files > Nittany Motorsports`
-  (older ones in `adi laptop files`). Nothing has been deleted from either. Dates marked ≈ predate git and come from
+  (older ones in `adi laptop files`). Nothing has been deleted from either. Uploads that don't differ significantly from the next one carry `_superseded` in their Fusion name (renamed 12 Oct). Dates marked ≈ predate git and come from
   the project log, not timestamps.
 
 ## Which Fusion file shows which frame
 
 | Fusion file | Uploaded | Frame inside | Wing | Notes |
 |---|---|---|---|---|
-| `NM26_FSAE_Concept_original` | ≈ 27 Sep | the team's concept STEP | no | Starting point; critiqued in BUILD_PLAN §1. `_first_import_sideways` is the same file before the Y-up fix |
+| `NM26_FSAE_Concept_original` | ≈ 27 Sep | the team's concept STEP | no | Starting point; critiqued in BUILD_PLAN §1. `_first_import_sideways_superseded` is the same file before the Y-up fix (renamed 12 Oct) |
 | `NM26_Frame_only_FEA_model` | ≈ 27–28 Sep | early frame, tubes only | no | Fusion simulation cross-check; abandoned after an Autodesk server error on every solve |
-| `NM26_Mule_simple_v1` to `_v3` | ≈ 27–29 Sep | early frame, simple model | no | Simple one-colour-per-system model during the first design pass; the repo does not record what differs between the three |
+| `NM26_Mule_simple_v1` | ≈ 27–28 Sep | first simple frame | no | Fusion-native: frame tubes grouped by size (`frame_size_H/A/B/C`), block primitives for seat, pedal box, attenuator; no shocks or rockers |
+| `NM26_Mule_simple_v2_superseded` | ≈ 28–29 Sep | reworked simple frame | no | One imported `NM26_Mule` assembly: new frame layout, shocks, rockers, hubs and firewall added. Renamed 12 Oct: v3 has the same geometry |
+| `NM26_Mule_simple_v3` | 29 Sep | same as v2 | no | v2 recoloured to one colour per system (`mule.COLORS`); geometry unchanged (compared in Fusion 12 Oct) |
 | `NM26_Assembly_v1_no_wing` | 29 Sep | pre-wing frame | no | First detailed assembly |
 | `NM26_Assembly_v2_first_wing` | 29 Sep | first frame with the wing | yes | Rear wing and DRS added at the team's request (PROJECT_LOG step 29) |
 | `NM26_Assembly_v3` | — | — | — | Does not exist: the 29 Sep 10:17 PM upload never finished and vanished from Fusion |
 | `NM26_Assembly_v4` (+ `_part2`, `_part3`) | 29 Sep 10:28 PM | **frame v1**, 50.1 kg | yes | Detailed CAD pass (15-part engine, routing). Fusion split the large STEP into three files |
 | `NM26_Assembly_v5` | 1 Oct 7:18 PM | **frame v3**, 44.3 kg | yes | C2 node-mounted rear. Frame v2 (46.4 kg) was never uploaded |
-| `NM26_Assembly_v6` | 2 Oct 5:05 PM | **frame v4**, 50.4 kg | no | Post-audit frame. Still shows a stray magenta wire above the main hoop (DRS servo wiring left in the CAD) |
+| `NM26_Assembly_v6_stray_wire_superseded` | 2 Oct 5:05 PM | **frame v4**, 50.4 kg | no | Post-audit frame. Still shows a stray magenta wire above the main hoop (DRS servo wiring left in the CAD). Renamed 12 Oct: v7 is the clean copy |
 | `NM26_Assembly_v7` | 3 Oct | **frame v4**, 50.4 kg | no | Same as v6 without the stray DRS wires |
 | `NM26_Assembly_v8` | 12 Oct | **frame v5**, 49.4 kg | no | Topology frame: front-bay diagonal pair gone, spool carrier posts end at the spool (upper half gone). **Current** |
 
