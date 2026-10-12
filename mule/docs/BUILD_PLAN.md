@@ -57,7 +57,7 @@ Modelling limits to know before cutting tube:
 
 | Case | Original | Final |
 |---|---|---|
-| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (2004 after the 2026-10-01 weight optimisation, robustness fix and AF4 roll-over correction; 1946 with the C2 node-mounted rear; **2422** after the 2 Oct audit re-size) |
+| Torsional stiffness (chassis only, pickup-to-pickup) | 1373 N·m/deg | **2138 N·m/deg** (2004 after the 2026-10-01 weight optimisation, robustness fix and AF4 roll-over correction; 1946 with the C2 node-mounted rear; 2422 after the 2 Oct audit re-size; **2399** after the 10 Oct topology study) |
 | Main hoop top load 6/5/9 kN: peak stress | 1009 MPa | **140 MPa (safety factor 1.28, worst of the 4 load directions)** |
 | Front hoop top load 6/5/9 kN: peak stress | 867 MPa | **133 MPa (safety factor 1.36)** |
 
