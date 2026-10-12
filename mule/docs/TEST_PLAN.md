@@ -450,8 +450,8 @@ Precondition: **the proof or burst ratings of the master cylinders, calipers and
 
 | Test | Date | Predicted | Measured (runs) | Pass? | Model input updated (real-to-sim loop, `SIM_TO_REAL.md`) |
 |---|---|---|---|---|---|
-| T1.1 mass | | 50.4 kg + 4 kg tabs | | | |
-| T1.2 torsion | | 2422 N·m/deg FEA; expect 1600–2400 measured | | | |
+| T1.1 mass | | 49.4 kg + 4 kg tabs | | | |
+| T1.2 torsion | | 2399 N·m/deg FEA; expect 1600–2400 measured | | | |
 | T2.2 camber gain F/R | | −0.72 / −0.75 °/25 mm | | | |
 | T2.3 bump steer F/R | | ≤ 0.11° / 0.00° |
 | T2.7 compliance toe at 1.5 g-equivalent side load F/R | | 0.10° in / 0.18° out | | | | | | |

@@ -99,10 +99,10 @@ A point mass has no driver, no tyre warm-up and no transients, so real times wil
 
 | Quantity | NM26 mule (code) | Team A | Team B | Team C |
 |---|---|---|---|---|
-| Mass with driver | 301 kg | | | |
+| Mass with driver | 300 kg | | | |
 | CG height | 325 mm | | | |
 | Wheelbase / track F/R | 1750 / 1220 / 1220 mm | | | |
-| Frame torsion | 2422 N·m/deg (FEA) | | | |
+| Frame torsion | 2399 N·m/deg (FEA) | | | |
 | Ride frequency F/R | 3.0 / 2.6 Hz | | | |
 | Motion ratio F/R | 0.72 / 0.75 | | | |
 | Scrub / KPI / caster | 38 mm / 9.6° / 4.6° | | | |

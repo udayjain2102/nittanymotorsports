@@ -55,7 +55,7 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 ## Step 1: frame ($1,350–2,300)
 - [ ] Order 4130 tube from `mule/fab/tube_order_list.csv` (+25 %), plus tabs, plate and filler.
 - [ ] Build the jig from `mule/fab/jig_node_coordinates.csv`; cut and cope from `mule/fab/tube_cut_sheet.csv`; bend hoops from `mule/fab/hoop_bend_program.csv`.
-- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 2422 N·m/deg FEA, pass ≥ 1000 measured).
+- [ ] Weld the frame. Run TEST_PLAN stage 1 (weight, twist stiffness: predicted 2399 N·m/deg FEA, pass ≥ 1000 measured).
 - [ ] Take photos and results to the next funding request.
 
 ## Steps 2–4: to a driving car

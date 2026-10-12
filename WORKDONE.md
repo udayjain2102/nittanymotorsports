@@ -1,11 +1,11 @@
 # Work done: NM26 mule
 
-A record of the work done on this project, from 27 September to 3 October 2026 (30 September is section 7, 1 October section 8, the 1–2 October audit section 9, the Fusion uploads and version history section 10). The step-by-step engineering log, with
+A record of the work done on this project, from 27 September to 10 October 2026 (30 September is section 7, 1 October section 8, the 1–2 October audit section 9, the Fusion uploads and version history section 10, the 5–10 October topology study section 11). The step-by-step engineering log, with
 every method, result and error, is [`mule/docs/PROJECT_LOG.md`](mule/docs/PROJECT_LOG.md). This page is the overview.
 
 **Starting point:** the concept CAD (`NM26_FSAE_Concept.step`) and the 2026 FSAE rules PDF.
 **Result:** a complete, rules-checked design for a drivable test car (a "mule"), all generated from Python code:
-- 228 automated design checks and 97 automated tests, all passing, also run by GitHub on every push;
+- 232 automated design checks and 97 automated tests, all passing, also run by GitHub on every push;
 - CAD in two levels of detail;
 - shop data to build the frame;
 - a physical test plan, a build plan, a bill of materials and a phased budget;
@@ -20,9 +20,9 @@ Every system is a Python script in `mule/` that computes the design and checks i
 | System | Script | What was done | Key result |
 |---|---|---|---|
 | Concept review | — | Critiqued the concept STEP against the rules | 7 problems found (wheelbase too short, missing parts, etc.) |
-| Frame layout and rules | `mule.py` | Parametric frame (128 members, 73 cut pieces) built around the 95th-percentile driver template; 28 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 50.4 kg frame after the audit (44.3 kg C2 before it; 46.4 kg before the C2 rear; 50.1 kg before the 1 Oct optimisation) |
-| Frame rules | `frame_rules.py` | 37 checks for every geometric FSAE frame rule (triangulation, tube size per job, bends, hoops, braces, supports, side impact, shoulder bar, mounts, legs, open wheel, tube clashes) | All pass; each key check proven to fail when its rule is broken |
-| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads 6/5/9 kN (legacy AF4), worst of 4 directions and 2 supports; frontal 95 kN; buckling in every case | Roll-over (welded 4130, under review): main 1.23, front 1.18; frontal 1.31; torsion 2422 N·m/deg FEA |
+| Frame layout and rules | `mule.py` | Parametric frame (124 members, 71 cut pieces) built around the 95th-percentile driver template; 28 FSAE rule checks | 1750 mm wheelbase, 1220 mm tracks, 49.4 kg frame after the topology study (50.4 kg after the audit; 44.3 kg C2 before it; 46.4 kg before the C2 rear; 50.1 kg before the 1 Oct optimisation) |
+| Frame rules | `frame_rules.py` | 40 checks for every geometric FSAE frame rule (triangulation, tube size per job, bends, hoops, braces, supports, closed front bulkhead, harness tab tubes, side impact, shoulder bar, mounts, legs and leg clearance, open wheel, tube clashes) | All pass; each key check proven to fail when its rule is broken |
+| Frame strength | `fea.py` | 3D beam FEA with inertia relief; roll-hoop loads 6/5/9 kN (legacy AF4), worst of 4 directions and 2 supports; frontal 95 kN; buckling in every case | Roll-over (welded 4130, under review): main 1.22, front 1.11; frontal 1.26; torsion 2399 N·m/deg FEA |
 | Suspension kinematics | `suspension.py`, `sideview.py`, `roll.py` | Double wishbones front and rear; roll centres, camber, caster, anti-dive/squat, roll gradient, static camber, jacking, handling balance | RC 37/52 mm, caster 4.6°, scrub 38 mm, camber −2.5/−2.0°, LLTD 49.6 % front (mild understeer) |
 | Loads into the frame | `loads.py`, `compliance.py` | Six-link upright statics for 10 load cases; link buckling; compliance steer | Worst frame FoS 1.26; toe change 0.10°/0.18° at 1.5 g |
 | Springs, rockers, shocks | `springs.py`, `rocker.py` | Pushrod + bell-crank layout, 230×65 MTB coil shocks | Motion ratio 0.72/0.75, 3.0/2.6 Hz ride, ~282/208 lb/in springs |
@@ -242,7 +242,7 @@ tests, CI and outputs) went through the whole repo. Their main points, checked a
 
 - `NM26_Assembly_v6` (2 Oct) and `NM26_Assembly_v7` (3 Oct) uploaded to Fusion, `adi laptop files > Nittany Motorsports`.
   Both are the 50.4 kg post-audit frame without the wing. v6 still drew the DRS servo wire up to where the wing was;
-  the detailed CAD now drops that wiring when the wing isn't fitted, and v7 is clean. **v7 is current.**
+  the detailed CAD now drops that wiring when the wing isn't fitted, and v7 is clean. v7 is still the latest Fusion upload; the 49.4 kg frame v5 (section 11) is not uploaded yet.
 - `mule/docs/VERSIONS.md` records what changed between every frame version and which Fusion file shows which frame.
   Each frozen `history/` copy was re-run with its own code, so the numbers are measured, not copied from old docs.
 - Writing it showed one change not reported before: straightening the upper bulkhead support moved the front upper
@@ -250,11 +250,25 @@ tests, CI and outputs) went through the whole repo. Their main points, checked a
 - Documentation sweep: module descriptions in both READMEs, the build plan's brake and wing items, and the frame
   research table brought to the post-audit design.
 
-## 11. Still open (needs people, parts or suppliers)
+## 11. 5–10 October: topology study, frame v5 (49.4 kg)
+
+- With tube sizes at their optimum, the next saving had to come from the layout. `topo_study.py` removed members one
+  pair at a time while every gate still passed; two tubes came out (the FBH-support front-bay diagonal and the upper
+  spool carrier post): **50.4 → 49.4 kg**, 71 pieces, torsion 2399 N·m/deg.
+- `topo_search.py` then tried adding every possible new diagonal and re-sizing. Against the tolerance gate every frame
+  must pass, the best layout with new tubes was 49.36 kg for 8 extra tubes, so none were added.
+- The study exposed four check gaps, now closed: the front bulkhead must be a closed perimeter (F.6.2), harness tab nodes
+  must sit on harness-size tube (F.3.2.1), no tube within 10 mm of the driver's legs, and no tube through the engine
+  box away from its mounts. 228 → 232 checks.
+- Margins are thinner than v4: front hoop roll-over 1.11 (was 1.18), frontal impact 1.26 (was 1.31), all above 1.0.
+- Merged into `main` on 10 Oct with the CAD, shop data and quote package regenerated; frozen copy
+  `history/frame_v5_49.4kg`. Details: `mule/docs/VERSIONS.md`.
+
+## 12. Still open (needs people, parts or suppliers)
 
 1. **Brake pressure ratings in writing** from Wilwood, Tilton and the hose supplier: proof rating covering 267 bar (the 2000 N test); 300 bar assumed.
 2. **Measure a CRF450R 2018+:** its mounts, output shaft and size go into `ENGINE` in `powertrain.py` **before ordering tube** (gear ratios and mass are already in, from the service manual).
 3. **Build the buck** and fit the drivers before cutting tube.
 4. **Weigh parts as they arrive**: the tilt margin is about 1.5–1.9° with the wing off (61.9° nominal, 61.5° if mass estimates all err the same way).
-5. **Faculty / alumni review** of the roll-over criterion (welded 4130 at 340/410 MPa; 180 MPa is infeasible) and of the crash-case criterion (300 MPa gives 50.4 kg, 410 MPa would give 46.65 kg), and the weld procedure; it assumes 4130 with ER70S-2 filler, so revisit it if the shop quotes 1020 DOM.
+5. **Faculty / alumni review** of the roll-over criterion (welded 4130 at 340/410 MPa; 180 MPa is infeasible) and of the crash-case criterion (300 MPa gave 50.4 kg before the topology study, now 49.4 kg; 410 MPa gave 46.65 kg on the pre-topology layout), and the weld procedure; it assumes 4130 with ER70S-2 filler, so revisit it if the shop quotes 1020 DOM.
 6. **Run TEST_PLAN stages 1–7** on the real car and put the measured numbers back into the code, especially the wing's aero coefficients.

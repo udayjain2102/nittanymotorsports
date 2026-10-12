@@ -3,7 +3,7 @@
 ![design checks and tests](https://github.com/udayjain2102/nittanymotorsports/actions/workflows/tests.yml/badge.svg)
 
 A drivable FSAE test car ("mule") built to the full 2026 FSAE rules. The rear wing with DRS is designed but not fitted on the base car (bolt-on later). Every number in the
-design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 228 design checks (every frame-relevant FSAE 2026 rule is listed in [`mule/docs/RULES_MATRIX.md`](mule/docs/RULES_MATRIX.md))
+design comes from the Python code in `mule/`, and the code checks itself: `python report.py` runs 232 design checks (every frame-relevant FSAE 2026 rule is listed in [`mule/docs/RULES_MATRIX.md`](mule/docs/RULES_MATRIX.md))
 and every automated test, and writes `mule/docs/REPORT.md`. GitHub runs the same checks on every push; the badge above
 turns red if a change breaks one.
 

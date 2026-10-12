@@ -449,3 +449,6 @@ was followed by the module checks, and the frame was re-sized once all new gates
 - Docs moved to 49.4 kg (README, WHATS_NEXT, VERSIONS v5 column and v4 → v5 section). Thinner than v4: front hoop
   roll-over 1.11 (was 1.18), frontal impact 1.26 (was 1.31). Merged into `main`; snapshot `history/frame_v5_49.4kg`.
 - The quote package was regenerated but not sent (the user is holding the quote and funding requests).
+
+## 2026-10-11: docs sweep for frame v5
+- Current-state numbers brought to frame v5 (49.4 kg, 124 members / 71 pieces, torsion 2399, 300 kg car, 232 checks) in README, WORKDONE (new section 11), WHATS_NEXT, BUDGET_PLAN, TEST_PLAN results log, PDS, FRAME_RESEARCH, CLEAN_SHEET and the mule/README file index (topology scripts added, frame_rules 40 checks). Historical sections left as written.
