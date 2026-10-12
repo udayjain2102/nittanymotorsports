@@ -26,7 +26,7 @@ Realistic target with the current safety standards: **~44–45 kg** for the fram
 - [x] C3 direct-acting front shocks: **checked, not built.** No frame node is within a shock's length of the upright (nearest usable 384 mm; shocks are 207–223 mm at ride). It would need a front outrigger tower each side (≈1.2 kg), about cancelling the rockers it removes, with a wishbone clash risk. Details in PROJECT_LOG.
 - [x] Winner so far: C2, merged into `main`; CAD, shop data and the quote package regenerated. If C3 or a C1+C2 combination beats it, merge that the same way.
 - [x] Topology study (branch `topo-experiment`, merged 10 Oct): two tubes removed, 50.4 → 49.4 kg; adding diagonals saved only 0.08 kg for 8 tubes, so none added. Details in `mule/docs/VERSIONS.md`.
-- [ ] Upload frame v5 (49.4 kg) to Fusion as `NM26_Assembly_v8`.
+- [x] Uploaded frame v5 (49.4 kg) to Fusion as `NM26_Assembly_v8` (12 Oct).
 - [ ] Give `frame_opt.py` a rule that a straight run of one tube keeps one size (it can currently size two collinear parts differently, which can't be coped).
 
 ## Frame audit, 1 Oct 2026: fix before ordering tube
@@ -77,4 +77,4 @@ The frame's engine mounts are welded in step 1, so the engine has to be known fi
 - Every design change: edit the code, run `python report.py` in `mule/`, add a line to `mule/docs/PROJECT_LOG.md`, then commit and push (GitHub re-runs every check).
 - A day's work goes into `WORKDONE.md` as a short summary; the detail stays in `PROJECT_LOG.md`.
 - No MATLAB needed: everything runs in Python (see the README quick start for the setup).
-- New Fusion uploads go in `adi laptop files > Nittany Motorsports` as the next version. Current: `NM26_Assembly_v7` (50.4 kg post-audit frame, no wing, 3 Oct 2026). v6 is the same frame with a stray DRS wire; v5 (44.3 kg) and v4 are in the same folder; next is `_v8`. Every version's differences: `mule/docs/VERSIONS.md`. v4 (46.4 kg frame) is still in the same folder; nothing is deleted.
+- New Fusion uploads go in `adi laptop files > Nittany Motorsports` as the next version. Current: `NM26_Assembly_v8` (49.4 kg frame v5, no wing, 12 Oct 2026). v7 is the 50.4 kg post-audit frame and v6 the same with a stray DRS wire; v5 (44.3 kg) and v4 are in the same folder; next is `_v9`. Every version's differences: `mule/docs/VERSIONS.md`. v4 (the first 50.1 kg frame) is still in the same folder; nothing is deleted.

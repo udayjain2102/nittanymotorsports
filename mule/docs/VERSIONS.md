@@ -3,7 +3,7 @@
 Two numbering schemes exist, so both are listed here:
 - **Frame versions** (`frame_v1` to `frame_v5`) are frozen copies of the whole `mule/` folder in `history/`, each with a
   git tag of the same name. Numbers below come from running each frozen copy's own code (2026-10-03).
-- **Fusion uploads** (`NM26_Assembly_v1` to `_v7`) are the CAD files in Fusion, `adi laptop files > Nittany Motorsports`
+- **Fusion uploads** (`NM26_Assembly_v1` to `_v8`) are the CAD files in Fusion, `adi laptop files > Nittany Motorsports`
   (older ones in `adi laptop files`). Nothing has been deleted from either. Dates marked ≈ predate git and come from
   the project log, not timestamps.
 
@@ -20,7 +20,8 @@ Two numbering schemes exist, so both are listed here:
 | `NM26_Assembly_v4` (+ `_part2`, `_part3`) | 29 Sep 10:28 PM | **frame v1**, 50.1 kg | yes | Detailed CAD pass (15-part engine, routing). Fusion split the large STEP into three files |
 | `NM26_Assembly_v5` | 1 Oct 7:18 PM | **frame v3**, 44.3 kg | yes | C2 node-mounted rear. Frame v2 (46.4 kg) was never uploaded |
 | `NM26_Assembly_v6` | 2 Oct 5:05 PM | **frame v4**, 50.4 kg | no | Post-audit frame. Still shows a stray magenta wire above the main hoop (DRS servo wiring left in the CAD) |
-| `NM26_Assembly_v7` | 3 Oct | **frame v4**, 50.4 kg | no | Same as v6 without the stray DRS wires. **Current** |
+| `NM26_Assembly_v7` | 3 Oct | **frame v4**, 50.4 kg | no | Same as v6 without the stray DRS wires |
+| `NM26_Assembly_v8` | 12 Oct | **frame v5**, 49.4 kg | no | Topology frame: front-bay diagonal pair gone, spool carrier posts end at the spool (upper half gone). **Current** |
 
 ## Frame versions at a glance
 
